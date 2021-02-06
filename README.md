@@ -4,7 +4,7 @@
 
 This is a part of our IT school project.
 We have to choose, plan and execute our own idea.
-We chose to (attempt to) make (simple) group planner where one can create a group and assign tasks
+We chose to (attempt to) make a (simple) group planner where one can create a group and assign tasks
 
 ---------------------------------------
 
