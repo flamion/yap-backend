@@ -4,7 +4,7 @@ CREATE TABLE user (
 user_id INTEGER PRIMARY KEY,
 username TEXT NOT NULL,
 password TEXT NOT NULL,
-create_date DATE DEFAULT (strftime('%s', 'now'))
+create_date INTEGER NOT NULL DEFAULT (strftime('%s', 'now'))
 , last_login, email_address TEXT default NULL);
 INSERT INTO user VALUES(1,'testuser','testpass',1612895671,'1612895671','test@test.com');
 INSERT INTO user VALUES(2,'FlareFlo','Duccus Longus',1612895671,'1612895671','FlareFlo@duck.quack');
