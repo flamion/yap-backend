@@ -9,7 +9,7 @@ public class DatabaseManagerJsonTest {
     @Test
     @DisplayName("User ID to json test")
     public void testUserIDToJson() throws Exception {
-        assertEquals("{\"userid\":1,\"username\":\"testuser\",\"createDate\":\"Feb. 9, 2021\",\"lastLogin\":\"Feb. 9, 2021\",\"emailAddress\":\"test@test.com\"}",
+        assertEquals("{\"userid\":1,\"username\":\"testuser\",\"createDate\":1612895671000,\"lastLogin\":1612895671000,\"emailAddress\":\"test@test.com\"}",
                 DatabaseManager.getInstance().getUserJson(1L)
         );
     }
@@ -18,7 +18,7 @@ public class DatabaseManagerJsonTest {
     @DisplayName("Entry ID to json test")
     public void testEntryIDToJson() throws Exception {
         assertEquals(
-                "{\"entryID\":1,\"creator\":{\"userid\":1,\"username\":\"testuser\",\"createDate\":\"Feb. 9, 2021\",\"lastLogin\":\"Feb. 9, 2021\",\"emailAddress\":\"test@test.com\"},\"createDate\":\"Feb. 6, 2021\",\"dueDate\":\"Feb. 7, 2021\",\"title\":\"Test Title\",\"description\":\"Test Description\"}\n",
+                "{\"entryID\":1,\"creator\":{\"userid\":1,\"username\":\"testuser\",\"createDate\":1612895671000,\"lastLogin\":1612895671000,\"emailAddress\":\"test@test.com\"},\"createDate\":1612650686000,\"dueDate\":1612737086000,\"title\":\"Test Title\",\"description\":\"Test Description\"}",
                 DatabaseManager.getInstance().getEntryJson(1L)
         );
     }
