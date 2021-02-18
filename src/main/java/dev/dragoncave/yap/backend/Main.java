@@ -1,7 +1,5 @@
 package dev.dragoncave.yap.backend;
 
-import javax.xml.crypto.Data;
-
 public class Main {
 
     private static final String DATABASE_URL = "jdbc:sqlite:database.db";

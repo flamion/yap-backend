@@ -1,15 +1,13 @@
 package dev.dragoncave.yap.backend;
 
-import java.util.Date;
-
 public class Group {
     private long groupID;
     private String groupName;
     private User creator;
-    private Date createDate;
-    private Date lastAccessDate;
+    private long createDate;
+    private long lastAccessDate;
 
-    public Group(long groupID, String groupName, User creator, Date createDate, Date lastAccessDate) {
+    public Group(long groupID, String groupName, User creator, long createDate, long lastAccessDate) {
         this.groupID = groupID;
         this.groupName = groupName;
         this.creator = creator;
@@ -45,19 +43,19 @@ public class Group {
         this.creator = creator;
     }
 
-    public Date getCreateDate() {
+    public long getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(long createDate) {
         this.createDate = createDate;
     }
 
-    public Date getLastAccessDate() {
+    public long getLastAccessDate() {
         return lastAccessDate;
     }
 
-    public void setLastAccessDate(Date lastAccessDate) {
+    public void setLastAccessDate(long lastAccessDate) {
         this.lastAccessDate = lastAccessDate;
     }
 }

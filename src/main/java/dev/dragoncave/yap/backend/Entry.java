@@ -1,16 +1,14 @@
 package dev.dragoncave.yap.backend;
 
-import java.util.Date;
-
 public class Entry {
     private long entryID;
     private User creator;
-    private Date createDate;
-    private Date dueDate;
+    private long createDate;
+    private long dueDate;
     private String title;
     private String description;
 
-    public Entry(long entryID, User creator, Date createDate, Date dueDate, String title, String description) {
+    public Entry(long entryID, User creator, long createDate, long dueDate, String title, String description) {
         this.entryID = entryID;
         this.creator = creator;
         this.createDate = createDate;
@@ -39,22 +37,6 @@ public class Entry {
         this.creator = creator;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(Date dueDate) {
-        this.dueDate = dueDate;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -69,5 +51,21 @@ public class Entry {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public long getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(long createDate) {
+        this.createDate = createDate;
+    }
+
+    public long getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(long dueDate) {
+        this.dueDate = dueDate;
     }
 }

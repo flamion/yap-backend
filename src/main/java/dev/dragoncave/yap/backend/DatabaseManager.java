@@ -52,8 +52,8 @@ public class DatabaseManager {
                 result.getLong("group_id"),
                 result.getString("group_name"),
                 getUserFromID(result.getLong("creator")),
-                new Date(result.getLong("create_date") * 1000L),
-                new Date(result.getLong("last_access_date") * 1000L)
+                result.getLong("create_date") * 1000L,
+                result.getLong("last_access_date") * 1000L
         );
     }
 
@@ -65,8 +65,8 @@ public class DatabaseManager {
         return new Entry(
                 result.getLong("entry_id"),
                 getUserFromID(result.getLong("creator")),
-                new Date(result.getLong("create_date") * 1000),
-                new Date(result.getLong("due_date") * 1000),
+                result.getLong("create_date") * 1000,
+                result.getLong("due_date") * 1000,
                 result.getString("title"),
                 result.getString("description")
         );
