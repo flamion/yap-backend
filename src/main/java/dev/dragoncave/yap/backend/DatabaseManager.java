@@ -37,8 +37,8 @@ public class DatabaseManager {
         return new User(
                 result.getInt("user_id"),
                 result.getString("username"),
-                new Date(result.getLong("create_date") * 1000L),
-                new Date(result.getLong("last_login") * 1000L),
+                result.getLong("create_date") * 1000L,
+                result.getLong("last_login") * 1000L,
                 result.getString("email_address")
         );
     }

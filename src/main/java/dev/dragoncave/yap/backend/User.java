@@ -1,19 +1,17 @@
 package dev.dragoncave.yap.backend;
 
-import java.util.Date;
-
 public class User {
     private long userid;
     private String username;
-    private Date createDate;
-    private Date lastLogin;
+    private long createDate;
+    private long lastLogin;
     private String emailAddress;
 
     public User() {
 
     }
 
-    public User(long userid, String username, Date createDate, Date lastLogin, String emailAddress) {
+    public User(long userid, String username, long createDate, long lastLogin, String emailAddress) {
         this.userid = userid;
         this.username = username;
         this.createDate = createDate;
@@ -37,27 +35,27 @@ public class User {
         this.username = username;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public Date getLastLogin() {
-        return lastLogin;
-    }
-
-    public void setLastLogin(Date lastLogin) {
-        this.lastLogin = lastLogin;
-    }
-
     public String getEmailAddress() {
         return emailAddress;
     }
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+
+    public long getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(long createDate) {
+        this.createDate = createDate;
+    }
+
+    public long getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(long lastLogin) {
+        this.lastLogin = lastLogin;
     }
 }
