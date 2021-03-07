@@ -1,5 +1,7 @@
 package dev.dragoncave.yap.backend;
 
+import com.google.gson.Gson;
+
 import java.util.Objects;
 
 public class User {
@@ -61,6 +63,9 @@ public class User {
         this.lastLogin = lastLogin;
     }
 
+    public String toJson() {
+        return new Gson().toJson(this);
+    }
 
     //Hashcode and Equals Methods; Auto-Generated
     @Override

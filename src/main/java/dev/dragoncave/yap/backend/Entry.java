@@ -1,5 +1,7 @@
 package dev.dragoncave.yap.backend;
 
+import com.google.gson.Gson;
+
 public class Entry {
     private long entryID;
     private User creator;
@@ -67,5 +69,9 @@ public class Entry {
 
     public void setDueDate(long dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public String toJson() {
+        return new Gson().toJson(this);
     }
 }

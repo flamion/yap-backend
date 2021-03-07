@@ -1,5 +1,7 @@
 package dev.dragoncave.yap.backend;
 
+import com.google.gson.Gson;
+
 public class Group {
     private long groupID;
     private String groupName;
@@ -57,5 +59,9 @@ public class Group {
 
     public void setLastAccessDate(long lastAccessDate) {
         this.lastAccessDate = lastAccessDate;
+    }
+
+    public String toJson() {
+        return new Gson().toJson(this);
     }
 }
