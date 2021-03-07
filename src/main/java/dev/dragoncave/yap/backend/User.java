@@ -1,5 +1,7 @@
 package dev.dragoncave.yap.backend;
 
+import java.util.Objects;
+
 public class User {
     private long userid;
     private String username;
@@ -57,5 +59,20 @@ public class User {
 
     public void setLastLogin(long lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+
+    //Hashcode and Equals Methods; Auto-Generated
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return getUserid() == user.getUserid() && getCreateDate() == user.getCreateDate() && getLastLogin() == user.getLastLogin() && getUsername().equals(user.getUsername()) && getEmailAddress().equals(user.getEmailAddress());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUserid(), getUsername(), getCreateDate(), getLastLogin(), getEmailAddress());
     }
 }
