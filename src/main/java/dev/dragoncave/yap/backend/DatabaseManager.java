@@ -159,4 +159,12 @@ public class DatabaseManager {
                 resultSet.getString("email_address")
         );
     }
+
+    public void deleteUser(long userid) throws SQLException {
+        PreparedStatement statement = dbcon.prepareStatement(
+                "DELETE FROM user WHERE user_id = ?"
+        );
+        statement.setLong(1, userid);
+        statement.execute();
+    }
 }
