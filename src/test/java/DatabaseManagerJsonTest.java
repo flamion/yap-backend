@@ -9,11 +9,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class DatabaseManagerJsonTest {
 
     @Test
-    @DisplayName("User ID to json test")
+    @DisplayName("Test User creation and deletion")
     public void testUserIDToJson() throws Exception {
-        assertEquals("{\"userid\":1,\"username\":\"testuser\",\"createDate\":1612895671000,\"lastLogin\":1612895671000,\"emailAddress\":\"test@test.com\"}",
-                DatabaseManager.getInstance().getUserJson(1L)
-        );
+        DatabaseManager instance = DatabaseManager.getInstance();
+        long time = System.currentTimeMillis();
+        long testUserid = instance.createUser("testuser", "testpassword", time, time, "testuser@test.test");
+
+        assert testUserid != -1L;
+
+        instance.deleteUser(testUserid);
+
+        assert instance.getUserByID(testUserid) == null;
+
+
     }
 
     @Test
@@ -26,14 +34,17 @@ public class DatabaseManagerJsonTest {
     }
 
     @Test
-    @DisplayName("Group creation and deletion test")
+    @DisplayName("Test Group creation and deletion")
     public void testGroupCreation() throws Exception {
         DatabaseManager instance = DatabaseManager.getInstance();
-        long testUserid = instance.createUser("testuser", "testpassword", System.currentTimeMillis(), System.currentTimeMillis(), "testuser@test.test");
+        long time = System.currentTimeMillis();
+        long testUserid = instance.createUser("testuser", "testpassword", time, time, "testuser@test.test");
         long testGroupid = instance.createGroup(
                 "Test Group",
                 instance.getUserByID(testUserid)
         );
+
+        assert testUserid != -1L && testGroupid != -1L;
 
         Group testGroup = instance.getGroupByID(testGroupid);
         User testUser = instance.getUserByID(testUserid);
@@ -44,6 +55,7 @@ public class DatabaseManagerJsonTest {
         instance.deleteGroup(testGroupid);
 
         assert instance.getGroupByID(testGroupid) == null;
+
 
     }
 }
