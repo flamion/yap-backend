@@ -1,4 +1,4 @@
-package dev.dragoncave.yap.backend.rest;
+package dev.dragoncave.yap.backend.rest.Controllers;
 
 import java.util.concurrent.atomic.AtomicLong;
 
