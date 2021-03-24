@@ -6,8 +6,10 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            System.out.println(DatabaseManager.getInstance().getUserJson(1L));
-            System.out.println(DatabaseManager.getInstance().getEntryJson(1L));
+            DatabaseManager instance = DatabaseManager.getInstance();
+            System.out.println(instance.getUserJson(2));
+            System.out.println(instance.getGroupJson(1));
+            System.out.println(instance.getEntryJson(5));
         } catch (Exception e) {
             e.printStackTrace();
         }
