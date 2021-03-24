@@ -8,13 +8,12 @@ public class DatabaseManager {
 
     private final static DatabaseManager manager = new DatabaseManager();
     private static Connection dbcon;
-    private String DATABASE_URL;
-
+    private String DATABASE_URL = "jdbc:sqlite:database.db";
 
     private DatabaseManager() {
-        if (System.getenv("DATABASE_TYPE").equals("SQLITE")) {
-            DATABASE_URL = "jdbc:sqlite:database.db";
-        }
+//        if (System.getenv("DATABASE_TYPE").equals("SQLITE")) {
+//            DATABASE_URL = "jdbc:sqlite:database.db";
+//        }
 
         assert DATABASE_URL != null;
 
@@ -137,6 +136,10 @@ public class DatabaseManager {
             return groupid.getLong(1);
         }
         return -1;
+    }
+
+    public long createUser(User newUser) throws SQLException {
+        return createUser(newUser.getUsername(), newUser.getPassword(), System.currentTimeMillis(), System.currentTimeMillis(), newUser.getEmailAddress());
     }
 
     public User getUserByID(long userid) throws SQLException {
