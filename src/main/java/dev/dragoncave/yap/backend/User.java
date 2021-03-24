@@ -7,6 +7,7 @@ import java.util.Objects;
 public class User {
     private long userid;
     private String username;
+    private String password;
     private long createDate;
     private long lastLogin;
     private String emailAddress;
@@ -65,6 +66,14 @@ public class User {
 
     public String toJson() {
         return new Gson().toJson(this);
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     //Hashcode and Equals Methods; Auto-Generated
