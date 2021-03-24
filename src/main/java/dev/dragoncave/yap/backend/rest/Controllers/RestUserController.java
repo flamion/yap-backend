@@ -13,6 +13,7 @@ import java.sql.SQLException;
 public class RestUserController {
     private static final DatabaseManager dbManager = DatabaseManager.getInstance();
 
+    //todo: Add Json response with Http Status code
     @GetMapping("/user/{id}")
     User getUser(@PathVariable("id") Long id) throws SQLException {
         return dbManager.getUserByID(id);
@@ -31,6 +32,9 @@ public class RestUserController {
     @ResponseStatus
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
+            if (!dbManager.userExists(id)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             dbManager.deleteUser(id);
         } catch (SQLException ex) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
