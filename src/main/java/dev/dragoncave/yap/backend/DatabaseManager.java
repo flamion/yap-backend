@@ -142,6 +142,18 @@ public class DatabaseManager {
         return createUser(newUser.getUsername(), newUser.getPassword(), System.currentTimeMillis(), System.currentTimeMillis(), newUser.getEmailAddress());
     }
 
+    public boolean userExists(long userid) throws SQLException {
+        PreparedStatement statement = dbcon.prepareStatement(
+                "SELECT user_id, username, create_date, last_login, email_address" +
+                        " FROM user" +
+                        " WHERE user_id = ?"
+        );
+        statement.setLong(1, userid);
+        statement.execute();
+        ResultSet resultSet = statement.getResultSet();
+        return resultSet.isBeforeFirst();
+    }
+
     public User getUserByID(long userid) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "SELECT user_id, username, create_date, last_login, email_address" +
