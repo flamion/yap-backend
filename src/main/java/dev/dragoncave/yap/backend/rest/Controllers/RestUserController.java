@@ -20,8 +20,8 @@ public class RestUserController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(dbManager.getUserJson(id), HttpStatus.OK);
-        } catch (SQLException ex) {
-
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -35,11 +35,11 @@ public class RestUserController {
         try {
             long newUserId = dbManager.createUser(newUser);
             return new ResponseEntity<>(String.valueOf(newUserId), HttpStatus.CREATED);
-        } catch (SQLException ex) {
-            if (ex.getErrorCode() == 19) {
+        } catch (SQLException exception) {
+            if (exception.getErrorCode() == 19) {
                 return new ResponseEntity<>("Field missing", HttpStatus.BAD_REQUEST);
             }
-            ex.printStackTrace();
+            exception.printStackTrace();
         }
 
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -52,8 +52,10 @@ public class RestUserController {
             if (!dbManager.userExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
+
             dbManager.deleteUser(id);
-        } catch (SQLException ex) {
+        } catch (SQLException exception) {
+            exception.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(HttpStatus.OK);
