@@ -86,6 +86,6 @@ public class Entry {
 
     public boolean isInvalid() throws SQLException {
         DatabaseManager dbmanager = DatabaseManager.getInstance();
-        return (!dbmanager.userExists(creator.getUserid()) || title == null || description == null);
+        return (creator == null || !dbmanager.userExists(creator.getUserid()) || title == null || description == null);
     }
 }
