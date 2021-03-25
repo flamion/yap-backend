@@ -42,7 +42,7 @@ public class DatabaseManager {
         );
     }
 
-    private Entry getEntryByID(long entry_id) throws SQLException {
+    public Entry getEntryByID(long entry_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE entry_id = ?");
         statement.setLong(1, entry_id);
         ResultSet result = statement.executeQuery();
