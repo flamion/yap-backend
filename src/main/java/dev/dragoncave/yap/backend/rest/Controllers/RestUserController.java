@@ -31,8 +31,18 @@ public class RestUserController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
-    public long newUser(@RequestBody User newUser) throws SQLException {
-        return dbManager.createUser(newUser);
+    public ResponseEntity<?> newUser(@RequestBody User newUser) {
+        try {
+            long newUserId = dbManager.createUser(newUser);
+            return new ResponseEntity<>(String.valueOf(newUserId), HttpStatus.OK);
+        } catch (SQLException ex) {
+            if (ex.getErrorCode() == 19) {
+                return new ResponseEntity<>("Field missing", HttpStatus.BAD_REQUEST);
+            }
+            ex.printStackTrace();
+        }
+
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @DeleteMapping("/user/{id}")
