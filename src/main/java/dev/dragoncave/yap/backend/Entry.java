@@ -2,6 +2,8 @@ package dev.dragoncave.yap.backend;
 
 import com.google.gson.Gson;
 
+import java.sql.SQLException;
+
 public class Entry {
     private long entryID;
     private User creator;
@@ -15,6 +17,13 @@ public class Entry {
         this.creator = creator;
         this.createDate = createDate;
         this.dueDate = dueDate;
+        this.title = title;
+        this.description = description;
+    }
+
+    public Entry(long creatorId, long dueDate, String title, String description) throws SQLException {
+        this.creator = DatabaseManager.getInstance().getUserByID(creatorId);
+        this.createDate = System.currentTimeMillis();
         this.title = title;
         this.description = description;
     }
