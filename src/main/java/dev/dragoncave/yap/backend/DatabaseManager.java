@@ -42,6 +42,14 @@ public class DatabaseManager {
         );
     }
 
+    public boolean entryExists(long entry_id) throws SQLException {
+        PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE entry_id = ?");
+        statement.setLong(1, entry_id);
+        ResultSet resultSet = statement.executeQuery();
+
+        return resultSet.isBeforeFirst();
+    }
+
     public Entry getEntryByID(long entry_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE entry_id = ?");
         statement.setLong(1, entry_id);
