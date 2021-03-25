@@ -36,15 +36,31 @@ public class EntryController {
             if (newEntry.isInvalid()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+
             long newEntryId = dbmanager.createEntry(newEntry);
             if (newEntryId == -1) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
+
             return new ResponseEntity<>(newEntryId, HttpStatus.CREATED);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @DeleteMapping("/entry/{id}")
+    public ResponseEntity<?> deleteEntry(@PathVariable Long id) {
+        try {
+            if (!dbmanager.entryExists(id)) {
+                return new ResponseEntity<>("Entry does not exist", HttpStatus.NO_CONTENT);
+            }
+
+            dbmanager.deleteEntry(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 
 }
