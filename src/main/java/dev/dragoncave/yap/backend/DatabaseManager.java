@@ -65,6 +65,30 @@ public class DatabaseManager {
         );
     }
 
+    public long createEntry(long creatorId, long dueDate, String title, String description) throws SQLException {
+        PreparedStatement statement = dbcon.prepareStatement(
+                "INSERT INTO entry (creator, create_date, due_date, title, description)" +
+                        "VALUES (?, ?, ?, ?, ?)"
+        );
+        statement.setLong(1, creatorId);
+        statement.setLong(2, System.currentTimeMillis());
+        statement.setLong(3, dueDate);
+        statement.setString(4, title);
+        statement.setString(5, description);
+
+        statement.execute();
+
+        ResultSet entryId = statement.getGeneratedKeys();
+        if (entryId.isBeforeFirst()) {
+            return entryId.getLong(1);
+        }
+        return -1;
+    }
+
+    public long createEntry(Entry newEntry) throws SQLException {
+        return createEntry(newEntry.getCreator().getUserid(), newEntry.getDueDate(), newEntry.getTitle(), newEntry.getDescription());
+    }
+
     public String getUserJson(long userid) throws SQLException {
         Gson gson = new Gson();
         return gson.toJson(getUserFromID(userid));
