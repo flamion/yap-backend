@@ -61,6 +61,7 @@ public class EntryController {
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
