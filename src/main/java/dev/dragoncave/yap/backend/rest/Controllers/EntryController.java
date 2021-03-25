@@ -1,11 +1,11 @@
 package dev.dragoncave.yap.backend.rest.Controllers;
 
 import dev.dragoncave.yap.backend.DatabaseManager;
+import dev.dragoncave.yap.backend.Entry;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 
@@ -26,6 +26,22 @@ public class EntryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-
+    @PostMapping(
+            value = "/entry/",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE}
+    )
+    public ResponseEntity<?> createEntry(@RequestBody Entry newEntry) {
+        try {
+            long newEntryId = dbmanager.createEntry(newEntry);
+            if (newEntryId == -1) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>(newEntryId, HttpStatus.CREATED);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 }
