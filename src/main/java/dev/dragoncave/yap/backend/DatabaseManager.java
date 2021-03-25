@@ -207,6 +207,15 @@ public class DatabaseManager {
         );
     }
 
+    public void deleteEntry(long entryID) throws SQLException {
+        PreparedStatement statement = dbcon.prepareStatement(
+                "DELETE FROM entry WHERE entry_id = ?"
+        );
+
+        statement.setLong(1, entryID);
+        statement.execute();
+    }
+
     public void deleteUser(long userid) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "DELETE FROM user WHERE user_id = ?"
