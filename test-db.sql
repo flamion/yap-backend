@@ -4,8 +4,7 @@ CREATE TABLE user (
 user_id INTEGER PRIMARY KEY,
 username TEXT NOT NULL,
 password TEXT NOT NULL,
-create_date INTEGER NOT NULL DEFAULT (strftime('%s', 'now'))
-, last_login, email_address TEXT default NULL);
+create_date INTEGER NOT NULL, last_login, email_address TEXT default NULL);
 INSERT INTO user VALUES(1,'testuser','testpass',1612895671,'1612895671','test@test.com');
 INSERT INTO user VALUES(2,'FlareFlo','Duccus Longus',1612895671,'1612895671','FlareFlo@duck.quack');
 INSERT INTO user VALUES(3,'Unixcorn','Btw i use Arch',1612895671,'1612895671','Unixcorn@i-use-arch.com');
@@ -14,8 +13,8 @@ CREATE TABLE entry
 (
     entry_id    INTEGER PRIMARY KEY,
     creator     INTEGER NOT NULL,
-    create_date INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
-    due_date    INTEGER DEFAULT (strftime('%s', 'now', '+1 days')),
+    create_date INTEGER NOT NULL,
+    due_date    INTEGER,
     title       TEXT    NOT NULL,
     description TEXT    NOT NULL DEFAULT '',
     FOREIGN KEY (creator) REFERENCES user (user_id)
@@ -31,8 +30,8 @@ CREATE TABLE groups (
 group_id INTEGER PRIMARY KEY,
 group_name TEXT NOT NULL,
 creator INTEGER NOT NULL,
-create_date INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
-last_access_date INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+create_date INTEGER NOT NULL,
+last_access_date INTEGER NOT NULL,
 FOREIGN KEY(creator) REFERENCES user(user_id)
 );
 CREATE TABLE in_group
