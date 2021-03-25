@@ -34,7 +34,7 @@ public class RestUserController {
     public ResponseEntity<?> newUser(@RequestBody User newUser) {
         try {
             long newUserId = dbManager.createUser(newUser);
-            return new ResponseEntity<>(String.valueOf(newUserId), HttpStatus.OK);
+            return new ResponseEntity<>(String.valueOf(newUserId), HttpStatus.CREATED);
         } catch (SQLException ex) {
             if (ex.getErrorCode() == 19) {
                 return new ResponseEntity<>("Field missing", HttpStatus.BAD_REQUEST);
