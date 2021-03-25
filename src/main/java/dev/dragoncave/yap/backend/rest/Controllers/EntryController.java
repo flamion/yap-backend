@@ -33,6 +33,9 @@ public class EntryController {
     )
     public ResponseEntity<?> createEntry(@RequestBody Entry newEntry) {
         try {
+            if (newEntry.isInvalid()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
             long newEntryId = dbmanager.createEntry(newEntry);
             if (newEntryId == -1) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
