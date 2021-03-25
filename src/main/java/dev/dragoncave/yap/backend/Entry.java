@@ -83,4 +83,9 @@ public class Entry {
     public String toJson() {
         return new Gson().toJson(this);
     }
+
+    public boolean isInvalid() throws SQLException {
+        DatabaseManager dbmanager = DatabaseManager.getInstance();
+        return (!dbmanager.userExists(creator.getUserid()) || title == null || description == null);
+    }
 }
