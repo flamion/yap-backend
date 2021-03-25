@@ -53,15 +53,15 @@ public class DatabaseManager {
     public Entry getEntryByID(long entry_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE entry_id = ?");
         statement.setLong(1, entry_id);
-        ResultSet result = statement.executeQuery();
+        ResultSet resultSet = statement.executeQuery();
 
         return new Entry(
-                result.getLong("entry_id"),
-                getUserFromID(result.getLong("creator")),
-                result.getLong("create_date"),
-                result.getLong("due_date"),
-                result.getString("title"),
-                result.getString("description")
+                resultSet.getLong("entry_id"),
+                getUserFromID(resultSet.getLong("creator")),
+                resultSet.getLong("create_date"),
+                resultSet.getLong("due_date"),
+                resultSet.getString("title"),
+                resultSet.getString("description")
         );
     }
 
