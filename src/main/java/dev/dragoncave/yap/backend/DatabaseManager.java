@@ -1,6 +1,9 @@
 package dev.dragoncave.yap.backend;
 
 import com.google.gson.Gson;
+import dev.dragoncave.yap.backend.rest.objects.Entry;
+import dev.dragoncave.yap.backend.rest.objects.Group;
+import dev.dragoncave.yap.backend.rest.objects.User;
 
 import java.sql.*;
 
