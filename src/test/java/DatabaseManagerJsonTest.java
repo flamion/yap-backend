@@ -20,8 +20,6 @@ public class DatabaseManagerJsonTest {
         instance.deleteUser(testUserid);
 
         assert instance.getUserByID(testUserid) == null;
-
-
     }
 
     @Test
@@ -55,7 +53,5 @@ public class DatabaseManagerJsonTest {
         instance.deleteGroup(testGroupid);
 
         assert instance.getGroupByID(testGroupid) == null;
-
-
     }
 }
