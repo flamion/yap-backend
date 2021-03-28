@@ -7,10 +7,10 @@ import dev.dragoncave.yap.backend.rest.objects.User;
 import java.sql.SQLException;
 
 public class Entry {
-    private long entryID;
+    private long entryID = -1;
     private User creator;
-    private long createDate;
-    private long dueDate;
+    private long createDate = -1;
+    private long dueDate = -1;
     private String title;
     private String description;
 
