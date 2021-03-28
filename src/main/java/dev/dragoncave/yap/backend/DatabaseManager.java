@@ -107,6 +107,38 @@ public class DatabaseManager {
         return createEntry(newEntry.getCreator().getUserid(), newEntry.getDueDate(), newEntry.getTitle(), newEntry.getDescription());
     }
 
+    public void updateEntry(Entry entry) throws SQLException {
+        Entry oldEntry = getEntryByID(entry.getEntryID());
+        long due_date = entry.getDueDate();
+        String title = entry.getTitle();
+        String description = entry.getDescription();
+
+        if (entry.getDueDate() == -1) {
+            due_date = oldEntry.getDueDate();
+        }
+
+        if (title == null) {
+            title = oldEntry.getTitle();
+        }
+
+        if (description == null) {
+            description = oldEntry.getDescription();
+        }
+        
+        PreparedStatement statement = dbcon.prepareStatement(
+                "UPDATE entry " +
+                        "SET due_date = ?, title = ?, description = ?" +
+                        "WHERE entry_id = ?"
+        );
+
+        statement.setLong(1, due_date);
+        statement.setString(2, title);
+        statement.setString(3, description);
+        statement.setLong(4, entry.getEntryID());
+
+        statement.execute();
+    }
+
     public String getUserJson(long user_id) throws SQLException {
         Gson gson = new Gson();
         return gson.toJson(getUserFromID(user_id));
