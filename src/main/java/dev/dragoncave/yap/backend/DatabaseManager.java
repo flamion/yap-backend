@@ -6,6 +6,8 @@ import dev.dragoncave.yap.backend.rest.objects.Group;
 import dev.dragoncave.yap.backend.rest.objects.User;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseManager {
 
@@ -51,6 +53,19 @@ public class DatabaseManager {
         ResultSet resultSet = statement.executeQuery();
 
         return resultSet.isBeforeFirst();
+    }
+
+    public List<Long> getUserEntries(long user_id) throws SQLException {
+        PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE creator = ?");
+        statement.setLong(1, user_id);
+        ResultSet resultSet = statement.executeQuery();
+        List<Long> entryIds = new ArrayList<>();
+
+        while (resultSet.next()) {
+            entryIds.add(resultSet.getLong("entry_id"));
+        }
+
+        return entryIds;
     }
 
     public Entry getEntryByID(long entry_id) throws SQLException {
