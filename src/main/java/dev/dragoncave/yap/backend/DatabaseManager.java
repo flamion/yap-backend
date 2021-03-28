@@ -19,8 +19,8 @@ public class DatabaseManager {
 //        if (System.getenv("DATABASE_TYPE").equals("SQLITE")) {
 //            DATABASE_URL = "jdbc:sqlite:database.db";
 //        }
-
-        assert DATABASE_URL != null;
+//
+//        assert DATABASE_URL != null;
 
         try {
             dbcon = DriverManager.getConnection(DATABASE_URL);
