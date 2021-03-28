@@ -124,7 +124,7 @@ public class DatabaseManager {
         if (description == null) {
             description = oldEntry.getDescription();
         }
-        
+
         PreparedStatement statement = dbcon.prepareStatement(
                 "UPDATE entry " +
                         "SET due_date = ?, title = ?, description = ?" +
@@ -136,6 +136,15 @@ public class DatabaseManager {
         statement.setString(3, description);
         statement.setLong(4, entry.getEntryID());
 
+        statement.execute();
+    }
+
+    public void deleteEntry(long entry_id) throws SQLException {
+        PreparedStatement statement = dbcon.prepareStatement(
+                "DELETE FROM entry WHERE entry_id = ?"
+        );
+
+        statement.setLong(1, entry_id);
         statement.execute();
     }
 
@@ -255,15 +264,6 @@ public class DatabaseManager {
                 resultSet.getLong("last_login"),
                 resultSet.getString("email_address")
         );
-    }
-
-    public void deleteEntry(long entry_id) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement(
-                "DELETE FROM entry WHERE entry_id = ?"
-        );
-
-        statement.setLong(1, entry_id);
-        statement.execute();
     }
 
     public void deleteUser(long user_id) throws SQLException {
