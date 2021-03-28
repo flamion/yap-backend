@@ -55,6 +55,7 @@ public class DatabaseManager {
         return resultSet.isBeforeFirst();
     }
 
+    //Get all entries from a user
     public List<Long> getUserEntries(long user_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE creator = ?");
         statement.setLong(1, user_id);
