@@ -33,9 +33,9 @@ public class DatabaseManager {
         return manager;
     }
 
-    private User getUserFromID(long userid) throws SQLException {
+    private User getUserFromID(long user_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM user WHERE user_id = ?");
-        statement.setLong(1, userid);
+        statement.setLong(1, user_id);
         ResultSet result = statement.executeQuery();
 
         return new User(
@@ -83,14 +83,14 @@ public class DatabaseManager {
         );
     }
 
-    public long createEntry(long creatorId, long dueDate, String title, String description) throws SQLException {
+    public long createEntry(long creator_id, long due_date, String title, String description) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "INSERT INTO entry (creator, create_date, due_date, title, description)" +
                         "VALUES (?, ?, ?, ?, ?)"
         );
-        statement.setLong(1, creatorId);
+        statement.setLong(1, creator_id);
         statement.setLong(2, System.currentTimeMillis());
-        statement.setLong(3, dueDate);
+        statement.setLong(3, due_date);
         statement.setString(4, title);
         statement.setString(5, description);
 
@@ -107,19 +107,19 @@ public class DatabaseManager {
         return createEntry(newEntry.getCreator().getUserid(), newEntry.getDueDate(), newEntry.getTitle(), newEntry.getDescription());
     }
 
-    public String getUserJson(long userid) throws SQLException {
+    public String getUserJson(long user_id) throws SQLException {
         Gson gson = new Gson();
-        return gson.toJson(getUserFromID(userid));
+        return gson.toJson(getUserFromID(user_id));
     }
 
-    public String getEntryJson(long entryid) throws SQLException {
+    public String getEntryJson(long entry_id) throws SQLException {
         Gson gson = new Gson();
-        return gson.toJson(getEntryByID(entryid));
+        return gson.toJson(getEntryByID(entry_id));
     }
 
-    public String getGroupJson(long groupid) throws SQLException, AssertionError {
+    public String getGroupJson(long group_id) throws SQLException, AssertionError {
         Gson gson = new Gson();
-        Group group = getGroupByID(groupid);
+        Group group = getGroupByID(group_id);
 
         assert group != null;
 
@@ -127,35 +127,35 @@ public class DatabaseManager {
     }
 
     //Returns the group ID of the created group in the Database or -1 if it failed
-    public long createGroup(String groupName, User creator) throws SQLException {
+    public long createGroup(String group_name, User creator) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "INSERT INTO groups (group_name, creator, create_date, last_access_date)" +
                         "VALUES (?, ?, ?, ?)");
-        statement.setString(1, groupName);
+        statement.setString(1, group_name);
         statement.setLong(2, creator.getUserid());
         statement.setLong(3, System.currentTimeMillis());
         statement.setLong(4, System.currentTimeMillis());
         statement.execute();
-        ResultSet groupid = statement.getGeneratedKeys();
-        if (groupid.isBeforeFirst()) {
-            return groupid.getLong(1);
+        ResultSet group_id = statement.getGeneratedKeys();
+        if (group_id.isBeforeFirst()) {
+            return group_id.getLong(1);
         }
         return -1;
     }
 
-    public void deleteGroup(long groupid) throws SQLException {
+    public void deleteGroup(long group_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "DELETE FROM groups WHERE group_id = ?"
         );
-        statement.setLong(1, groupid);
+        statement.setLong(1, group_id);
         statement.execute();
     }
 
-    public Group getGroupByID(long groupid) throws SQLException {
+    public Group getGroupByID(long group_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "SELECT * FROM groups WHERE group_id = ?"
         );
-        statement.setLong(1, groupid);
+        statement.setLong(1, group_id);
         ResultSet resultSet = statement.executeQuery();
         if (!resultSet.isBeforeFirst()) {
             return null;
@@ -170,20 +170,20 @@ public class DatabaseManager {
     }
 
     //returns the ID of the just created user or -1 if something went wrong
-    public long createUser(String username, String password, long createDate, long lastLogin, String emailAddress) throws SQLException {
+    public long createUser(String username, String password, long create_date, long last_login, String email_address) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "INSERT INTO user (username, password, create_date, last_login, email_address)" +
                         "VALUES (?, ?, ?, ?, ?)"
         );
         statement.setString(1, username);
         statement.setString(2, password);
-        statement.setLong(3, createDate);
-        statement.setLong(4, lastLogin);
-        statement.setString(5, emailAddress);
+        statement.setLong(3, create_date);
+        statement.setLong(4, last_login);
+        statement.setString(5, email_address);
         statement.execute();
-        ResultSet groupid = statement.getGeneratedKeys();
-        if (groupid.isBeforeFirst()) {
-            return groupid.getLong(1);
+        ResultSet group_id = statement.getGeneratedKeys();
+        if (group_id.isBeforeFirst()) {
+            return group_id.getLong(1);
         }
         return -1;
     }
@@ -192,25 +192,25 @@ public class DatabaseManager {
         return createUser(newUser.getUsername(), newUser.getPassword(), System.currentTimeMillis(), System.currentTimeMillis(), newUser.getEmailAddress());
     }
 
-    public boolean userExists(long userid) throws SQLException {
+    public boolean userExists(long user_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "SELECT user_id, username, create_date, last_login, email_address" +
                         " FROM user" +
                         " WHERE user_id = ?"
         );
-        statement.setLong(1, userid);
+        statement.setLong(1, user_id);
         statement.execute();
         ResultSet resultSet = statement.getResultSet();
         return resultSet.isBeforeFirst();
     }
 
-    public User getUserByID(long userid) throws SQLException {
+    public User getUserByID(long user_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "SELECT user_id, username, create_date, last_login, email_address" +
                         " FROM user" +
                         " WHERE user_id = ?"
         );
-        statement.setLong(1, userid);
+        statement.setLong(1, user_id);
         statement.execute();
         ResultSet resultSet = statement.getResultSet();
         if (!resultSet.isBeforeFirst()) {
@@ -225,20 +225,20 @@ public class DatabaseManager {
         );
     }
 
-    public void deleteEntry(long entryID) throws SQLException {
+    public void deleteEntry(long entry_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "DELETE FROM entry WHERE entry_id = ?"
         );
 
-        statement.setLong(1, entryID);
+        statement.setLong(1, entry_id);
         statement.execute();
     }
 
-    public void deleteUser(long userid) throws SQLException {
+    public void deleteUser(long user_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "DELETE FROM user WHERE user_id = ?"
         );
-        statement.setLong(1, userid);
+        statement.setLong(1, user_id);
         statement.execute();
     }
 }
