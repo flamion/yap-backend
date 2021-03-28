@@ -26,6 +26,20 @@ public class EntryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @GetMapping("/user/{id}/entries/")
+    public ResponseEntity<?> getEntries(@PathVariable Long id) {
+        try {
+            if (!dbmanager.userExists(id)) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            return new ResponseEntity<>(dbmanager.getUserEntries(id), HttpStatus.OK);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @PostMapping(
             value = "/entry/",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
