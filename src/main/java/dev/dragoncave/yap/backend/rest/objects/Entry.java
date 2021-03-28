@@ -1,6 +1,8 @@
-package dev.dragoncave.yap.backend;
+package dev.dragoncave.yap.backend.rest.objects;
 
 import com.google.gson.Gson;
+import dev.dragoncave.yap.backend.DatabaseManager;
+import dev.dragoncave.yap.backend.rest.objects.User;
 
 import java.sql.SQLException;
 

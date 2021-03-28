@@ -1,4 +1,4 @@
-package dev.dragoncave.yap.backend;
+package dev.dragoncave.yap.backend.rest.objects;
 
 import com.google.gson.Gson;
 
