@@ -1,5 +1,7 @@
 package dev.dragoncave.yap.backend;
 
+import dev.dragoncave.yap.backend.rest.objects.Entry;
+
 public class Main {
 
     private static final String DATABASE_URL = "jdbc:sqlite:database.db";
