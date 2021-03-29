@@ -1,6 +1,7 @@
 package dev.dragoncave.yap.backend.rest.Controllers;
 
 import dev.dragoncave.yap.backend.DatabaseManager;
+import dev.dragoncave.yap.backend.rest.objects.Entry;
 import dev.dragoncave.yap.backend.rest.objects.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +21,30 @@ public class RestUserController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(dbManager.getUserJson(id), HttpStatus.OK);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PutMapping("/user/{id}")
+    public ResponseEntity<?> putEntry(@PathVariable Long id, @RequestBody User user) {
+        try {
+            //prevent manipulation of the id inside the user object but allow if it absent from the object
+            if (id != user.getUserid()) {
+                user.setUserid(id);
+            }
+
+            if (user.isInvalid()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            if (!dbManager.userExists(id)) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            dbManager.updateUser(user);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
