@@ -33,20 +33,6 @@ public class DatabaseManager {
         return manager;
     }
 
-    private User getUserFromID(long user_id) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM user WHERE user_id = ?");
-        statement.setLong(1, user_id);
-        ResultSet result = statement.executeQuery();
-
-        return new User(
-                result.getInt("user_id"),
-                result.getString("username"),
-                result.getLong("create_date"),
-                result.getLong("last_login"),
-                result.getString("email_address")
-        );
-    }
-
     public boolean entryExists(long entry_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE entry_id = ?");
         statement.setLong(1, entry_id);
@@ -138,6 +124,20 @@ public class DatabaseManager {
         statement.setLong(4, entry.getEntryID());
 
         statement.execute();
+    }
+
+    private User getUserFromID(long user_id) throws SQLException {
+        PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM user WHERE user_id = ?");
+        statement.setLong(1, user_id);
+        ResultSet result = statement.executeQuery();
+
+        return new User(
+                result.getInt("user_id"),
+                result.getString("username"),
+                result.getLong("create_date"),
+                result.getLong("last_login"),
+                result.getString("email_address")
+        );
     }
 
     public void updateUser(User user) throws SQLException {
