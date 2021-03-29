@@ -140,6 +140,30 @@ public class DatabaseManager {
         statement.execute();
     }
 
+    public void updateUser(User user) throws SQLException {
+        User oldUser = getUserByID(user.getUserid());
+        String username = user.getUsername();
+        String emailAddress = user.getEmailAddress();
+
+        if (username == null) {
+            username = oldUser.getUsername();
+        }
+        if (emailAddress == null) {
+            emailAddress = oldUser.getEmailAddress();
+        }
+
+        PreparedStatement statement = dbcon.prepareStatement(
+                "UPDATE user " +
+                        "SET username = ?, email_address = ?" +
+                        "WHERE user_id = ?"
+        );
+
+        statement.setString(1, username);
+        statement.setString(2, emailAddress);
+
+        statement.execute();
+    }
+
     public void deleteEntry(long entry_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "DELETE FROM entry WHERE entry_id = ?"
