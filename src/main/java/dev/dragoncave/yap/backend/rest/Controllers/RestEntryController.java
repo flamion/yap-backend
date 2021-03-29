@@ -1,6 +1,6 @@
 package dev.dragoncave.yap.backend.rest.Controllers;
 
-import dev.dragoncave.yap.backend.DatabaseManager;
+import dev.dragoncave.yap.backend.databasemanagers.DatabaseManager;
 import dev.dragoncave.yap.backend.rest.objects.Entry;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
