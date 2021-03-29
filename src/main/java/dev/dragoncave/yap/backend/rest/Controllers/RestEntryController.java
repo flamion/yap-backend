@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 
 @RestController
-public class EntryController {
+public class RestEntryController {
     private static final DatabaseManager dbmanager = DatabaseManager.getInstance();
 
     @GetMapping("/entry/{id}")
