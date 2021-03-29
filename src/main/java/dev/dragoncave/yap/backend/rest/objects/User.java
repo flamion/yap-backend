@@ -1,15 +1,16 @@
 package dev.dragoncave.yap.backend.rest.objects;
 
 import com.google.gson.Gson;
+import dev.dragoncave.yap.backend.DatabaseManager;
 
 import java.util.Objects;
 
 public class User {
-    private long userid;
+    private long userid = -1;
     private String username;
     private String password;
-    private long createDate;
-    private long lastLogin;
+    private long createDate = -1;
+    private long lastLogin = -1;
     private String emailAddress;
 
     public User() {
@@ -88,5 +89,10 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(getUserid(), getUsername(), getCreateDate(), getLastLogin(), getEmailAddress());
+    }
+
+    public boolean isInvalid() {
+        DatabaseManager dbManager = DatabaseManager.getInstance();
+        return userid == 0 || username == null || emailAddress == null;
     }
 }
