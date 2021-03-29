@@ -1,4 +1,4 @@
-import dev.dragoncave.yap.backend.DatabaseManager;
+import dev.dragoncave.yap.backend.databasemanagers.DatabaseManager;
 import dev.dragoncave.yap.backend.rest.objects.Group;
 import dev.dragoncave.yap.backend.rest.objects.User;
 import org.junit.jupiter.api.DisplayName;

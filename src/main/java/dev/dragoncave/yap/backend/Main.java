@@ -1,6 +1,6 @@
 package dev.dragoncave.yap.backend;
 
-import dev.dragoncave.yap.backend.rest.objects.Entry;
+import dev.dragoncave.yap.backend.databasemanagers.DatabaseManager;
 
 public class Main {
 
