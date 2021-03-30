@@ -19,7 +19,7 @@ public class RestEntryController {
     public ResponseEntity<?> getEntry(@PathVariable Long id) {
         try {
             if (!entryController.entryExists(id)) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(entryController.getEntryJson(id), HttpStatus.OK);
         } catch (SQLException ex) {
