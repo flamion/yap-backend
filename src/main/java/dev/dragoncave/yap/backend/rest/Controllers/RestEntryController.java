@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class RestEntryController {
@@ -36,6 +38,28 @@ public class RestEntryController {
             }
 
             return new ResponseEntity<>(entryController.getUserEntries(id), HttpStatus.OK);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+
+    //TODO validate if the entries belong to that use
+    @GetMapping("/bulk/user/{id}/entries/")
+    public ResponseEntity<?> getBulkEntries(@RequestBody List<Long> list, @PathVariable Long id) {
+        try {
+            if (!userController.userExists(id)) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            List<Entry> entries = new ArrayList<>();
+
+            for (var entryID : list) {
+                entries.add(entryController.getEntryByID(entryID));
+            }
+
+            return new ResponseEntity<>(entries, HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
