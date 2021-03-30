@@ -1,7 +1,6 @@
 package dev.dragoncave.yap.backend.rest.objects;
 
 import com.google.gson.Gson;
-import dev.dragoncave.yap.backend.databasemanagers.DatabaseManager;
 
 import java.util.Objects;
 
@@ -92,7 +91,6 @@ public class User {
     }
 
     public boolean isInvalid() {
-        DatabaseManager dbManager = DatabaseManager.getInstance();
         return userid == 0 || username == null || emailAddress == null;
     }
 }

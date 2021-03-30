@@ -1,6 +1,6 @@
 package dev.dragoncave.yap.backend.rest.Controllers;
 
-import dev.dragoncave.yap.backend.databasemanagers.DatabaseManager;
+import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,15 +11,16 @@ import java.sql.SQLException;
 
 @RestController
 public class RestUserController {
-    private static final DatabaseManager dbManager = DatabaseManager.getInstance();
+    private static final UserController userController = UserController.getInstance();
+
 
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
         try {
-            if (!dbManager.userExists(id)) {
+            if (!userController.userExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(dbManager.getUserJson(id), HttpStatus.OK);
+            return new ResponseEntity<>(userController.getUserJson(id), HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -38,11 +39,11 @@ public class RestUserController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-            if (!dbManager.userExists(id)) {
+            if (!userController.userExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            dbManager.updateUser(user);
+            userController.updateUser(user);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -57,7 +58,7 @@ public class RestUserController {
     )
     public ResponseEntity<?> newUser(@RequestBody User newUser) {
         try {
-            long newUserId = dbManager.createUser(newUser);
+            long newUserId = userController.createUser(newUser);
             return new ResponseEntity<>(newUserId, HttpStatus.CREATED);
         } catch (SQLException exception) {
             if (exception.getErrorCode() == 19) {
@@ -73,11 +74,11 @@ public class RestUserController {
     @ResponseStatus
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
-            if (!dbManager.userExists(id)) {
+            if (!userController.userExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            dbManager.deleteUser(id);
+            userController.deleteUser(id);
         } catch (SQLException exception) {
             exception.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
