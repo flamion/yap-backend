@@ -1,7 +1,7 @@
 package dev.dragoncave.yap.backend.rest.objects;
 
 import com.google.gson.Gson;
-import dev.dragoncave.yap.backend.databasemanagers.DatabaseManager;
+import dev.dragoncave.yap.backend.databasemanagers.UserController;
 
 import java.sql.SQLException;
 
@@ -23,7 +23,7 @@ public class Entry {
     }
 
     public Entry(long creatorId, long dueDate, String title, String description) throws SQLException {
-        this.creator = DatabaseManager.getInstance().getUserByID(creatorId);
+        this.creator = UserController.getInstance().getUserByID(creatorId);
         this.createDate = System.currentTimeMillis();
         this.title = title;
         this.description = description;
@@ -86,7 +86,7 @@ public class Entry {
     }
 
     public boolean isInvalid() throws SQLException {
-        DatabaseManager dbmanager = DatabaseManager.getInstance();
-        return (creator == null || !dbmanager.userExists(creator.getUserid()) || title == null || description == null);
+        UserController userController = UserController.getInstance();
+        return (creator == null || !userController.userExists(creator.getUserid()) || title == null || description == null);
     }
 }

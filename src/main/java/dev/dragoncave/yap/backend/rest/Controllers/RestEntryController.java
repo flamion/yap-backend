@@ -1,6 +1,7 @@
 package dev.dragoncave.yap.backend.rest.Controllers;
 
-import dev.dragoncave.yap.backend.databasemanagers.DatabaseManager;
+import dev.dragoncave.yap.backend.databasemanagers.EntryController;
+import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.Entry;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,16 +12,17 @@ import java.sql.SQLException;
 
 @RestController
 public class RestEntryController {
-    private static final DatabaseManager dbManager = DatabaseManager.getInstance();
+    private static final EntryController entryController = EntryController.getInstance();
+    private static final UserController userController = UserController.getInstance();
 
     @GetMapping("/entry/{id}")
     public ResponseEntity<?> getEntry(@PathVariable Long id) {
         try {
-            if (!dbManager.entryExists(id)) {
+            if (!entryController.entryExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            return new ResponseEntity<>(dbManager.getEntryJson(id), HttpStatus.OK);
-        } catch (SQLException ex ) {
+            return new ResponseEntity<>(entryController.getEntryJson(id), HttpStatus.OK);
+        } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -29,11 +31,11 @@ public class RestEntryController {
     @GetMapping("/user/{id}/entries/")
     public ResponseEntity<?> getEntries(@PathVariable Long id) {
         try {
-            if (!dbManager.userExists(id)) {
+            if (!userController.userExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            return new ResponseEntity<>(dbManager.getUserEntries(id), HttpStatus.OK);
+            return new ResponseEntity<>(entryController.getUserEntries(id), HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -50,11 +52,11 @@ public class RestEntryController {
             if (entry.isInvalid()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            if (!dbManager.entryExists(id)) {
+            if (!entryController.entryExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            dbManager.updateEntry(entry);
+            entryController.updateEntry(entry);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -73,7 +75,7 @@ public class RestEntryController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-            long newEntryId = dbManager.createEntry(newEntry);
+            long newEntryId = entryController.createEntry(newEntry);
             if (newEntryId == -1) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -88,11 +90,11 @@ public class RestEntryController {
     @DeleteMapping("/entry/{id}")
     public ResponseEntity<?> deleteEntry(@PathVariable Long id) {
         try {
-            if (!dbManager.entryExists(id)) {
+            if (!entryController.entryExists(id)) {
                 return new ResponseEntity<>("Entry does not exist", HttpStatus.NO_CONTENT);
             }
 
-            dbManager.deleteEntry(id);
+            entryController.deleteEntry(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
