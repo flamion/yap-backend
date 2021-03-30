@@ -32,7 +32,7 @@ public class RestEntryController {
     public ResponseEntity<?> getEntries(@PathVariable Long id) {
         try {
             if (!userController.userExists(id)) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
             return new ResponseEntity<>(entryController.getUserEntries(id), HttpStatus.OK);
