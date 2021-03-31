@@ -47,7 +47,7 @@ public class RestEntryController {
 
     //TODO validate if the entries belong to that user
     @GetMapping("/bulk/user/{id}/entries/")
-    public ResponseEntity<?> getBulkEntries(@RequestBody List<Long> list, @PathVariable Long id) {
+    public ResponseEntity<?> getBulkEntries(@RequestBody List<Long> entryIDs, @PathVariable Long id) {
         try {
             if (!userController.userExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
