@@ -46,16 +46,16 @@ public class RestEntryController {
 
 
     //TODO validate if the entries belong to that user
-    @GetMapping("/bulk/user/{id}/entries/")
-    public ResponseEntity<?> getBulkEntries(@RequestBody List<Long> entryIDs, @PathVariable Long id) {
+    @GetMapping("/bulk/user/{userID}/entries/")
+    public ResponseEntity<?> getBulkEntries(@RequestBody List<Long> entryIDs, @PathVariable Long userID) {
         try {
-            if (!userController.userExists(id)) {
+            if (!userController.userExists(userID)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
             List<Entry> entries = new ArrayList<>();
 
-            for (var entryID : list) {
+            for (var entryID : entryIDs) {
                 entries.add(entryController.getEntryByID(entryID));
             }
 
