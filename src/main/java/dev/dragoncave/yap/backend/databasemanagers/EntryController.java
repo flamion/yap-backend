@@ -1,6 +1,7 @@
 package dev.dragoncave.yap.backend.databasemanagers;
 
 import com.google.gson.Gson;
+import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;
 import dev.dragoncave.yap.backend.rest.objects.Entry;
 
 import java.sql.Connection;
