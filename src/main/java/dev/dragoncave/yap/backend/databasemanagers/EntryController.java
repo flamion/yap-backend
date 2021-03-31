@@ -130,4 +130,16 @@ public class EntryController {
         Gson gson = new Gson();
         return gson.toJson(getEntryByID(entry_id));
     }
+
+    public boolean belongsToUser(long user_id, long entry_ids) throws SQLException {
+        PreparedStatement statement = dbcon.prepareStatement(
+                "SELECT * FROM entry WHERE user_id = ? AND entry_id = ?"
+        );
+
+        statement.setLong(1, user_id);
+        statement.setLong(2, entry_ids);
+
+        ResultSet resultSet = statement.executeQuery();
+        return resultSet.isBeforeFirst();
+    }
 }
