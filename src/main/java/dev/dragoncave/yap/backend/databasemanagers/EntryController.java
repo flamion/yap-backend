@@ -131,7 +131,7 @@ public class EntryController {
         return gson.toJson(getEntryByID(entry_id));
     }
 
-    public boolean belongsToUser(long user_id, long entry_ids) throws SQLException {
+    public boolean entryBelongsToUser(long user_id, long entry_ids) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "SELECT * FROM entry WHERE user_id = ? AND entry_id = ?"
         );
