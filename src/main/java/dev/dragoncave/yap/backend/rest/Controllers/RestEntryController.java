@@ -57,7 +57,7 @@ public class RestEntryController {
                 if (!entryController.entryExists(entryID)) {
                     continue;
                 }
-                if (!entryController.belongsToUser(userID, entryID)) {
+                if (!entryController.entryBelongsToUser(userID, entryID)) {
                     allValid = false;
                     break;
                 }
