@@ -1,4 +1,4 @@
-package dev.dragoncave.yap.backend.databasemanagers;
+package dev.dragoncave.yap.backend.databasemanagers.connections;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
