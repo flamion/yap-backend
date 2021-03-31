@@ -45,7 +45,6 @@ public class RestEntryController {
     }
 
 
-    //TODO validate if the entries belong to that user
     @GetMapping("/bulk/user/{userID}/entries")
     public ResponseEntity<?> getBulkEntries(@RequestBody List<Long> entryIDs, @PathVariable Long userID) {
         try {
