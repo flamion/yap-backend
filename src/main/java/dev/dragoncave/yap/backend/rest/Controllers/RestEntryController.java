@@ -30,7 +30,7 @@ public class RestEntryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/user/{id}/entries/")
+    @GetMapping("/user/{id}/entries")
     public ResponseEntity<?> getEntries(@PathVariable Long id) {
         try {
             if (!userController.userExists(id)) {
@@ -46,7 +46,7 @@ public class RestEntryController {
 
 
     //TODO validate if the entries belong to that user
-    @GetMapping("/bulk/user/{userID}/entries/")
+    @GetMapping("/bulk/user/{userID}/entries")
     public ResponseEntity<?> getBulkEntries(@RequestBody List<Long> entryIDs, @PathVariable Long userID) {
         try {
             if (!userController.userExists(userID)) {
