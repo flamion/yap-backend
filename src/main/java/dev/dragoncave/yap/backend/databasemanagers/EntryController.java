@@ -133,7 +133,7 @@ public class EntryController {
 
     public boolean entryBelongsToUser(long user_id, long entry_ids) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
-                "SELECT * FROM entry WHERE user_id = ? AND entry_id = ?"
+                "SELECT * FROM entry WHERE creator = ? AND entry_id = ?"
         );
 
         statement.setLong(1, user_id);
