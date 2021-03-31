@@ -52,7 +52,7 @@ public class RestUserController {
     }
 
     @PostMapping(
-            value = "/user/",
+            value = "/user",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
