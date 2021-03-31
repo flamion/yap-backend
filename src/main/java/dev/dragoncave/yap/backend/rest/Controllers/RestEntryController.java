@@ -52,6 +52,20 @@ public class RestEntryController {
             if (!userController.userExists(userID)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
+            boolean allValid = true;
+            for (var entryID : entryIDs) {
+                if (!entryController.entryExists(entryID)) {
+                    continue;
+                }
+                if (!entryController.belongsToUser(userID, entryID)) {
+                    allValid = false;
+                    break;
+                }
+            }
+
+            if (!allValid) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
 
             List<Entry> entries = new ArrayList<>();
 
