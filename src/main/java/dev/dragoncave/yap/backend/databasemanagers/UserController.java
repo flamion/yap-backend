@@ -26,14 +26,14 @@ public class UserController {
     public User getUserFromID(long user_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM users WHERE user_id = ?");
         statement.setLong(1, user_id);
-        ResultSet result = statement.executeQuery();
+        ResultSet resultSet = statement.executeQuery();
 
         return new User(
-                result.getInt("user_id"),
-                result.getString("username"),
-                result.getLong("create_date"),
-                result.getLong("last_login"),
-                result.getString("email_address")
+                resultSet.getInt("user_id"),
+                resultSet.getString("username"),
+                resultSet.getLong("create_date"),
+                resultSet.getLong("last_login"),
+                resultSet.getString("email_address")
         );
     }
 
@@ -78,6 +78,7 @@ public class UserController {
         statement.setLong(4, last_login);
         statement.setString(5, email_address);
         statement.execute();
+
         ResultSet group_id = statement.getGeneratedKeys();
         if (group_id.isBeforeFirst()) {
             return group_id.getLong(1);
