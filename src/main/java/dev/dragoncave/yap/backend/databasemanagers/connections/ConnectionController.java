@@ -19,6 +19,8 @@ public class ConnectionController {
             e.printStackTrace();
         }
         assert dbcon != null;
+
+        System.out.println(System.getenv("DB_USERNAME") + "  " + System.getenv("DB_PASS"));
     }
 
     public static ConnectionController getInstance() {
