@@ -27,14 +27,16 @@ public class UserController {
         PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM users WHERE user_id = ?");
         statement.setLong(1, user_id);
         ResultSet resultSet = statement.executeQuery();
-
-        return new User(
-                resultSet.getInt("user_id"),
-                resultSet.getString("username"),
-                resultSet.getLong("create_date"),
-                resultSet.getLong("last_login"),
-                resultSet.getString("email_address")
-        );
+        if (resultSet.next()) {
+            return new User(
+                    resultSet.getInt("user_id"),
+                    resultSet.getString("username"),
+                    resultSet.getLong("create_date"),
+                    resultSet.getLong("last_login"),
+                    resultSet.getString("email_address")
+            );
+        }
+        return null;
     }
 
     public void updateUser(User user) throws SQLException {
@@ -79,7 +81,7 @@ public class UserController {
         statement.setString(5, email_address);
         statement.execute();
         ResultSet group_id = statement.getGeneratedKeys();
-        if (group_id.isBeforeFirst()) {
+        if (group_id.next()) {
             return group_id.getLong(1);
         }
         return -1;
@@ -98,7 +100,7 @@ public class UserController {
         statement.setLong(1, user_id);
         statement.execute();
         ResultSet resultSet = statement.getResultSet();
-        return resultSet.isBeforeFirst();
+        return resultSet.next();
     }
 
     public User getUserByID(long user_id) throws SQLException {
@@ -110,7 +112,7 @@ public class UserController {
         statement.setLong(1, user_id);
         statement.execute();
         ResultSet resultSet = statement.getResultSet();
-        if (!resultSet.isBeforeFirst()) {
+        if (!resultSet.next()) {
             return null;
         }
         return new User(

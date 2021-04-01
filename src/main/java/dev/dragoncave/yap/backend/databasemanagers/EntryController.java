@@ -54,7 +54,7 @@ public class EntryController {
         statement.execute();
 
         ResultSet entryId = statement.getGeneratedKeys();
-        if (entryId.isBeforeFirst()) {
+        if (entryId.next()) {
             return entryId.getLong(1);
         }
         return -1;
@@ -65,7 +65,7 @@ public class EntryController {
         statement.setLong(1, entry_id);
         ResultSet resultSet = statement.executeQuery();
 
-        return resultSet.isBeforeFirst();
+        return resultSet.next();
     }
 
     //Get all entries from a user
@@ -141,6 +141,6 @@ public class EntryController {
         statement.setLong(2, entry_ids);
 
         ResultSet resultSet = statement.executeQuery();
-        return resultSet.isBeforeFirst();
+        return resultSet.next();
     }
 }
