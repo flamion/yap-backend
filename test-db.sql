@@ -5,10 +5,10 @@ user_id INTEGER PRIMARY KEY,
 username TEXT NOT NULL,
 password TEXT NOT NULL,
 create_date INTEGER NOT NULL, last_login, email_address TEXT default NULL);
-INSERT INTO user VALUES(1,'testuser','testpass',1612895671,'1612895671','test@test.com');
-INSERT INTO user VALUES(2,'FlareFlo','Duccus Longus',1612895671,'1612895671','FlareFlo@duck.quack');
-INSERT INTO user VALUES(3,'Unixcorn','Btw i use Arch',1612895671,'1612895671','Unixcorn@i-use-arch.com');
-INSERT INTO user VALUES(4,'flamion','Ur Gay',1612895671,'1612895671','flamion@protonmail.com');
+INSERT INTO users VALUES(1,'testuser','testpass',1612895671,'1612895671','test@test.com');
+INSERT INTO users VALUES(2,'FlareFlo','Duccus Longus',1612895671,'1612895671','FlareFlo@duck.quack');
+INSERT INTO users VALUES(3,'Unixcorn','Btw i use Arch',1612895671,'1612895671','Unixcorn@i-use-arch.com');
+INSERT INTO users VALUES(4,'flamion','Ur Gay',1612895671,'1612895671','flamion@protonmail.com');
 CREATE TABLE entry
 (
     entry_id    INTEGER PRIMARY KEY,
@@ -17,7 +17,7 @@ CREATE TABLE entry
     due_date    INTEGER,
     title       TEXT    NOT NULL,
     description TEXT    NOT NULL DEFAULT '',
-    FOREIGN KEY (creator) REFERENCES user (user_id)
+    FOREIGN KEY (creator) REFERENCES users (user_id)
 );
 INSERT INTO entry VALUES(1,1,1612650686,1612737086,'Test Title','Test Description');
 INSERT INTO entry VALUES(2,4,1612650686,1612737086,'Password Storing','Hash the passwords instead of storing in plaintext');
@@ -32,13 +32,13 @@ group_name TEXT NOT NULL,
 creator INTEGER NOT NULL,
 create_date INTEGER NOT NULL,
 last_access_date INTEGER NOT NULL,
-FOREIGN KEY(creator) REFERENCES user(user_id)
+FOREIGN KEY(creator) REFERENCES users(user_id)
 );
 CREATE TABLE in_group
 (
 user_id INTEGER NOT NULL,
 group_id INTEGER NOT NULL,
-FOREIGN KEY (user_id) REFERENCES user (user_id),
+FOREIGN KEY (user_id) REFERENCES users (user_id),
 FOREIGN KEY (group_id) REFERENCES groups (group_id)
 
 );
@@ -46,7 +46,7 @@ CREATE TABLE admin_in
 (
 user_id INTEGER NOT NULL,
 group_id INTEGER NOT NULL,
-FOREIGN KEY (user_id) REFERENCES user (user_id),
+FOREIGN KEY (user_id) REFERENCES users (user_id),
 FOREIGN KEY (group_id) REFERENCES groups (group_id)
 
 );
