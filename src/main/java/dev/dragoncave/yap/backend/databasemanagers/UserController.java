@@ -78,7 +78,6 @@ public class UserController {
         statement.setLong(4, last_login);
         statement.setString(5, email_address);
         statement.execute();
-
         ResultSet group_id = statement.getGeneratedKeys();
         if (group_id.isBeforeFirst()) {
             return group_id.getLong(1);
