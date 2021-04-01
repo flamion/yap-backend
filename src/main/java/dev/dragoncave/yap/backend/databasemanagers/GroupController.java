@@ -25,7 +25,7 @@ public class GroupController {
         statement.setLong(4, System.currentTimeMillis());
         statement.execute();
         ResultSet group_id = statement.getGeneratedKeys();
-        if (group_id.isBeforeFirst()) {
+        if (group_id.next()) {
             return group_id.getLong(1);
         }
         return -1;
@@ -45,7 +45,7 @@ public class GroupController {
         );
         statement.setLong(1, group_id);
         ResultSet resultSet = statement.executeQuery();
-        if (!resultSet.isBeforeFirst()) {
+        if (!resultSet.next()) {
             return null;
         }
         return new Group(
