@@ -24,7 +24,7 @@ public class UserController {
 
 
     public User getUserFromID(long user_id) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM user WHERE user_id = ?");
+        PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM users WHERE user_id = ?");
         statement.setLong(1, user_id);
         ResultSet result = statement.executeQuery();
 
@@ -50,7 +50,7 @@ public class UserController {
         }
 
         PreparedStatement statement = dbcon.prepareStatement(
-                "UPDATE user " +
+                "UPDATE users " +
                         "SET username = ?, email_address = ?" +
                         "WHERE user_id = ?"
         );
@@ -69,7 +69,7 @@ public class UserController {
     //returns the ID of the just created user or -1 if something went wrong
     public long createUser(String username, String password, long create_date, long last_login, String email_address) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
-                "INSERT INTO user (username, password, create_date, last_login, email_address)" +
+                "INSERT INTO users (username, password, create_date, last_login, email_address)" +
                         "VALUES (?, ?, ?, ?, ?)"
         );
         statement.setString(1, username);
@@ -92,7 +92,7 @@ public class UserController {
     public boolean userExists(long user_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "SELECT user_id, username, create_date, last_login, email_address" +
-                        " FROM user" +
+                        " FROM users" +
                         " WHERE user_id = ?"
         );
         statement.setLong(1, user_id);
@@ -104,7 +104,7 @@ public class UserController {
     public User getUserByID(long user_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "SELECT user_id, username, create_date, last_login, email_address" +
-                        " FROM user" +
+                        " FROM users" +
                         " WHERE user_id = ?"
         );
         statement.setLong(1, user_id);
@@ -124,7 +124,7 @@ public class UserController {
 
     public void deleteUser(long user_id) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
-                "DELETE FROM user WHERE user_id = ?"
+                "DELETE FROM users WHERE user_id = ?"
         );
         statement.setLong(1, user_id);
         statement.execute();
