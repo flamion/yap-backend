@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;
 import dev.dragoncave.yap.backend.rest.objects.User;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 
 public class UserController {
