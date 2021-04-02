@@ -81,7 +81,6 @@ public class UserController {
         ResultSet group_id = statement.getGeneratedKeys();
 
         if (group_id.next()) {
-            System.out.println(group_id.getLong(1));
             return group_id.getLong(1);
         }
         return -1;
