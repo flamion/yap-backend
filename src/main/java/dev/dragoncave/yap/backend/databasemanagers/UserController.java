@@ -69,11 +69,6 @@ public class UserController {
         }
     }
 
-    public String getUserJson(long user_id) throws SQLException {
-        Gson gson = new Gson();
-        return gson.toJson(getUserFromID(user_id));
-    }
-
     //returns the ID of the just created user or -1 if something went wrong
     public long createUser(String username, String password, long create_date, long last_login, String email_address) throws SQLException {
         try (
@@ -159,5 +154,10 @@ public class UserController {
             statement.setLong(1, user_id);
             statement.execute();
         }
+    }
+
+    public String getUserJson(long user_id) throws SQLException {
+        Gson gson = new Gson();
+        return gson.toJson(getUserFromID(user_id));
     }
 }
