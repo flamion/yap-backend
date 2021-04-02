@@ -24,7 +24,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     //implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-    //implementation 'com.zaxxer:HikariCP:4.0.3'
+    implementation 'com.zaxxer:HikariCP:4.0.3'
 
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.19'
 }
