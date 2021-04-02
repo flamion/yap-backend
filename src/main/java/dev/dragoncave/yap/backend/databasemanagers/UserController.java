@@ -7,7 +7,6 @@ import dev.dragoncave.yap.backend.rest.objects.User;
 import java.sql.*;
 
 public class UserController {
-    private static final Connection dbcon = ConnectionController.getInstance().getConnection();
     private static final UserController instance = new UserController();
 
 
@@ -21,17 +20,24 @@ public class UserController {
 
 
     public User getUserFromID(long user_id) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM users WHERE user_id = ?");
-        statement.setLong(1, user_id);
-        ResultSet resultSet = statement.executeQuery();
-        if (resultSet.next()) {
-            return new User(
-                    resultSet.getInt("user_id"),
-                    resultSet.getString("username"),
-                    resultSet.getLong("create_date"),
-                    resultSet.getLong("last_login"),
-                    resultSet.getString("email_address")
-            );
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM users WHERE user_id = ?")
+
+        ) {
+            statement.setLong(1, user_id);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new User(
+                            resultSet.getInt("user_id"),
+                            resultSet.getString("username"),
+                            resultSet.getLong("create_date"),
+                            resultSet.getLong("last_login"),
+                            resultSet.getString("email_address")
+                    );
+                }
+            }
         }
         return null;
     }
@@ -48,16 +54,19 @@ public class UserController {
             emailAddress = oldUser.getEmailAddress();
         }
 
-        PreparedStatement statement = dbcon.prepareStatement(
-                "UPDATE users " +
-                        "SET username = ?, email_address = ?" +
-                        "WHERE user_id = ?"
-        );
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "UPDATE users " +
+                                "SET username = ?, email_address = ?" +
+                                "WHERE user_id = ?"
+                )
+        ) {
+            statement.setString(1, username);
+            statement.setString(2, emailAddress);
 
-        statement.setString(1, username);
-        statement.setString(2, emailAddress);
-
-        statement.execute();
+            statement.execute();
+        }
     }
 
     public String getUserJson(long user_id) throws SQLException {
@@ -67,22 +76,28 @@ public class UserController {
 
     //returns the ID of the just created user or -1 if something went wrong
     public long createUser(String username, String password, long create_date, long last_login, String email_address) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement(
-                "INSERT INTO users (username, password, create_date, last_login, email_address)" +
-                        "VALUES (?, ?, ?, ?, ?)",
-                Statement.RETURN_GENERATED_KEYS //Add to prepared statement as second argument next to the sql because we otherwise don't get the generated ID unlike with MySQL or SQLITE
-        );
-        statement.setString(1, username);
-        statement.setString(2, password);
-        statement.setLong(3, create_date);
-        statement.setLong(4, last_login);
-        statement.setString(5, email_address);
-        statement.execute();
-        ResultSet group_id = statement.getGeneratedKeys();
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "INSERT INTO users (username, password, create_date, last_login, email_address)" +
+                                "VALUES (?, ?, ?, ?, ?)",
+                        Statement.RETURN_GENERATED_KEYS //Add to prepared statement as second argument next to the sql because we otherwise don't get the generated ID unlike with MySQL or SQLITE
+                )
+        ) {
+            statement.setString(1, username);
+            statement.setString(2, password);
+            statement.setLong(3, create_date);
+            statement.setLong(4, last_login);
+            statement.setString(5, email_address);
+            statement.execute();
 
-        if (group_id.next()) {
-            return group_id.getLong(1);
+            try (ResultSet group_id = statement.getGeneratedKeys()) {
+                if (group_id.next()) {
+                    return group_id.getLong(1);
+                }
+            }
         }
+
         return -1;
     }
 
@@ -91,43 +106,58 @@ public class UserController {
     }
 
     public boolean userExists(long user_id) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement(
-                "SELECT user_id, username, create_date, last_login, email_address" +
-                        " FROM users" +
-                        " WHERE user_id = ?"
-        );
-        statement.setLong(1, user_id);
-        statement.execute();
-        ResultSet resultSet = statement.getResultSet();
-        return resultSet.next();
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "SELECT user_id, username, create_date, last_login, email_address" +
+                                " FROM users" +
+                                " WHERE user_id = ?"
+                )
+        ) {
+            statement.setLong(1, user_id);
+            statement.execute();
+
+            try (ResultSet resultSet = statement.getResultSet()) {
+                return resultSet.next();
+            }
+        }
     }
 
     public User getUserByID(long user_id) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement(
-                "SELECT user_id, username, create_date, last_login, email_address" +
-                        " FROM users" +
-                        " WHERE user_id = ?"
-        );
-        statement.setLong(1, user_id);
-        statement.execute();
-        ResultSet resultSet = statement.getResultSet();
-        if (!resultSet.next()) {
-            return null;
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "SELECT user_id, username, create_date, last_login, email_address" +
+                                " FROM users" +
+                                " WHERE user_id = ?"
+                )
+        ) {
+            statement.setLong(1, user_id);
+            statement.execute();
+            try (ResultSet resultSet = statement.getResultSet()) {
+                if (!resultSet.next()) {
+                    return null;
+                }
+                return new User(
+                        resultSet.getLong("user_id"),
+                        resultSet.getString("username"),
+                        resultSet.getLong("create_date"),
+                        resultSet.getLong("last_login"),
+                        resultSet.getString("email_address")
+                );
+            }
         }
-        return new User(
-                resultSet.getLong("user_id"),
-                resultSet.getString("username"),
-                resultSet.getLong("create_date"),
-                resultSet.getLong("last_login"),
-                resultSet.getString("email_address")
-        );
     }
 
     public void deleteUser(long user_id) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement(
-                "DELETE FROM users WHERE user_id = ?"
-        );
-        statement.setLong(1, user_id);
-        statement.execute();
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "DELETE FROM users WHERE user_id = ?"
+                )
+        ) {
+            statement.setLong(1, user_id);
+            statement.execute();
+        }
     }
 }
