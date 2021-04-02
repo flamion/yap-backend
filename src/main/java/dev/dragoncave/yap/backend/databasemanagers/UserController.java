@@ -4,10 +4,8 @@ import com.google.gson.Gson;
 import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;
 import dev.dragoncave.yap.backend.rest.objects.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.swing.plaf.nimbus.State;
+import java.sql.*;
 
 public class UserController {
     private static final Connection dbcon = ConnectionController.getInstance().getConnection();
@@ -72,7 +70,8 @@ public class UserController {
     public long createUser(String username, String password, long create_date, long last_login, String email_address) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "INSERT INTO users (username, password, create_date, last_login, email_address)" +
-                        "VALUES (?, ?, ?, ?, ?)"
+                        "VALUES (?, ?, ?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS //Add to prepared statement as second argument next to the sql because we otherwise don't get the generated ID unlike with MySQL or SQLITE
         );
         statement.setString(1, username);
         statement.setString(2, password);
@@ -81,7 +80,9 @@ public class UserController {
         statement.setString(5, email_address);
         statement.execute();
         ResultSet group_id = statement.getGeneratedKeys();
+
         if (group_id.next()) {
+            System.out.println(group_id.getLong(1));
             return group_id.getLong(1);
         }
         return -1;
