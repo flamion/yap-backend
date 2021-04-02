@@ -4,10 +4,7 @@ import com.google.gson.Gson;
 import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;
 import dev.dragoncave.yap.backend.rest.objects.Entry;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +40,8 @@ public class EntryController {
     public long createEntry(long creator_id, long due_date, String title, String description) throws SQLException {
         PreparedStatement statement = dbcon.prepareStatement(
                 "INSERT INTO entry (creator, create_date, due_date, title, description)" +
-                        "VALUES (?, ?, ?, ?, ?)"
+                        "VALUES (?, ?, ?, ?, ?)",
+                Statement.RETURN_GENERATED_KEYS
         );
         statement.setLong(1, creator_id);
         statement.setLong(2, System.currentTimeMillis());
