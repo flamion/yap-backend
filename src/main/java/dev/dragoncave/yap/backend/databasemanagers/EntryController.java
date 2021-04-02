@@ -148,11 +148,6 @@ public class EntryController {
         }
     }
 
-    public String getEntryJson(long entry_id) throws SQLException {
-        Gson gson = new Gson();
-        return gson.toJson(getEntryByID(entry_id));
-    }
-
     public boolean entryBelongsToUser(long user_id, long entry_ids) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
@@ -167,5 +162,10 @@ public class EntryController {
                 return resultSet.next();
             }
         }
+    }
+
+    public String getEntryJson(long entry_id) throws SQLException {
+        Gson gson = new Gson();
+        return gson.toJson(getEntryByID(entry_id));
     }
 }
