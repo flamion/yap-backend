@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntryController {
-    private static final UserController userController = UserController.getInstance();
 
     private static final EntryController instance = new EntryController();
 
@@ -31,7 +30,7 @@ public class EntryController {
                 resultSet.next();
                 return new Entry(
                         resultSet.getLong("entry_id"),
-                        userController.getUserFromID(resultSet.getLong("creator")),
+                        UserController.getUserFromID(resultSet.getLong("creator")),
                         resultSet.getLong("create_date"),
                         resultSet.getLong("due_date"),
                         resultSet.getString("title"),
