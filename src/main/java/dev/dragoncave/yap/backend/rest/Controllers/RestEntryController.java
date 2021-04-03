@@ -14,16 +14,14 @@ import java.util.List;
 
 @RestController
 public class RestEntryController {
-    private static final EntryController entryController = EntryController.getInstance();
-    private static final UserController userController = UserController.getInstance();
 
     @GetMapping("/entry/{id}")
     public ResponseEntity<?> getEntry(@PathVariable Long id) {
         try {
-            if (!entryController.entryExists(id)) {
+            if (!EntryController.entryExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(entryController.getEntryJson(id), HttpStatus.OK);
+            return new ResponseEntity<>(EntryController.getEntryJson(id), HttpStatus.OK);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -33,11 +31,11 @@ public class RestEntryController {
     @GetMapping("/user/{id}/entries")
     public ResponseEntity<?> getEntries(@PathVariable Long id) {
         try {
-            if (!userController.userExists(id)) {
+            if (!UserController.userExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(entryController.getUserEntries(id), HttpStatus.OK);
+            return new ResponseEntity<>(EntryController.getUserEntries(id), HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -48,15 +46,15 @@ public class RestEntryController {
     @GetMapping("/bulk/user/{userID}/entries")
     public ResponseEntity<?> getBulkEntries(@RequestBody List<Long> entryIDs, @PathVariable Long userID) {
         try {
-            if (!userController.userExists(userID)) {
+            if (!UserController.userExists(userID)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             boolean allValid = true;
             for (var entryID : entryIDs) {
-                if (!entryController.entryExists(entryID)) {
+                if (!EntryController.entryExists(entryID)) {
                     continue;
                 }
-                if (!entryController.entryBelongsToUser(userID, entryID)) {
+                if (!EntryController.entryBelongsToUser(userID, entryID)) {
                     allValid = false;
                     break;
                 }
@@ -69,7 +67,7 @@ public class RestEntryController {
             List<Entry> entries = new ArrayList<>();
 
             for (var entryID : entryIDs) {
-                entries.add(entryController.getEntryByID(entryID));
+                entries.add(EntryController.getEntryByID(entryID));
             }
 
             return new ResponseEntity<>(entries, HttpStatus.OK);
@@ -89,11 +87,11 @@ public class RestEntryController {
             if (entry.isInvalid()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            if (!entryController.entryExists(id)) {
+            if (!EntryController.entryExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            entryController.updateEntry(entry);
+            EntryController.updateEntry(entry);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -112,7 +110,7 @@ public class RestEntryController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-            long newEntryId = entryController.createEntry(newEntry);
+            long newEntryId = EntryController.createEntry(newEntry);
             if (newEntryId == -1) {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -127,11 +125,11 @@ public class RestEntryController {
     @DeleteMapping("/entry/{id}")
     public ResponseEntity<?> deleteEntry(@PathVariable Long id) {
         try {
-            if (!entryController.entryExists(id)) {
+            if (!EntryController.entryExists(id)) {
                 return new ResponseEntity<>("Entry does not exist", HttpStatus.NO_CONTENT);
             }
 
-            entryController.deleteEntry(id);
+            EntryController.deleteEntry(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();

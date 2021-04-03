@@ -7,7 +7,9 @@ import dev.dragoncave.yap.backend.rest.objects.User;
 import java.sql.*;
 
 public class UserController {
-    private UserController(){}
+    private UserController() {
+
+    }
 
 
     public static User getUserFromID(long user_id) throws SQLException {

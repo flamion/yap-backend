@@ -11,10 +11,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class GroupController {
-    private static final UserController userController = UserController.getInstance();
+    private GroupController() {
+
+    }
+
 
     //Returns the group ID of the created group in the Database or -1 if it failed
-    public long createGroup(String group_name, User creator) throws SQLException {
+    public static long createGroup(String group_name, User creator) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement(
@@ -36,7 +39,7 @@ public class GroupController {
         return -1;
     }
 
-    public void deleteGroup(long group_id) throws SQLException {
+    public static void deleteGroup(long group_id) throws SQLException {
 
         try (
                 Connection dbcon = ConnectionController.getConnection();
@@ -49,7 +52,7 @@ public class GroupController {
         }
     }
 
-    public Group getGroupByID(long group_id) throws SQLException {
+    public static Group getGroupByID(long group_id) throws SQLException {
 
         try (
                 Connection dbcon = ConnectionController.getConnection();
@@ -65,7 +68,7 @@ public class GroupController {
                 return new Group(
                         resultSet.getLong("group_id"),
                         resultSet.getString("group_name"),
-                        userController.getUserFromID(resultSet.getLong("creator")),
+                        UserController.getUserFromID(resultSet.getLong("creator")),
                         resultSet.getLong("create_date"),
                         resultSet.getLong("last_access_date")
                 );
@@ -73,7 +76,7 @@ public class GroupController {
         }
     }
 
-    public String getGroupJson(long group_id) throws SQLException {
+    public static String getGroupJson(long group_id) throws SQLException {
         Gson gson = new Gson();
         Group group = getGroupByID(group_id);
 

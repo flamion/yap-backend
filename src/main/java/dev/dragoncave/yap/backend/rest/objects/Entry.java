@@ -23,7 +23,7 @@ public class Entry {
     }
 
     public Entry(long creatorId, long dueDate, String title, String description) throws SQLException {
-        this.creator = UserController.getInstance().getUserByID(creatorId);
+        this.creator = UserController.getUserByID(creatorId);
         this.createDate = System.currentTimeMillis();
         this.title = title;
         this.description = description;
@@ -86,7 +86,6 @@ public class Entry {
     }
 
     public boolean isInvalid() throws SQLException {
-        UserController userController = UserController.getInstance();
-        return (creator == null || !userController.userExists(creator.getUserid()) || title == null || description == null);
+        return (creator == null || !UserController.userExists(creator.getUserid()) || title == null || description == null);
     }
 }

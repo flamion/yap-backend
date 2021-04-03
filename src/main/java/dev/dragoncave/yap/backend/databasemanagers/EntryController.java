@@ -10,17 +10,12 @@ import java.util.List;
 
 public class EntryController {
 
-    private static final EntryController instance = new EntryController();
-
     private EntryController() {
 
     }
 
-    public static EntryController getInstance() {
-        return instance;
-    }
 
-    public Entry getEntryByID(long entry_id) throws SQLException {
+    public static Entry getEntryByID(long entry_id) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE entry_id = ?")
@@ -40,7 +35,7 @@ public class EntryController {
         }
     }
 
-    public long createEntry(long creator_id, long due_date, String title, String description) throws SQLException {
+    public static long createEntry(long creator_id, long due_date, String title, String description) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement(
@@ -66,7 +61,7 @@ public class EntryController {
         return -1;
     }
 
-    public boolean entryExists(long entry_id) throws SQLException {
+    public static boolean entryExists(long entry_id) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE entry_id = ?")
@@ -79,7 +74,7 @@ public class EntryController {
     }
 
     //Get all entries from a user
-    public List<Long> getUserEntries(long user_id) throws SQLException {
+    public static List<Long> getUserEntries(long user_id) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE creator = ?")
@@ -96,11 +91,11 @@ public class EntryController {
         }
     }
 
-    public long createEntry(Entry newEntry) throws SQLException {
+    public static long createEntry(Entry newEntry) throws SQLException {
         return createEntry(newEntry.getCreator().getUserid(), newEntry.getDueDate(), newEntry.getTitle(), newEntry.getDescription());
     }
 
-    public void updateEntry(Entry entry) throws SQLException {
+    public static void updateEntry(Entry entry) throws SQLException {
         Entry oldEntry = getEntryByID(entry.getEntryID());
         long due_date = entry.getDueDate();
         String title = entry.getTitle();
@@ -135,7 +130,7 @@ public class EntryController {
         }
     }
 
-    public void deleteEntry(long entry_id) throws SQLException {
+    public static void deleteEntry(long entry_id) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement(
@@ -147,7 +142,7 @@ public class EntryController {
         }
     }
 
-    public boolean entryBelongsToUser(long user_id, long entry_ids) throws SQLException {
+    public static boolean entryBelongsToUser(long user_id, long entry_ids) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement(
@@ -163,7 +158,7 @@ public class EntryController {
         }
     }
 
-    public String getEntryJson(long entry_id) throws SQLException {
+    public static String getEntryJson(long entry_id) throws SQLException {
         Gson gson = new Gson();
         return gson.toJson(getEntryByID(entry_id));
     }
