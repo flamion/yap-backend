@@ -57,6 +57,10 @@ public class RestUserController {
     )
     public ResponseEntity<?> newUser(@RequestBody User newUser) {
         try {
+            if (newUser.isInvalid()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
             long newUserId = UserController.createUser(newUser);
             return new ResponseEntity<>(newUserId, HttpStatus.CREATED);
         } catch (SQLException exception) {

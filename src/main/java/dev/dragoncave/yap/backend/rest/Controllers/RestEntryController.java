@@ -61,7 +61,7 @@ public class RestEntryController {
             }
 
             if (!allValid) {
-                return new ResponseEntity<>("Entry ID provided which does not belong to the user",HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Entry ID provided which does not belong to the user", HttpStatus.BAD_REQUEST);
             }
 
             List<Entry> entries = new ArrayList<>();
