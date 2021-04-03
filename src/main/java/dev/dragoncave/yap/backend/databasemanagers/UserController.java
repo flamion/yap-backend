@@ -7,19 +7,10 @@ import dev.dragoncave.yap.backend.rest.objects.User;
 import java.sql.*;
 
 public class UserController {
-    private static final UserController instance = new UserController();
+    private UserController(){}
 
 
-    private UserController() {
-
-    }
-
-    public static UserController getInstance() {
-        return instance;
-    }
-
-
-    public User getUserFromID(long user_id) throws SQLException {
+    public static User getUserFromID(long user_id) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM users WHERE user_id = ?")
@@ -42,7 +33,7 @@ public class UserController {
         return null;
     }
 
-    public void updateUser(User user) throws SQLException {
+    public static void updateUser(User user) throws SQLException {
         User oldUser = getUserByID(user.getUserid());
         String username = user.getUsername();
         String emailAddress = user.getEmailAddress();
@@ -70,7 +61,7 @@ public class UserController {
     }
 
     //returns the ID of the just created user or -1 if something went wrong
-    public long createUser(String username, String password, long create_date, long last_login, String email_address) throws SQLException {
+    public static long createUser(String username, String password, long create_date, long last_login, String email_address) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement(
@@ -96,11 +87,11 @@ public class UserController {
         return -1;
     }
 
-    public long createUser(User newUser) throws SQLException {
+    public static long createUser(User newUser) throws SQLException {
         return createUser(newUser.getUsername(), newUser.getPassword(), System.currentTimeMillis(), System.currentTimeMillis(), newUser.getEmailAddress());
     }
 
-    public boolean userExists(long user_id) throws SQLException {
+    public static boolean userExists(long user_id) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement(
@@ -118,7 +109,7 @@ public class UserController {
         }
     }
 
-    public User getUserByID(long user_id) throws SQLException {
+    public static User getUserByID(long user_id) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement(
@@ -144,7 +135,7 @@ public class UserController {
         }
     }
 
-    public void deleteUser(long user_id) throws SQLException {
+    public static void deleteUser(long user_id) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement(
@@ -156,7 +147,7 @@ public class UserController {
         }
     }
 
-    public String getUserJson(long user_id) throws SQLException {
+    public static String getUserJson(long user_id) throws SQLException {
         Gson gson = new Gson();
         return gson.toJson(getUserFromID(user_id));
     }

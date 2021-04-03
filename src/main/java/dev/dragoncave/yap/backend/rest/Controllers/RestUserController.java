@@ -11,16 +11,15 @@ import java.sql.SQLException;
 
 @RestController
 public class RestUserController {
-    private static final UserController userController = UserController.getInstance();
 
 
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
         try {
-            if (!userController.userExists(id)) {
+            if (!UserController.userExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(userController.getUserJson(id), HttpStatus.OK);
+            return new ResponseEntity<>(UserController.getUserJson(id), HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
@@ -39,11 +38,11 @@ public class RestUserController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-            if (!userController.userExists(id)) {
+            if (!UserController.userExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            userController.updateUser(user);
+            UserController.updateUser(user);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -58,7 +57,7 @@ public class RestUserController {
     )
     public ResponseEntity<?> newUser(@RequestBody User newUser) {
         try {
-            long newUserId = userController.createUser(newUser);
+            long newUserId = UserController.createUser(newUser);
             return new ResponseEntity<>(newUserId, HttpStatus.CREATED);
         } catch (SQLException exception) {
             if (exception.getErrorCode() == 19) {
@@ -74,11 +73,11 @@ public class RestUserController {
     @ResponseStatus
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
-            if (!userController.userExists(id)) {
+            if (!UserController.userExists(id)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            userController.deleteUser(id);
+            UserController.deleteUser(id);
         } catch (SQLException exception) {
             exception.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
