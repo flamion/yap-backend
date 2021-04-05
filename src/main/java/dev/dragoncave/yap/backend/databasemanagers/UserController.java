@@ -36,12 +36,8 @@ public class UserController {
                 if (passwordResultSet.next() && saltResultSet.next()) {
                     String passwordHash = passwordResultSet.getString("password");
                     String base64Salt = saltResultSet.getString("salt");
-                    System.out.println(passwordHash);
-                    System.out.println(PasswordUtils.getHash(password, base64Salt));
-                    System.out.println(PasswordUtils.isExpectedPassword(password, base64Salt, passwordHash));
                     return PasswordUtils.isExpectedPassword(password, base64Salt, passwordHash);
                 }
-                System.out.println("Error on next");
             }
 
         }
