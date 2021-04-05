@@ -18,7 +18,7 @@ public class PasswordUtils {
         return bytes;
     }
 
-    public boolean isValidPassword(String password) {
+    public static boolean isValidPassword(String password) {
         return password.length() >= 10;
     }
 
