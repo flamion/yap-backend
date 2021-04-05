@@ -82,5 +82,8 @@ public class SecurityController {
         con2.commit();
 
         System.out.println("commited");
+
+        dbcon.close();
+        con2.close();
     }
 }
