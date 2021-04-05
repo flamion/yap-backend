@@ -1,13 +1,10 @@
 package dev.dragoncave.yap.backend.rest.Controllers.security;
 
 import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.SQLException;
