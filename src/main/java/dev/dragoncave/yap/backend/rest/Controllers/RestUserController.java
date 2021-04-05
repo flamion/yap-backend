@@ -66,27 +66,27 @@ public class RestUserController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping(
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE}
-    )
-    public ResponseEntity<?> newUser(@RequestBody User newUser) {
-        try {
-            if (newUser.isInvalid()) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            long newUserId = UserController.createUser(newUser);
-            return new ResponseEntity<>(newUserId, HttpStatus.CREATED);
-        } catch (SQLException exception) {
-            if (exception.getErrorCode() == 19) {
-                return new ResponseEntity<>("Field missing", HttpStatus.BAD_REQUEST);
-            }
-            exception.printStackTrace();
-        }
-
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @PostMapping(
+//            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+//            produces = {MediaType.APPLICATION_JSON_VALUE}
+//    )
+//    public ResponseEntity<?> newUser(@RequestBody User newUser) {
+//        try {
+//            if (newUser.isInvalid()) {
+//                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//            }
+//
+//            long newUserId = UserController.createUser(newUser);
+//            return new ResponseEntity<>(newUserId, HttpStatus.CREATED);
+//        } catch (SQLException exception) {
+//            if (exception.getErrorCode() == 19) {
+//                return new ResponseEntity<>("Field missing", HttpStatus.BAD_REQUEST);
+//            }
+//            exception.printStackTrace();
+//        }
+//
+//        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus
