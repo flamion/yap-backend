@@ -13,6 +13,7 @@ public class UserController {
 
     }
 
+    //TODO Check if this method actually works (check for change in Database)
     //TODO Optimize Query into a single one using JOIN
     public static boolean passwordMatches(long user_id, String password) throws SQLException, NoSuchAlgorithmException {
         try (
@@ -43,6 +44,7 @@ public class UserController {
         return false;
     }
 
+    //TODO check if this method also actually works (check for change in Database)
     public static void updatePassword(long user_id, String newPassword) throws SQLException, NoSuchAlgorithmException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
