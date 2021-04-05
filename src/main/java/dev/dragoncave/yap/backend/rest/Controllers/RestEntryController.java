@@ -13,9 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/entry")
 public class RestEntryController {
 
-    @GetMapping("/entry/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getEntry(@PathVariable Long id) {
         try {
             if (!EntryController.entryExists(id)) {
@@ -28,7 +29,7 @@ public class RestEntryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PutMapping("/entry/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> putEntry(@PathVariable Long id, @RequestBody Entry entry) {
         try {
             //prevent manipulation of the id inside the entry object but allow if it absent from the object
@@ -51,7 +52,6 @@ public class RestEntryController {
     }
 
     @PostMapping(
-            value = "/entry/",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
@@ -73,7 +73,7 @@ public class RestEntryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/entry/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEntry(@PathVariable Long id) {
         try {
             if (!EntryController.entryExists(id)) {
