@@ -42,6 +42,31 @@ public class UserController {
         return false;
     }
 
+    public static void updatePassword(long user_id, String newPassword) throws SQLException, NoSuchAlgorithmException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement changeUserPasswordStatement = dbcon.prepareStatement(
+                        "UPDATE users SET password = ? WHERE user_id = ?"
+                );
+                PreparedStatement changeSaltStatement = dbcon.prepareStatement(
+                        "UPDATE password_salts SET salt = ? WHERE user_id = ?"
+                )
+        ) {
+            String newSalt = PasswordUtils.getBase64Salt();
+            String newPasswordHash = PasswordUtils.getHash(newPassword, newSalt);
+
+            changeUserPasswordStatement.setString(1, newPasswordHash);
+            changeUserPasswordStatement.setLong(2, user_id);
+
+            changeSaltStatement.setString(1, newSalt);
+            changeSaltStatement.setLong(2, user_id);
+
+            changeUserPasswordStatement.execute();
+            changeSaltStatement.execute();
+
+        }
+    }
+
 
     public static User getUserFromID(long user_id) throws SQLException {
         try (
