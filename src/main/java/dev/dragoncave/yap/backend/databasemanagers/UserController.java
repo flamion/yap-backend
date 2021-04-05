@@ -2,8 +2,10 @@ package dev.dragoncave.yap.backend.databasemanagers;
 
 import com.google.gson.Gson;
 import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;
+import dev.dragoncave.yap.backend.rest.Controllers.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.objects.User;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 public class UserController {
@@ -64,33 +66,48 @@ public class UserController {
     }
 
     //returns the ID of the just created user or -1 if something went wrong
-    public static long createUser(String username, String password, long create_date, long last_login, String email_address) throws SQLException {
+    public static long createUser(String username, String password, long create_date, long last_login, String email_address) throws SQLException, NoSuchAlgorithmException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
-                PreparedStatement statement = dbcon.prepareStatement(
+                PreparedStatement userInsertionStatement = dbcon.prepareStatement(
                         "INSERT INTO users (username, password, create_date, last_login, email_address)" +
                                 "VALUES (?, ?, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS //Add to prepared statement as second argument next to the sql because we otherwise don't get the generated ID unlike with MySQL or SQLITE
+                );
+                PreparedStatement passwordSaltInsertionStatement = dbcon.prepareStatement(
+                        "INSERT INTO password_salts VALUES(?, ?)"
                 )
         ) {
-            statement.setString(1, username);
-            statement.setString(2, password);
-            statement.setLong(3, create_date);
-            statement.setLong(4, last_login);
-            statement.setString(5, email_address);
-            statement.execute();
 
-            try (ResultSet new_user_id_resultset = statement.getGeneratedKeys()) {
-                if (new_user_id_resultset.next()) {
-                    return new_user_id_resultset.getLong(1);
+            String salt = PasswordUtils.getBase64Salt();
+            String hashedPassword = PasswordUtils.getHash(password, salt);
+
+            userInsertionStatement.setString(1, username);
+            userInsertionStatement.setString(2, hashedPassword);
+            userInsertionStatement.setLong(3, create_date);
+            userInsertionStatement.setLong(4, last_login);
+            userInsertionStatement.setString(5, email_address);
+            userInsertionStatement.execute();
+
+            long new_user_id = 0;
+
+            try (ResultSet new_user_id_resultSet = userInsertionStatement.getGeneratedKeys()) {
+                if (new_user_id_resultSet.next()) {
+                    new_user_id = new_user_id_resultSet.getLong(1);
                 }
             }
-        }
 
-        return -1;
+            if (new_user_id != 0) {
+                passwordSaltInsertionStatement.setLong(1, new_user_id);
+                passwordSaltInsertionStatement.setString(2, salt);
+                return new_user_id;
+            }
+
+            return -1;
+        }
     }
 
-    public static long createUser(User newUser) throws SQLException {
+    public static long createUser(User newUser) throws SQLException, NoSuchAlgorithmException {
         return createUser(newUser.getUsername(), newUser.getPassword(), System.currentTimeMillis(), System.currentTimeMillis(), newUser.getEmailAddress());
     }
 
