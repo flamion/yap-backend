@@ -42,41 +42,6 @@ public class RestEntryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-
-    @GetMapping("/bulk/user/{userID}/entries")
-    public ResponseEntity<?> getBulkEntries(@RequestBody List<Long> entryIDs, @PathVariable Long userID) {
-        try {
-            if (!UserController.userExists(userID)) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            boolean allValid = true;
-            for (var entryID : entryIDs) {
-                if (!EntryController.entryExists(entryID)) {
-                    continue;
-                }
-                if (!EntryController.entryBelongsToUser(userID, entryID)) {
-                    allValid = false;
-                    break;
-                }
-            }
-
-            if (!allValid) {
-                return new ResponseEntity<>("Entry ID provided which does not belong to the user", HttpStatus.BAD_REQUEST);
-            }
-
-            List<Entry> entries = new ArrayList<>();
-
-            for (var entryID : entryIDs) {
-                entries.add(EntryController.getEntryByID(entryID));
-            }
-
-            return new ResponseEntity<>(entries, HttpStatus.OK);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
     @PutMapping("/entry/{id}")
     public ResponseEntity<?> putEntry(@PathVariable Long id, @RequestBody Entry entry) {
         try {
