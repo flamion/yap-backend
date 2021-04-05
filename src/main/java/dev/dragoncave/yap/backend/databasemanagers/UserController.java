@@ -91,9 +91,9 @@ public class UserController {
 
             long newUserId = 0;
 
-            try (ResultSet new_user_id_resultSet = userInsertionStatement.getGeneratedKeys()) {
-                if (new_user_id_resultSet.next()) {
-                    newUserId = new_user_id_resultSet.getLong(1);
+            try (ResultSet newUserIdResultSet = userInsertionStatement.getGeneratedKeys()) {
+                if (newUserIdResultSet.next()) {
+                    newUserId = newUserIdResultSet.getLong(1);
                 }
             }
 
