@@ -58,6 +58,10 @@ public class RestUserController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
+            user.setPassword(null); //Make password null in case it is not null. Passwords can be changed behind a specific endpoint
+                                    //and not here since this endpoint can be accessed just with the token. The change password endpoint
+                                    //requires the original password to be sent aswell
+
             UserController.updateUser(user);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (SQLException exception) {
