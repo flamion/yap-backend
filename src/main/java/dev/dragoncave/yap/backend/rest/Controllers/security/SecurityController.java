@@ -46,7 +46,7 @@ public class SecurityController {
                 return new ResponseEntity<>("Wrong Password", HttpStatus.BAD_REQUEST);
             }
 
-            UserController.updatePassword(userId, password);
+            UserController.updatePassword(userId, newPassword);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception exception) {
             if (exception instanceof NumberFormatException) {
