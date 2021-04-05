@@ -57,6 +57,7 @@ public class UserController {
         ) {
             statement.setString(1, username);
             statement.setString(2, emailAddress);
+            statement.setLong(3, user.getUserid());
 
             statement.execute();
         }
