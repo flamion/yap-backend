@@ -18,6 +18,10 @@ public class PasswordUtils {
         return bytes;
     }
 
+    public boolean isValidPassword(String password) {
+        return password.length() >= 10;
+    }
+
     public static boolean isExpectedPassword(String password, String base64Salt, String expectedHash) throws NoSuchAlgorithmException {
         return isExpectedPassword(password, Base64.getDecoder().decode(base64Salt), expectedHash);
     }
