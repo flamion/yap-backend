@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 
 @RestController
+@RequestMapping("/user")
 public class RestUserController {
 
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
         try {
             if (!UserController.userExists(id)) {
@@ -26,7 +27,7 @@ public class RestUserController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> putEntry(@PathVariable Long id, @RequestBody User user) {
         try {
             //prevent manipulation of the id inside the user object but allow if it absent from the object
@@ -51,7 +52,6 @@ public class RestUserController {
     }
 
     @PostMapping(
-            value = "/user",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
@@ -73,7 +73,7 @@ public class RestUserController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
