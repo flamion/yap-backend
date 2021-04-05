@@ -2,6 +2,7 @@ package dev.dragoncave.yap.backend.rest.Controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
+import dev.dragoncave.yap.backend.rest.Controllers.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.objects.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -74,6 +75,10 @@ public class RestUserController {
         try {
             if (newUser.isInvalid()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            if (!PasswordUtils.isValidPassword(newUser.getPassword())) {
+                return new ResponseEntity<>("Invalid Password supplied", HttpStatus.BAD_REQUEST);
             }
 
             long newUserId = UserController.createUser(newUser);
