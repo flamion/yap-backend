@@ -13,6 +13,35 @@ public class UserController {
 
     }
 
+    public static boolean passwordMatches(long user_id, String password) throws SQLException, NoSuchAlgorithmException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement getPasswordStatement = dbcon.prepareStatement(
+                        "SELECT password FROM users WHERE user_id = ?"
+                );
+                PreparedStatement getSaltStatement = dbcon.prepareStatement(
+                        "SELECT salt FROM password_salts WHERE user_id = ?"
+                )
+
+        ) {
+            getPasswordStatement.setLong(1, user_id);
+            getSaltStatement.setLong(1, user_id);
+
+            try (
+                    ResultSet passwordResultSet = getPasswordStatement.executeQuery();
+                    ResultSet saltResultSet = getSaltStatement.executeQuery()
+            ) {
+                if (passwordResultSet.next() && saltResultSet.next()) {
+                    String passwordHash = passwordResultSet.getString("password");
+                    String base64Salt = saltResultSet.getString("salt");
+                    return PasswordUtils.isExpectedPassword(password, base64Salt, passwordHash);
+                }
+            }
+
+        }
+        return false;
+    }
+
 
     public static User getUserFromID(long user_id) throws SQLException {
         try (
