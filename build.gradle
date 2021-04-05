@@ -22,11 +22,15 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    //implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-    implementation 'com.zaxxer:HikariCP:4.0.3'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.session:spring-session-core'
 
+    implementation 'com.zaxxer:HikariCP:4.0.3'
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.19'
+
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {
