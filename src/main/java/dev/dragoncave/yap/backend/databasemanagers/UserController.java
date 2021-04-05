@@ -89,18 +89,18 @@ public class UserController {
             userInsertionStatement.setString(5, email_address);
             userInsertionStatement.execute();
 
-            long new_user_id = 0;
+            long newUserId = 0;
 
             try (ResultSet new_user_id_resultSet = userInsertionStatement.getGeneratedKeys()) {
                 if (new_user_id_resultSet.next()) {
-                    new_user_id = new_user_id_resultSet.getLong(1);
+                    newUserId = new_user_id_resultSet.getLong(1);
                 }
             }
 
-            if (new_user_id != 0) {
-                passwordSaltInsertionStatement.setLong(1, new_user_id);
+            if (newUserId != 0) {
+                passwordSaltInsertionStatement.setLong(1, newUserId);
                 passwordSaltInsertionStatement.setString(2, salt);
-                return new_user_id;
+                return newUserId;
             }
 
             return -1;
