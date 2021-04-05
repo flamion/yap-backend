@@ -18,8 +18,6 @@ import java.util.HashMap;
 @RequestMapping("/security")
 public class SecurityController {
 
-
-    //TODO Fix method
     @PostMapping("/password/update")
     public ResponseEntity<?> changePassword(@RequestBody HashMap<String, String> args) {
         try (
