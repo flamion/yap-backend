@@ -80,9 +80,9 @@ public class UserController {
             statement.setString(5, email_address);
             statement.execute();
 
-            try (ResultSet group_id = statement.getGeneratedKeys()) {
-                if (group_id.next()) {
-                    return group_id.getLong(1);
+            try (ResultSet new_user_id_resultset = statement.getGeneratedKeys()) {
+                if (new_user_id_resultset.next()) {
+                    return new_user_id_resultset.getLong(1);
                 }
             }
         }
