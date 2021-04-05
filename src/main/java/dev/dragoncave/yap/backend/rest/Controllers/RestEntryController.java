@@ -28,20 +28,6 @@ public class RestEntryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/user/{id}/entries")
-    public ResponseEntity<?> getEntries(@PathVariable Long id) {
-        try {
-            if (!UserController.userExists(id)) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
-            return new ResponseEntity<>(EntryController.getUserEntries(id), HttpStatus.OK);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
     @PutMapping("/entry/{id}")
     public ResponseEntity<?> putEntry(@PathVariable Long id, @RequestBody Entry entry) {
         try {

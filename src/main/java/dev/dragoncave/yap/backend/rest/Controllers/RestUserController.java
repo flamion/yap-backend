@@ -1,5 +1,6 @@
 package dev.dragoncave.yap.backend.rest.Controllers;
 
+import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.User;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,20 @@ public class RestUserController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(UserController.getUserJson(id), HttpStatus.OK);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @GetMapping("/{id}/entries")
+    public ResponseEntity<?> getEntries(@PathVariable Long id) {
+        try {
+            if (!UserController.userExists(id)) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(EntryController.getUserEntries(id), HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
