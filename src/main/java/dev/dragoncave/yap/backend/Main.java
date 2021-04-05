@@ -1,13 +1,9 @@
 package dev.dragoncave.yap.backend;
 
-import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;
 import dev.dragoncave.yap.backend.rest.Controllers.security.PasswordUtils;
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Base64;
 
