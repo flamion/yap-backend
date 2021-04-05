@@ -19,7 +19,7 @@ public class PasswordUtils {
     }
 
     public static boolean isValidPassword(String password) {
-        return password.length() >= 10;
+        return password != null && password.length() >= 10;
     }
 
     public static boolean isExpectedPassword(String password, String base64Salt, String expectedHash) throws NoSuchAlgorithmException {
