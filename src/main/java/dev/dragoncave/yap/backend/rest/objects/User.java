@@ -90,6 +90,11 @@ public class User {
         return Objects.hash(getUserid(), getUsername(), getCreateDate(), getLastLogin(), getEmailAddress());
     }
 
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
+    }
+
     public boolean isInvalid() {
         return userid == 0 || username == null || emailAddress == null;
     }
