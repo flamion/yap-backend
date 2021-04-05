@@ -81,7 +81,6 @@ public class RestUserController {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
