@@ -13,6 +13,7 @@ public class UserController {
 
     }
 
+    //TODO Optimize Query into a single one using JOIN
     public static boolean passwordMatches(long user_id, String password) throws SQLException, NoSuchAlgorithmException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
@@ -63,7 +64,6 @@ public class UserController {
 
             changeUserPasswordStatement.execute();
             changeSaltStatement.execute();
-
         }
     }
 
