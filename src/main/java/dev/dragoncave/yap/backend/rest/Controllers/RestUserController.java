@@ -78,10 +78,7 @@ public class RestUserController {
 
             long newUserId = UserController.createUser(newUser);
             return new ResponseEntity<>(newUserId, HttpStatus.CREATED);
-        } catch (SQLException exception) {
-            if (exception.getErrorCode() == 19) {
-                return new ResponseEntity<>("Field missing", HttpStatus.BAD_REQUEST);
-            }
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
 
