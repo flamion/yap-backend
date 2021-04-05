@@ -51,27 +51,27 @@ public class RestEntryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping(
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE}
-    )
-    public ResponseEntity<?> createEntry(@RequestBody Entry newEntry) {
-        try {
-            if (newEntry.isInvalid()) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            long newEntryId = EntryController.createEntry(newEntry);
-            if (newEntryId == -1) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
-            return new ResponseEntity<>(newEntryId, HttpStatus.CREATED);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @PostMapping(
+//            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+//            produces = {MediaType.APPLICATION_JSON_VALUE}
+//    )
+//    public ResponseEntity<?> createEntry(@RequestBody Entry newEntry) {
+//        try {
+//            if (newEntry.isInvalid()) {
+//                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//            }
+//
+//            long newEntryId = EntryController.createEntry(newEntry);
+//            if (newEntryId == -1) {
+//                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//            }
+//
+//            return new ResponseEntity<>(newEntryId, HttpStatus.CREATED);
+//        } catch (SQLException exception) {
+//            exception.printStackTrace();
+//        }
+//        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEntry(@PathVariable Long id) {
