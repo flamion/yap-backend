@@ -2,7 +2,7 @@ package dev.dragoncave.yap.backend.rest.Controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
-import dev.dragoncave.yap.backend.rest.Controllers.security.PasswordUtils;
+import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.objects.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

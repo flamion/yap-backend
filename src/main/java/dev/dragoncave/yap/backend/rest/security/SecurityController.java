@@ -1,4 +1,4 @@
-package dev.dragoncave.yap.backend.rest.Controllers.security;
+package dev.dragoncave.yap.backend.rest.security;
 
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;

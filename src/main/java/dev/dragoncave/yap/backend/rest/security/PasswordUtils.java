@@ -1,4 +1,4 @@
-package dev.dragoncave.yap.backend.rest.Controllers.security;
+package dev.dragoncave.yap.backend.rest.security;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
