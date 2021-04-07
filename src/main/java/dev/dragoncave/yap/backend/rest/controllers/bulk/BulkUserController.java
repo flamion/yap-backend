@@ -1,4 +1,4 @@
-package dev.dragoncave.yap.backend.rest.Controllers.bulk;
+package dev.dragoncave.yap.backend.rest.controllers.bulk;
 
 import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
