@@ -1,7 +1,8 @@
-package dev.dragoncave.yap.backend.rest.security;
+package dev.dragoncave.yap.backend.rest.security.controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;
+import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
