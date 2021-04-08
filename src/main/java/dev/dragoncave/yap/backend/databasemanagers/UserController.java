@@ -48,6 +48,7 @@ public class UserController {
         return false;
     }
 
+    //TODO use JOIN
     public static void updatePassword(long user_id, String newPassword) throws SQLException, NoSuchAlgorithmException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
