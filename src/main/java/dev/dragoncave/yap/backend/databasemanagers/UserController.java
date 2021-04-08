@@ -2,8 +2,8 @@ package dev.dragoncave.yap.backend.databasemanagers;
 
 import com.google.gson.Gson;
 import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;
-import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.objects.User;
+import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -73,13 +73,13 @@ public class UserController {
         }
     }
 
-    public static long getUserIdFromEmailAddress(String email_address) throws SQLException{
+    public static long getUserIdFromEmailAddress(String email_address) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement getIdStatement = dbcon.prepareStatement(
                         "SELECT user_id FROM users WHERE email_address = ?"
                 )
-                ) {
+        ) {
 
             getIdStatement.setString(1, email_address);
 
