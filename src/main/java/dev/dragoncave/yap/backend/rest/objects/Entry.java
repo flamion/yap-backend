@@ -86,6 +86,6 @@ public class Entry {
     }
 
     public boolean isInvalid() throws SQLException {
-        return (creator == null || !UserController.userExists(creator.getUserid()) || title == null || description == null);
+        return (creator == null || !UserController.userExists(creator.getUserid()) || title == null || description == null || entryID == -1);
     }
 }
