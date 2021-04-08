@@ -99,6 +99,7 @@ public class DatabaseTokenStore implements Tokenstore {
                         "SELECT * FROM tokens WHERE token = ?"
                 )
         ) {
+            getTokenStatement.setString(1, token);
             try (ResultSet tokenResultSet = getTokenStatement.executeQuery()) {
                 if (tokenResultSet.next()) {
                     long validUntil = tokenResultSet.getLong("valid_until");
