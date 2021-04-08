@@ -13,6 +13,11 @@ public class UserController {
 
     }
 
+    public static boolean passwordMatches(String email_address, String password) throws SQLException, NoSuchAlgorithmException {
+        long user_id = getUserIdFromEmailAddress(email_address);
+        return passwordMatches(user_id, password);
+    }
+
     //TODO Optimize Query into a single one using JOIN
     public static boolean passwordMatches(long user_id, String password) throws SQLException, NoSuchAlgorithmException {
         try (
