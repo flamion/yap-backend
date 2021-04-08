@@ -90,4 +90,26 @@ public class DatabaseTokenStore implements Tokenstore {
     public void invalidateAllUserTokens(long userId) {
 
     }
+
+    @Override
+    public boolean tokenIsValid(String token) {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement getTokenStatement = dbcon.prepareStatement(
+                        "SELECT * FROM tokens WHERE token = ?"
+                )
+        ) {
+            try (ResultSet tokenResultSet = getTokenStatement.executeQuery()) {
+                if (tokenResultSet.next()) {
+                    long validUntil = tokenResultSet.getLong("valid_until");
+                    if (System.currentTimeMillis() < validUntil) {
+                        return true;
+                    }
+                }
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return false;
+    }
 }
