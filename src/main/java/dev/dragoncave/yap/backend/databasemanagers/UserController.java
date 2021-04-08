@@ -67,6 +67,24 @@ public class UserController {
         }
     }
 
+    public static long getUserIdFromEmailAddress(String email_address) throws SQLException{
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement getIdStatement = dbcon.prepareStatement(
+                        "SELECT user_id FROM users WHERE email_address = ?"
+                )
+                ) {
+
+            getIdStatement.setString(1, email_address);
+
+            try (ResultSet userIdResultSet = getIdStatement.executeQuery()) {
+                if (userIdResultSet.next()) {
+                    return userIdResultSet.getLong("user_id");
+                }
+            }
+        }
+        return -1;
+    }
 
     public static User getUserFromID(long user_id) throws SQLException {
         try (
