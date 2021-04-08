@@ -85,12 +85,22 @@ public class DatabaseTokenStore implements Tokenstore {
 
     @Override
     public void invalidateToken(String token) {
-
     }
 
     @Override
     public void invalidateAllUserTokens(long userId) {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement deleteAllUserTokens = dbcon.prepareStatement(
+                        "DELETE FROM tokens WHERE user_id = ?"
+                )
+        ) {
+            deleteAllUserTokens.setLong(1, userId);
+            deleteAllUserTokens.execute();
 
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @Override
