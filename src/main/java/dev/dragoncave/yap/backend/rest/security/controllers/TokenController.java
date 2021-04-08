@@ -1,11 +1,7 @@
 package dev.dragoncave.yap.backend.rest.security.controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
-import dev.dragoncave.yap.backend.rest.objects.User;
-import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
-import dev.dragoncave.yap.backend.rest.security.tokens.Token;
-import dev.dragoncave.yap.backend.rest.security.tokens.TokenUtils;
 import dev.dragoncave.yap.backend.rest.security.tokens.Tokenstore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +40,7 @@ public class TokenController {
 
     @GetMapping
     @RequestMapping("/checkValid")
-    public ResponseEntity<?> tokenIsValid(@RequestHeader(value="Token") String token) {
+    public ResponseEntity<?> tokenIsValid(@RequestHeader(value = "Token") String token) {
         if (tokenStore.tokenIsValid(token)) {
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
