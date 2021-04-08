@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DatabaseTokenStore implements Tokenstore {
 
-    private static final long VALID_DURATION = 600 * 1000; //how long the token is valid in milliseconds
+    private static final long VALID_DURATION = 60 * 60 * 1000; //how long the token is valid in milliseconds
 
     @Override
     public List<String> getTokensByUserId(long userId) {
