@@ -67,7 +67,7 @@ public class User {
     }
 
     public String toJson() {
-        return new Gson().toJson(this);
+        return this.toString();
     }
 
     public String getPassword() {
