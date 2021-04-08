@@ -9,10 +9,7 @@ import dev.dragoncave.yap.backend.rest.security.tokens.TokenUtils;
 import dev.dragoncave.yap.backend.rest.security.tokens.Tokenstore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -43,5 +40,14 @@ public class TokenController {
             exception.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @GetMapping
+    @RequestMapping("/checkValid")
+    public ResponseEntity<?> tokenIsValid(@RequestHeader(value="Token") String token) {
+        if (tokenStore.tokenIsValid(token)) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.OK);
     }
 }
