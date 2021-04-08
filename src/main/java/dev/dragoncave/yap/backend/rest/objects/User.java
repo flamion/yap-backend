@@ -98,6 +98,6 @@ public class User {
     }
 
     public boolean isInvalid() {
-        return userid == 0 || username == null || emailAddress == null;
+        return userid == -1 || username == null || emailAddress == null;
     }
 }
