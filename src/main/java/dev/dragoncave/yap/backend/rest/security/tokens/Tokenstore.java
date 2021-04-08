@@ -12,4 +12,6 @@ public interface Tokenstore {
     public void invalidateToken(String token);
 
     public void invalidateAllUserTokens(long userId);
+
+    public boolean tokenIsValid(String token);
 }
