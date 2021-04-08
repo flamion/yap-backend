@@ -74,6 +74,8 @@ public class DatabaseTokenStore implements Tokenstore {
             insertNewTokenStatement.setLong(1, userId);
             insertNewTokenStatement.setString(2, newToken);
             insertNewTokenStatement.setLong(3, (System.currentTimeMillis() + VALID_DURATION));
+
+            insertNewTokenStatement.execute();
             return newToken;
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -102,11 +104,14 @@ public class DatabaseTokenStore implements Tokenstore {
             getTokenStatement.setString(1, token);
             try (ResultSet tokenResultSet = getTokenStatement.executeQuery()) {
                 if (tokenResultSet.next()) {
+                    System.out.println("Not empty");
                     long validUntil = tokenResultSet.getLong("valid_until");
+                    System.out.println(validUntil);
                     if (System.currentTimeMillis() < validUntil) {
                         return true;
                     }
                 }
+                System.out.println("empty");
             }
         } catch (SQLException exception) {
             exception.printStackTrace();
