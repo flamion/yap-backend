@@ -3,9 +3,9 @@ package dev.dragoncave.yap.backend.rest.security.tokens;
 import java.util.List;
 
 public interface Tokenstore {
-    public List<Token> getTokensByUserId(long userId);
+    public List<String> getTokensByUserId(long userId);
 
-    public List<Token> getTokensByEmail(String emailAddress);
+    public List<String> getTokensByEmail(String emailAddress);
 
     public String createToken(long userId);
 
