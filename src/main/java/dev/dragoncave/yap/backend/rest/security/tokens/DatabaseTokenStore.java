@@ -68,14 +68,14 @@ public class DatabaseTokenStore implements Tokenstore {
                 PreparedStatement insertNewTokenStatement = dbcon.prepareStatement(
                         "INSERT INTO tokens VALUES (?, ?, ?)"
                 )
-                ) {
+        ) {
             String newToken = TokenUtils.generateToken();
 
             insertNewTokenStatement.setLong(1, userId);
             insertNewTokenStatement.setString(2, newToken);
             insertNewTokenStatement.setLong(3, System.currentTimeMillis() + VALID_DURATION);
             return newToken;
-        }  catch (SQLException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         }
         return null;
