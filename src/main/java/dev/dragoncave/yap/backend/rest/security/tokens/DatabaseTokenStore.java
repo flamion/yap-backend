@@ -14,8 +14,8 @@ public class DatabaseTokenStore implements Tokenstore {
     private static final long VALID_DURATION = 30 * 1000; //how long the token is valid in milliseconds
 
     @Override
-    public List<Token> getTokensByUserId(long userId) {
-        List<Token> tokens = new ArrayList<>();
+    public List<String> getTokensByUserId(long userId) {
+        List<String> tokens = new ArrayList<>();
 
         try (
                 Connection dbcon = ConnectionController.getConnection();
@@ -27,7 +27,7 @@ public class DatabaseTokenStore implements Tokenstore {
 
             try (ResultSet tokenInformationResultSet = getTokensStatement.executeQuery()) {
                 while (tokenInformationResultSet.next()) {
-                    tokens.add(new Token(tokenInformationResultSet.getString("token")));
+                    tokens.add(tokenInformationResultSet.getString("token"));
                 }
             }
 
@@ -38,8 +38,8 @@ public class DatabaseTokenStore implements Tokenstore {
     }
 
     @Override
-    public List<Token> getTokensByEmail(String emailAddress) {
-        List<Token> tokens = new ArrayList<>();
+    public List<String> getTokensByEmail(String emailAddress) {
+        List<String> tokens = new ArrayList<>();
 
         try (
                 Connection dbcon = ConnectionController.getConnection();
@@ -51,7 +51,7 @@ public class DatabaseTokenStore implements Tokenstore {
 
             try (ResultSet tokenInformationResultSet = getTokensStatement.executeQuery()) {
                 while (tokenInformationResultSet.next()) {
-                    tokens.add(new Token(tokenInformationResultSet.getString("token")));
+                    tokens.add(tokenInformationResultSet.getString("token"));
                 }
             }
 
