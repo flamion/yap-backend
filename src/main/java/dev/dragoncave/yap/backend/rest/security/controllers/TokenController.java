@@ -4,6 +4,7 @@ import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
 import dev.dragoncave.yap.backend.rest.security.tokens.Tokenstore;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import java.util.HashMap;
 public class TokenController {
     private static final Tokenstore tokenStore = new DatabaseTokenStore();
 
-    @PostMapping
+    @PostMapping(produces = {MediaType.TEXT_PLAIN_VALUE})
     public ResponseEntity<?> createToken(@RequestBody HashMap<String, String> loginDetails) {
         if (!loginDetails.containsKey("emailAddress") && !loginDetails.containsKey("password")) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
