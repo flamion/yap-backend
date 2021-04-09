@@ -32,7 +32,7 @@ public class TokenController {
                 String newToken = tokenStore.createToken(userId);
                 return new ResponseEntity<>(newToken, HttpStatus.OK);
             }
-            return new ResponseEntity<>("Wrong user or password", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Wrong email address or password", HttpStatus.UNAUTHORIZED);
         } catch (SQLException | NoSuchAlgorithmException exception) {
             exception.printStackTrace();
         }
