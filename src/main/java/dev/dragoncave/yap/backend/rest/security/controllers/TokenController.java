@@ -43,8 +43,8 @@ public class TokenController {
     @RequestMapping("/checkValid")
     public ResponseEntity<?> tokenIsValid(@RequestHeader(value = "Token") String token) {
         if (tokenStore.tokenIsValid(token)) {
-            return new ResponseEntity<>(true, HttpStatus.OK);
+            return new ResponseEntity<>(true, HttpStatus.I_AM_A_TEAPOT);
         }
-        return new ResponseEntity<>(false, HttpStatus.OK);
+        return new ResponseEntity<>(false, HttpStatus.I_AM_A_TEAPOT);
     }
 }
