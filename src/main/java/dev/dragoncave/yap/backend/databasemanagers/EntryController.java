@@ -4,89 +4,98 @@ import com.google.gson.Gson;
 import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;
 import dev.dragoncave.yap.backend.rest.objects.Entry;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EntryController {
-    private static final Connection dbcon = ConnectionController.getInstance().getConnection();
-    private static final UserController userController = UserController.getInstance();
-
-    private static final EntryController instance = new EntryController();
 
     private EntryController() {
 
     }
 
-    public static EntryController getInstance() {
-        return instance;
+
+    public static Entry getEntryByID(long entry_id) throws SQLException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE entry_id = ?")
+        ) {
+            statement.setLong(1, entry_id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                resultSet.next();
+                return new Entry(
+                        resultSet.getLong("entry_id"),
+                        UserController.getUserFromID(resultSet.getLong("creator")),
+                        resultSet.getLong("create_date"),
+                        resultSet.getLong("due_date"),
+                        resultSet.getString("title"),
+                        resultSet.getString("description")
+                );
+            }
+        }
     }
 
-    public Entry getEntryByID(long entry_id) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE entry_id = ?");
-        statement.setLong(1, entry_id);
-        ResultSet resultSet = statement.executeQuery();
+    public static long createEntry(long creator_id, long due_date, String title, String description) throws SQLException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "INSERT INTO entry (creator, create_date, due_date, title, description)" +
+                                "VALUES (?, ?, ?, ?, ?)",
+                        Statement.RETURN_GENERATED_KEYS
+                )
+        ) {
+            statement.setLong(1, creator_id);
+            statement.setLong(2, System.currentTimeMillis());
+            statement.setLong(3, due_date);
+            statement.setString(4, title);
+            statement.setString(5, description);
 
-        return new Entry(
-                resultSet.getLong("entry_id"),
-                userController.getUserFromID(resultSet.getLong("creator")),
-                resultSet.getLong("create_date"),
-                resultSet.getLong("due_date"),
-                resultSet.getString("title"),
-                resultSet.getString("description")
-        );
-    }
+            statement.execute();
 
-    public long createEntry(long creator_id, long due_date, String title, String description) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement(
-                "INSERT INTO entry (creator, create_date, due_date, title, description)" +
-                        "VALUES (?, ?, ?, ?, ?)"
-        );
-        statement.setLong(1, creator_id);
-        statement.setLong(2, System.currentTimeMillis());
-        statement.setLong(3, due_date);
-        statement.setString(4, title);
-        statement.setString(5, description);
-
-        statement.execute();
-
-        ResultSet entryId = statement.getGeneratedKeys();
-        if (entryId.next()) {
-            return entryId.getLong(1);
+            try (ResultSet entryId = statement.getGeneratedKeys()) {
+                if (entryId.next()) {
+                    return entryId.getLong(1);
+                }
+            }
         }
         return -1;
     }
 
-    public boolean entryExists(long entry_id) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE entry_id = ?");
-        statement.setLong(1, entry_id);
-        ResultSet resultSet = statement.executeQuery();
-
-        return resultSet.next();
+    public static boolean entryExists(long entry_id) throws SQLException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE entry_id = ?")
+        ) {
+            statement.setLong(1, entry_id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+        }
     }
 
     //Get all entries from a user
-    public List<Long> getUserEntries(long user_id) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE creator = ?");
-        statement.setLong(1, user_id);
-        ResultSet resultSet = statement.executeQuery();
-        List<Long> entryIds = new ArrayList<>();
+    public static List<Long> getUserEntries(long user_id) throws SQLException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM entry WHERE creator = ?")
+        ) {
+            statement.setLong(1, user_id);
 
-        while (resultSet.next()) {
-            entryIds.add(resultSet.getLong("entry_id"));
+            try (ResultSet resultSet = statement.executeQuery()) {
+                List<Long> entryIds = new ArrayList<>();
+                while (resultSet.next()) {
+                    entryIds.add(resultSet.getLong("entry_id"));
+                }
+                return entryIds;
+            }
         }
-
-        return entryIds;
     }
 
-    public long createEntry(Entry newEntry) throws SQLException {
+    public static long createEntry(Entry newEntry) throws SQLException {
         return createEntry(newEntry.getCreator().getUserid(), newEntry.getDueDate(), newEntry.getTitle(), newEntry.getDescription());
     }
 
-    public void updateEntry(Entry entry) throws SQLException {
+    public static void updateEntry(Entry entry) throws SQLException {
         Entry oldEntry = getEntryByID(entry.getEntryID());
         long due_date = entry.getDueDate();
         String title = entry.getTitle();
@@ -104,43 +113,53 @@ public class EntryController {
             description = oldEntry.getDescription();
         }
 
-        PreparedStatement statement = dbcon.prepareStatement(
-                "UPDATE entry " +
-                        "SET due_date = ?, title = ?, description = ?" +
-                        "WHERE entry_id = ?"
-        );
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "UPDATE entry " +
+                                "SET due_date = ?, title = ?, description = ?" +
+                                "WHERE entry_id = ?"
+                )
+        ) {
+            statement.setLong(1, due_date);
+            statement.setString(2, title);
+            statement.setString(3, description);
+            statement.setLong(4, entry.getEntryID());
 
-        statement.setLong(1, due_date);
-        statement.setString(2, title);
-        statement.setString(3, description);
-        statement.setLong(4, entry.getEntryID());
-
-        statement.execute();
+            statement.execute();
+        }
     }
 
-    public void deleteEntry(long entry_id) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement(
-                "DELETE FROM entry WHERE entry_id = ?"
-        );
-
-        statement.setLong(1, entry_id);
-        statement.execute();
+    public static void deleteEntry(long entry_id) throws SQLException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "DELETE FROM entry WHERE entry_id = ?"
+                )
+        ) {
+            statement.setLong(1, entry_id);
+            statement.execute();
+        }
     }
 
-    public String getEntryJson(long entry_id) throws SQLException {
+    public static boolean entryBelongsToUser(long user_id, long entry_ids) throws SQLException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "SELECT * FROM entry WHERE creator = ? AND entry_id = ?"
+                )
+        ) {
+            statement.setLong(1, user_id);
+            statement.setLong(2, entry_ids);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+        }
+    }
+
+    public static String getEntryJson(long entry_id) throws SQLException {
         Gson gson = new Gson();
         return gson.toJson(getEntryByID(entry_id));
-    }
-
-    public boolean entryBelongsToUser(long user_id, long entry_ids) throws SQLException {
-        PreparedStatement statement = dbcon.prepareStatement(
-                "SELECT * FROM entry WHERE creator = ? AND entry_id = ?"
-        );
-
-        statement.setLong(1, user_id);
-        statement.setLong(2, entry_ids);
-
-        ResultSet resultSet = statement.executeQuery();
-        return resultSet.next();
     }
 }
