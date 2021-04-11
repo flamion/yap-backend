@@ -1,6 +1,5 @@
 package dev.dragoncave.yap.backend.rest.objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
 
 import java.util.Objects;
@@ -8,7 +7,6 @@ import java.util.Objects;
 public class User {
     private long userid = -1;
     private String username;
-    @JsonIgnore
     private String password;
     private long createDate = -1;
     private long lastLogin = -1;
