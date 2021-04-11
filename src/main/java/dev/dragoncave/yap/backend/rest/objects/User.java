@@ -1,6 +1,7 @@
 package dev.dragoncave.yap.backend.rest.objects;
 
 import com.google.gson.Gson;
+import dev.dragoncave.yap.backend.rest.UserUtils;
 
 import java.util.Objects;
 
@@ -96,6 +97,6 @@ public class User {
     }
 
     public boolean isInvalid() {
-        return userid == -1 || username == null || emailAddress == null;
+        return userid == -1 || username == null || !UserUtils.emailIsValid(emailAddress);
     }
 }
