@@ -97,6 +97,6 @@ public class User {
     }
 
     public boolean isInvalid() {
-        return userid == -1 || username == null || !UserUtils.emailIsValid(emailAddress);
+        return username == null || !UserUtils.emailIsValid(emailAddress);
     }
 }
