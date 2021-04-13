@@ -80,14 +80,27 @@ public class RestEntryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteEntry(@PathVariable Long id) {
+    @DeleteMapping("/{entryId}")
+    public ResponseEntity<?> deleteEntry(@RequestHeader(value = "Token") String token, @PathVariable Long entryId) {
         try {
-            if (!EntryController.entryExists(id)) {
+            if (tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            if (!tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            if (!EntryController.entryExists(entryId)) {
                 return new ResponseEntity<>("Entry does not exist", HttpStatus.NO_CONTENT);
             }
 
-            EntryController.deleteEntry(id);
+            long ownerId = tokenStore.getUserIdByToken(token);
+            if (!EntryController.entryBelongsToUser(ownerId, entryId)) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+
+            EntryController.deleteEntry(entryId);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
