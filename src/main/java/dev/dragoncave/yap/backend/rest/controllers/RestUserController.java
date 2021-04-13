@@ -2,9 +2,8 @@ package dev.dragoncave.yap.backend.rest.controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
-import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.objects.User;
-import org.postgresql.util.PSQLException;
+import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
