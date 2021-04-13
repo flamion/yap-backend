@@ -69,7 +69,7 @@ public class RestEntryController {
     }
 
     @PostMapping(
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     public ResponseEntity<?> createEntry(@RequestHeader(value = "Token") String token, @RequestBody Entry newEntry) {
