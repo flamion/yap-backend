@@ -95,11 +95,6 @@ public class RestEntryController {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
-            //Remove this duplicate after next commit
-            if (!tokenStore.tokenIsValid(token)) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-
             if (!EntryController.entryExists(entryId)) {
                 return new ResponseEntity<>("Entry does not exist", HttpStatus.NO_CONTENT);
             }
