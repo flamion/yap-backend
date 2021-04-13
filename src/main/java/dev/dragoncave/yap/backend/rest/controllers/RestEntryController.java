@@ -1,6 +1,7 @@
 package dev.dragoncave.yap.backend.rest.controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.EntryController;
+import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.Entry;
 import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
 import dev.dragoncave.yap.backend.rest.security.tokens.Tokenstore;
@@ -62,8 +63,15 @@ public class RestEntryController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
-    public ResponseEntity<?> createEntry(@RequestBody Entry newEntry) {
+    public ResponseEntity<?> createEntry(@RequestHeader(value = "Token") String token, @RequestBody Entry newEntry) {
         try {
+            if (tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            long ownerId = tokenStore.getUserIdByToken(token);
+            newEntry.setCreator(UserController.getUserFromID(ownerId));
+
             if (newEntry.isInvalid()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
@@ -87,6 +95,7 @@ public class RestEntryController {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
+            //Remove this duplicate after next commit
             if (!tokenStore.tokenIsValid(token)) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
