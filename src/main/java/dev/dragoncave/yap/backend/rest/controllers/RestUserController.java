@@ -2,8 +2,8 @@ package dev.dragoncave.yap.backend.rest.controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
-import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.objects.User;
+import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,6 @@ import java.sql.SQLException;
 @RestController
 @RequestMapping("/user")
 public class RestUserController {
-
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
@@ -47,6 +46,7 @@ public class RestUserController {
     public ResponseEntity<?> putEntry(@PathVariable Long id, @RequestBody User user) {
         try {
             //prevent manipulation of the id inside the user object but allow if it absent from the object
+            //Wont matter anymore with token based authentication
             if (id != user.getUserid()) {
                 user.setUserid(id);
             }
@@ -68,13 +68,17 @@ public class RestUserController {
     }
 
     @PostMapping(
-            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE}
     )
     public ResponseEntity<?> newUser(@RequestBody User newUser) {
         try {
             if (newUser.isInvalid()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            if (UserController.getUserIdFromEmailAddress(newUser.getEmailAddress()) != -1) {
+                return new ResponseEntity<>("User already exists", HttpStatus.CONFLICT);
             }
 
             if (!PasswordUtils.isValidPassword(newUser.getPassword())) {
@@ -90,7 +94,6 @@ public class RestUserController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
             if (!UserController.userExists(id)) {

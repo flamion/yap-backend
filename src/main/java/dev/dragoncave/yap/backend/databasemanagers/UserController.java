@@ -8,6 +8,7 @@ import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
+@SuppressWarnings("SqlResolve")
 public class UserController {
     private UserController() {
 

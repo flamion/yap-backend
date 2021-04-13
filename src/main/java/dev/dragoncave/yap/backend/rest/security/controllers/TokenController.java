@@ -39,7 +39,7 @@ public class TokenController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping
+    @GetMapping(produces = {MediaType.TEXT_PLAIN_VALUE})
     @RequestMapping("/checkValid")
     public ResponseEntity<?> tokenIsValid(@RequestHeader(value = "Token") String token) {
         if (tokenStore.tokenIsValid(token)) {
