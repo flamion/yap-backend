@@ -2,6 +2,8 @@ package dev.dragoncave.yap.backend.rest.controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.rest.objects.Entry;
+import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
+import dev.dragoncave.yap.backend.rest.security.tokens.Tokenstore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import java.sql.SQLException;
 @RestController
 @RequestMapping("/entry")
 public class RestEntryController {
+    Tokenstore tokenStore = new DatabaseTokenStore();
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getEntry(@PathVariable Long id) {
@@ -26,18 +29,25 @@ public class RestEntryController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> putEntry(@PathVariable Long id, @RequestBody Entry entry) {
+    @PutMapping()
+    public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @RequestBody Entry entry) {
         try {
-            //prevent manipulation of the id inside the entry object but allow if it absent from the object
-            if (id != entry.getEntryID()) {
-                entry.setEntryID(id);
+            if (!tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
+
             if (entry.isInvalid()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
-            if (!EntryController.entryExists(id)) {
+
+            long entryId = entry.getEntryID();
+            if (!EntryController.entryExists(entryId)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            long ownerId = tokenStore.getUserIdByToken(token);
+            if (!EntryController.entryBelongsToUser(ownerId, entryId)) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
 
             EntryController.updateEntry(entry);
