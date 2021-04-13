@@ -142,7 +142,7 @@ public class EntryController {
         }
     }
 
-    public static boolean entryBelongsToUser(long user_id, long entry_ids) throws SQLException {
+    public static boolean entryBelongsToUser(long user_id, long entry_id) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
                 PreparedStatement statement = dbcon.prepareStatement(
@@ -150,7 +150,7 @@ public class EntryController {
                 )
         ) {
             statement.setLong(1, user_id);
-            statement.setLong(2, entry_ids);
+            statement.setLong(2, entry_id);
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 return resultSet.next();
