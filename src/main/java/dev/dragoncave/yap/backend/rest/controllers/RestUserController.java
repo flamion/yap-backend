@@ -4,6 +4,7 @@ import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.objects.User;
+import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import java.sql.SQLException;
 @RestController
 @RequestMapping("/user")
 public class RestUserController {
-
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
@@ -76,6 +76,10 @@ public class RestUserController {
         try {
             if (newUser.isInvalid()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            if (UserController.getUserIdFromEmailAddress(newUser.getEmailAddress()) != -1) {
+                return new ResponseEntity<>("User already exists", HttpStatus.CONFLICT);
             }
 
             if (!PasswordUtils.isValidPassword(newUser.getPassword())) {
