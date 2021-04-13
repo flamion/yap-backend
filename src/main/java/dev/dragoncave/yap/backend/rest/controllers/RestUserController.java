@@ -91,7 +91,6 @@ public class RestUserController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
             if (!UserController.userExists(id)) {
