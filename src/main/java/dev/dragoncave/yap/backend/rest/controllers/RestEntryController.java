@@ -17,13 +17,22 @@ import java.sql.SQLException;
 public class RestEntryController {
     Tokenstore tokenStore = new DatabaseTokenStore();
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getEntry(@PathVariable Long id) {
+    @GetMapping("/{entryId}")
+    public ResponseEntity<?> getEntry(@RequestHeader(value = "Token") String token, @PathVariable Long entryId) {
         try {
-            if (!EntryController.entryExists(id)) {
+            if (!tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            long ownerId = tokenStore.getUserIdByToken(token);
+            if (!EntryController.entryBelongsToUser(ownerId, entryId)) {
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            }
+
+            if (!EntryController.entryExists(entryId)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(EntryController.getEntryJson(id), HttpStatus.OK);
+            return new ResponseEntity<>(EntryController.getEntryJson(entryId), HttpStatus.OK);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
