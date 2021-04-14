@@ -13,4 +13,4 @@ This is the backend of YAP and it features:
 - authentication
 - REST API
 
-[Documentation](documentation/Documentation-main.md)
+[REST API Documentation](api-documentation/Documentation-main.md)
