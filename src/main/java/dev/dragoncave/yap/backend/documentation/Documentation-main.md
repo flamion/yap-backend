@@ -9,4 +9,6 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [POST entry](entry/post-entry.md)
 
+[PUT entry](entry/put-entry.md)
+
 [DELETE entry](entry/remove-entry.md)
