@@ -1,4 +1,4 @@
-#GET user
+# GET user
 
 ### Mapping /user
 
@@ -7,6 +7,10 @@
 * Requestbody: none
 
 * Response:
-  * HttpStatus
-  * Json:
-    * User object
+    * HttpStatus
+    * Json:
+        * User object
+
+#### Description:
+
+Returns user object corresponding to the provided token
