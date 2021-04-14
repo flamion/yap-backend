@@ -13,3 +13,5 @@
     * Content: Entry Object
     
 
+####Description:
+Takes an entry id in the path and returns a Json formatted entry object
