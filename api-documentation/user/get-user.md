@@ -7,7 +7,7 @@
 * Requestbody: none
 
 * Response:
-    * HttpStatus
+    * HttpStatus (401, 200)
     * Json:
         * User object
 
