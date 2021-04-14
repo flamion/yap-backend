@@ -15,3 +15,5 @@ This is the documentation for the yap backend. If you find anything missing or s
 # [User]
 
 [GET user](user/get-user.md)
+
+[DELETE user](user/remove-user.md)
