@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseTokenStore implements Tokenstore {
-                                                //Days, hours, minutes, seconds, milliseconds
+    //Days, hours, minutes, seconds, milliseconds
     private static final long VALID_DURATION = 14 * 24 * 60 * 60 * 1000; //how long the token is valid in milliseconds
 
     @Override
@@ -124,5 +124,25 @@ public class DatabaseTokenStore implements Tokenstore {
             exception.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public long getUserIdByToken(String token) {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement getUserIdByTokenStatement = dbcon.prepareStatement(
+                        "SELECT user_id FROM tokens WHERE token = ?"
+                )
+        ) {
+            getUserIdByTokenStatement.setString(1, token);
+            try (ResultSet userIdResultSet = getUserIdByTokenStatement.executeQuery()) {
+                if (userIdResultSet.next()) {
+                    return userIdResultSet.getLong("user_id");
+                }
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return -1;
     }
 }

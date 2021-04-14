@@ -4,6 +4,8 @@ import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.User;
 import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
+import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
+import dev.dragoncave.yap.backend.rest.security.tokens.Tokenstore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,49 +16,50 @@ import java.sql.SQLException;
 @RestController
 @RequestMapping("/user")
 public class RestUserController {
+    Tokenstore tokenStore = new DatabaseTokenStore();
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
+    @GetMapping()
+    public ResponseEntity<?> getUser(@RequestHeader(value = "Token") String token) {
         try {
-            if (!UserController.userExists(id)) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            if (!tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-            return new ResponseEntity<>(UserController.getUserJson(id), HttpStatus.OK);
+
+            long userId = tokenStore.getUserIdByToken(token);
+            return new ResponseEntity<>(UserController.getUserJson(userId), HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/{id}/entries")
-    public ResponseEntity<?> getEntries(@PathVariable Long id) {
+    @GetMapping("/entries")
+    public ResponseEntity<?> getEntries(@RequestHeader(value = "Token") String token) {
         try {
-            if (!UserController.userExists(id)) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            if (!tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
-            return new ResponseEntity<>(EntryController.getUserEntries(id), HttpStatus.OK);
+            long userId = tokenStore.getUserIdByToken(token);
+            return new ResponseEntity<>(EntryController.getUserEntries(userId), HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> putEntry(@PathVariable Long id, @RequestBody User user) {
+    @PutMapping()
+    public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @RequestBody User user) {
         try {
-            //prevent manipulation of the id inside the user object but allow if it absent from the object
-            //Wont matter anymore with token based authentication
-            if (id != user.getUserid()) {
-                user.setUserid(id);
+            if (!tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
+
+            long id = tokenStore.getUserIdByToken(token);
+            user.setUserid(id);
 
             if (user.isInvalid()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            if (!UserController.userExists(id)) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
             UserController.updateUser(user);
@@ -93,14 +96,20 @@ public class RestUserController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    //Todo: maybe require password to delete a user not just the token
+    @DeleteMapping()
+    public ResponseEntity<?> deleteUser(@RequestHeader(value = "Token") String token) {
         try {
-            if (!UserController.userExists(id)) {
+            if (!tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            long userId = tokenStore.getUserIdByToken(token);
+            if (!UserController.userExists(userId)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            UserController.deleteUser(id);
+            UserController.deleteUser(userId);
         } catch (SQLException exception) {
             exception.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

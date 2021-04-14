@@ -14,4 +14,6 @@ public interface Tokenstore {
     void invalidateAllUserTokens(long userId);
 
     boolean tokenIsValid(String token);
+
+    long getUserIdByToken(String token);
 }
