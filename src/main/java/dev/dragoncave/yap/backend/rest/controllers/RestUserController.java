@@ -4,6 +4,8 @@ import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.User;
 import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
+import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
+import dev.dragoncave.yap.backend.rest.security.tokens.Tokenstore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +16,17 @@ import java.sql.SQLException;
 @RestController
 @RequestMapping("/user")
 public class RestUserController {
+    Tokenstore tokenStore = new DatabaseTokenStore();
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
+    @GetMapping()
+    public ResponseEntity<?> getUser(@RequestHeader(value = "Token") String token) {
         try {
-            if (!UserController.userExists(id)) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            if (!tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-            return new ResponseEntity<>(UserController.getUserJson(id), HttpStatus.OK);
+
+            long userId = tokenStore.getUserIdByToken(token);
+            return new ResponseEntity<>(UserController.getUserJson(userId), HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
