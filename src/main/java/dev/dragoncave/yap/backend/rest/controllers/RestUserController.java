@@ -96,6 +96,7 @@ public class RestUserController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    //Todo: maybe require password to delete a user not just the token
     @DeleteMapping()
     public ResponseEntity<?> deleteUser(@RequestHeader(value = "Token") String token) {
         try {
