@@ -96,14 +96,19 @@ public class RestUserController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    @DeleteMapping()
+    public ResponseEntity<?> deleteUser(@RequestHeader(value = "Token") String token) {
         try {
-            if (!UserController.userExists(id)) {
+            if (!tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+
+            long userId = tokenStore.getUserIdByToken(token);
+            if (!UserController.userExists(userId)) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            UserController.deleteUser(id);
+            UserController.deleteUser(userId);
         } catch (SQLException exception) {
             exception.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
