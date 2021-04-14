@@ -33,14 +33,15 @@ public class RestUserController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/{id}/entries")
-    public ResponseEntity<?> getEntries(@PathVariable Long id) {
+    @GetMapping("/entries")
+    public ResponseEntity<?> getEntries(@RequestHeader(value = "Token") String token) {
         try {
-            if (!UserController.userExists(id)) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            if (!tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
-            return new ResponseEntity<>(EntryController.getUserEntries(id), HttpStatus.OK);
+            long userId = tokenStore.getUserIdByToken(token);
+            return new ResponseEntity<>(EntryController.getUserEntries(userId), HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
