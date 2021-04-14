@@ -1,9 +1,8 @@
-#Backend Documentation
+# Backend Documentation
 
 This is the documentation for the yap backend. If you find anything missing or something false, please open an issue
 
-
-#[Entry]
+# [Entry]
 
 [GET entry](entry/get-entry.md)
 
