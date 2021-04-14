@@ -10,7 +10,7 @@
 
 * Response:
     * HttpStatus
-  
+
 #### Description:
 
 Takes a modified, existing entry object and modifies the data in the database
