@@ -48,21 +48,18 @@ public class RestUserController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> putEntry(@PathVariable Long id, @RequestBody User user) {
+    @PutMapping()
+    public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @RequestBody User user) {
         try {
-            //prevent manipulation of the id inside the user object but allow if it absent from the object
-            //Wont matter anymore with token based authentication
-            if (id != user.getUserid()) {
-                user.setUserid(id);
+            if (!tokenStore.tokenIsValid(token)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
+
+            long id = tokenStore.getUserIdByToken(token);
+            user.setUserid(id);
 
             if (user.isInvalid()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-            if (!UserController.userExists(id)) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
             UserController.updateUser(user);
