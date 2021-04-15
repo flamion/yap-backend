@@ -18,4 +18,6 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [POST user](user/post-user.md)
 
+[PUT user](user/put-user.md)
+
 [DELETE user](user/remove-user.md)
