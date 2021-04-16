@@ -10,7 +10,7 @@
         * field: "password: $password"
 
 * Response:
-    * HttpStatus (400, 401, 200)
+    * HttpStatus (400, 403, 200)
     * Plaintext response with token
 
 #### Description
