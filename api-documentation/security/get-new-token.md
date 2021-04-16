@@ -1,5 +1,7 @@
 # Get new token for user
 
+* Method: POST
+
 ### Mapping /security/token
 
 * Requestbody:
