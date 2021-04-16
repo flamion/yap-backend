@@ -32,7 +32,7 @@ public class TokenController {
                 String newToken = tokenStore.createToken(userId);
                 return new ResponseEntity<>(newToken, HttpStatus.OK);
             }
-            return new ResponseEntity<>("Incorrect email address or password", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Incorrect email address or password", HttpStatus.FORBIDDEN);
         } catch (SQLException | NoSuchAlgorithmException exception) {
             exception.printStackTrace();
         }
