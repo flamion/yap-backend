@@ -11,3 +11,17 @@ This is the documentation for the yap backend. If you find anything missing or s
 [PUT entry](entry/put-entry.md)
 
 [DELETE entry](entry/remove-entry.md)
+
+# [User]
+
+[GET user](user/get-user.md)
+
+[POST user](user/post-user.md)
+
+[PUT user](user/put-user.md)
+
+[DELETE user](user/remove-user.md)
+
+# [Security]
+
+[Get user token](security/get-new-token.md)

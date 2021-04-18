@@ -7,9 +7,7 @@
 * Requestbody: none
 
 * Response:
-
     * HttpStatus (401, 403, 204, 200)
-
     * Json:
         * Content: Entry Object
 

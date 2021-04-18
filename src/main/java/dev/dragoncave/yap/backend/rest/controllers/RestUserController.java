@@ -105,15 +105,11 @@ public class RestUserController {
             }
 
             long userId = tokenStore.getUserIdByToken(token);
-            if (!UserController.userExists(userId)) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
             UserController.deleteUser(userId);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (SQLException exception) {
             exception.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
