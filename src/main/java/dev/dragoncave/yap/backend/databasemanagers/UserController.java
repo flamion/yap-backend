@@ -10,245 +10,219 @@ import java.sql.*;
 
 @SuppressWarnings("SqlResolve")
 public class UserController {
-	private UserController() {
+    private UserController() {
 
-	}
+    }
 
-	public static boolean passwordMatches(String email_address, String password) throws SQLException, NoSuchAlgorithmException {
-		long user_id = getUserIdFromEmailAddress(email_address);
-		return passwordMatches(user_id, password);
-	}
+    public static boolean passwordMatches(String email_address, String password) throws SQLException, NoSuchAlgorithmException {
+        long user_id = getUserIdFromEmailAddress(email_address);
+        return passwordMatches(user_id, password);
+    }
 
-	//TODO Optimize Query into a single one using JOIN
-	public static boolean passwordMatches(long user_id, String password) throws SQLException, NoSuchAlgorithmException {
-		try (
-				Connection dbcon = ConnectionController.getConnection();
-				PreparedStatement getPasswordStatement = dbcon.prepareStatement(
-						"SELECT password FROM users WHERE user_id = ?"
-				);
-				PreparedStatement getSaltStatement = dbcon.prepareStatement(
-						"SELECT salt FROM password_salts WHERE user_id = ?"
-				)
+    //TODO Optimize Query into a single one using JOIN
+    public static boolean passwordMatches(long user_id, String password) throws SQLException, NoSuchAlgorithmException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement getPasswordStatement = dbcon.prepareStatement(
+                        "SELECT password FROM users WHERE user_id = ?"
+                );
+                PreparedStatement getSaltStatement = dbcon.prepareStatement(
+                        "SELECT salt FROM password_salts WHERE user_id = ?"
+                )
 
-		) {
-			getPasswordStatement.setLong(1, user_id);
-			getSaltStatement.setLong(1, user_id);
+        ) {
+            getPasswordStatement.setLong(1, user_id);
+            getSaltStatement.setLong(1, user_id);
 
-			try (
-					ResultSet passwordResultSet = getPasswordStatement.executeQuery();
-					ResultSet saltResultSet = getSaltStatement.executeQuery()
-			) {
-				if (passwordResultSet.next() && saltResultSet.next()) {
-					String passwordHash = passwordResultSet.getString("password");
-					String base64Salt = saltResultSet.getString("salt");
-					return PasswordUtils.isExpectedPassword(password, base64Salt, passwordHash);
-				}
-			}
+            try (
+                    ResultSet passwordResultSet = getPasswordStatement.executeQuery();
+                    ResultSet saltResultSet = getSaltStatement.executeQuery()
+            ) {
+                if (passwordResultSet.next() && saltResultSet.next()) {
+                    String passwordHash = passwordResultSet.getString("password");
+                    String base64Salt = saltResultSet.getString("salt");
+                    return PasswordUtils.isExpectedPassword(password, base64Salt, passwordHash);
+                }
+            }
 
-		}
-		return false;
-	}
+        }
+        return false;
+    }
 
-	//TODO use JOIN
-	public static void updatePassword(long user_id, String newPassword) throws SQLException, NoSuchAlgorithmException {
-		try (
-				Connection dbcon = ConnectionController.getConnection();
-				PreparedStatement changeUserPasswordStatement = dbcon.prepareStatement(
-						"UPDATE users SET password = ? WHERE user_id = ?"
-				);
-				PreparedStatement changeSaltStatement = dbcon.prepareStatement(
-						"UPDATE password_salts SET salt = ? WHERE user_id = ?"
-				)
-		) {
-			String newSalt = PasswordUtils.getBase64Salt();
-			String newPasswordHash = PasswordUtils.getHash(newPassword, newSalt);
+    //TODO use JOIN
+    public static void updatePassword(long user_id, String newPassword) throws SQLException, NoSuchAlgorithmException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement changeUserPasswordStatement = dbcon.prepareStatement(
+                        "UPDATE users SET password = ? WHERE user_id = ?"
+                );
+                PreparedStatement changeSaltStatement = dbcon.prepareStatement(
+                        "UPDATE password_salts SET salt = ? WHERE user_id = ?"
+                )
+        ) {
+            String newSalt = PasswordUtils.getBase64Salt();
+            String newPasswordHash = PasswordUtils.getHash(newPassword, newSalt);
 
-			changeUserPasswordStatement.setString(1, newPasswordHash);
-			changeUserPasswordStatement.setLong(2, user_id);
+            changeUserPasswordStatement.setString(1, newPasswordHash);
+            changeUserPasswordStatement.setLong(2, user_id);
 
-			changeSaltStatement.setString(1, newSalt);
-			changeSaltStatement.setLong(2, user_id);
+            changeSaltStatement.setString(1, newSalt);
+            changeSaltStatement.setLong(2, user_id);
 
-			changeUserPasswordStatement.execute();
-			changeSaltStatement.execute();
-		}
-	}
+            changeUserPasswordStatement.execute();
+            changeSaltStatement.execute();
+        }
+    }
 
-	public static long getUserIdFromEmailAddress(String email_address) throws SQLException {
-		try (
-				Connection dbcon = ConnectionController.getConnection();
-				PreparedStatement getIdStatement = dbcon.prepareStatement(
-						"SELECT user_id FROM users WHERE email_address = ?"
-				)
-		) {
+    public static long getUserIdFromEmailAddress(String email_address) throws SQLException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement getIdStatement = dbcon.prepareStatement(
+                        "SELECT user_id FROM users WHERE email_address = ?"
+                )
+        ) {
 
-			getIdStatement.setString(1, email_address);
+            getIdStatement.setString(1, email_address);
 
-			try (ResultSet userIdResultSet = getIdStatement.executeQuery()) {
-				if (userIdResultSet.next()) {
-					return userIdResultSet.getLong("user_id");
-				}
-			}
-		}
-		return -1;
-	}
+            try (ResultSet userIdResultSet = getIdStatement.executeQuery()) {
+                if (userIdResultSet.next()) {
+                    return userIdResultSet.getLong("user_id");
+                }
+            }
+        }
+        return -1;
+    }
 
-	public static User getUserFromID(long user_id) throws SQLException {
-		try (
-				Connection dbcon = ConnectionController.getConnection();
-				PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM users WHERE user_id = ?")
+    public static void updateUser(User user) throws SQLException {
+        User oldUser = getUserByID(user.getUserid());
+        String username = user.getUsername();
+        String emailAddress = user.getEmailAddress();
 
-		) {
-			statement.setLong(1, user_id);
+        if (username == null) {
+            username = oldUser.getUsername();
+        }
+        if (emailAddress == null) {
+            emailAddress = oldUser.getEmailAddress();
+        }
 
-			try (ResultSet resultSet = statement.executeQuery()) {
-				if (resultSet.next()) {
-					return new User(
-							resultSet.getInt("user_id"),
-							resultSet.getString("username"),
-							resultSet.getLong("create_date"),
-							resultSet.getLong("last_login"),
-							resultSet.getString("email_address")
-					);
-				}
-			}
-		}
-		return null;
-	}
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "UPDATE users " +
+                                "SET username = ?, email_address = ?" +
+                                "WHERE user_id = ?"
+                )
+        ) {
+            statement.setString(1, username);
+            statement.setString(2, emailAddress);
+            statement.setLong(3, user.getUserid());
 
-	public static void updateUser(User user) throws SQLException {
-		User oldUser = getUserByID(user.getUserid());
-		String username = user.getUsername();
-		String emailAddress = user.getEmailAddress();
+            statement.execute();
+        }
+    }
 
-		if (username == null) {
-			username = oldUser.getUsername();
-		}
-		if (emailAddress == null) {
-			emailAddress = oldUser.getEmailAddress();
-		}
+    //returns the ID of the just created user or -1 if something went wrong
+    public static long createUser(String username, String password, long create_date, long last_login, String email_address) throws SQLException, NoSuchAlgorithmException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement userInsertionStatement = dbcon.prepareStatement(
+                        "INSERT INTO users (username, password, create_date, last_login, email_address)" +
+                                "VALUES (?, ?, ?, ?, ?)",
+                        Statement.RETURN_GENERATED_KEYS //Add to prepared statement as second argument next to the sql because we otherwise don't get the generated ID unlike with MySQL or SQLITE
+                );
+                PreparedStatement passwordSaltInsertionStatement = dbcon.prepareStatement(
+                        "INSERT INTO password_salts VALUES(?, ?)"
+                )
+        ) {
 
-		try (
-				Connection dbcon = ConnectionController.getConnection();
-				PreparedStatement statement = dbcon.prepareStatement(
-						"UPDATE users " +
-								"SET username = ?, email_address = ?" +
-								"WHERE user_id = ?"
-				)
-		) {
-			statement.setString(1, username);
-			statement.setString(2, emailAddress);
-			statement.setLong(3, user.getUserid());
+            String salt = PasswordUtils.getBase64Salt();
+            String hashedPassword = PasswordUtils.getHash(password, salt);
 
-			statement.execute();
-		}
-	}
+            userInsertionStatement.setString(1, username);
+            userInsertionStatement.setString(2, hashedPassword);
+            userInsertionStatement.setLong(3, create_date);
+            userInsertionStatement.setLong(4, last_login);
+            userInsertionStatement.setString(5, email_address);
+            userInsertionStatement.execute();
 
-	//returns the ID of the just created user or -1 if something went wrong
-	public static long createUser(String username, String password, long create_date, long last_login, String email_address) throws SQLException, NoSuchAlgorithmException {
-		try (
-				Connection dbcon = ConnectionController.getConnection();
-				PreparedStatement userInsertionStatement = dbcon.prepareStatement(
-						"INSERT INTO users (username, password, create_date, last_login, email_address)" +
-								"VALUES (?, ?, ?, ?, ?)",
-						Statement.RETURN_GENERATED_KEYS //Add to prepared statement as second argument next to the sql because we otherwise don't get the generated ID unlike with MySQL or SQLITE
-				);
-				PreparedStatement passwordSaltInsertionStatement = dbcon.prepareStatement(
-						"INSERT INTO password_salts VALUES(?, ?)"
-				)
-		) {
+            long newUserId = 0;
 
-			String salt = PasswordUtils.getBase64Salt();
-			String hashedPassword = PasswordUtils.getHash(password, salt);
+            try (ResultSet newUserIdResultSet = userInsertionStatement.getGeneratedKeys()) {
+                if (newUserIdResultSet.next()) {
+                    newUserId = newUserIdResultSet.getLong(1);
+                }
+            }
 
-			userInsertionStatement.setString(1, username);
-			userInsertionStatement.setString(2, hashedPassword);
-			userInsertionStatement.setLong(3, create_date);
-			userInsertionStatement.setLong(4, last_login);
-			userInsertionStatement.setString(5, email_address);
-			userInsertionStatement.execute();
+            if (newUserId != 0) {
+                passwordSaltInsertionStatement.setLong(1, newUserId);
+                passwordSaltInsertionStatement.setString(2, salt);
+                passwordSaltInsertionStatement.execute();
+                return newUserId;
+            }
 
-			long newUserId = 0;
+            return -1;
+        }
+    }
 
-			try (ResultSet newUserIdResultSet = userInsertionStatement.getGeneratedKeys()) {
-				if (newUserIdResultSet.next()) {
-					newUserId = newUserIdResultSet.getLong(1);
-				}
-			}
+    public static long createUser(User newUser) throws SQLException, NoSuchAlgorithmException {
+        return createUser(newUser.getUsername(), newUser.getPassword(), System.currentTimeMillis(), System.currentTimeMillis(), newUser.getEmailAddress());
+    }
 
-			if (newUserId != 0) {
-				passwordSaltInsertionStatement.setLong(1, newUserId);
-				passwordSaltInsertionStatement.setString(2, salt);
-				passwordSaltInsertionStatement.execute();
-				return newUserId;
-			}
+    public static boolean userExists(long user_id) throws SQLException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "SELECT user_id, username, create_date, last_login, email_address" +
+                                " FROM users" +
+                                " WHERE user_id = ?"
+                )
+        ) {
+            statement.setLong(1, user_id);
+            statement.execute();
 
-			return -1;
-		}
-	}
+            try (ResultSet resultSet = statement.getResultSet()) {
+                return resultSet.next();
+            }
+        }
+    }
 
-	public static long createUser(User newUser) throws SQLException, NoSuchAlgorithmException {
-		return createUser(newUser.getUsername(), newUser.getPassword(), System.currentTimeMillis(), System.currentTimeMillis(), newUser.getEmailAddress());
-	}
+    public static User getUserByID(long user_id) throws SQLException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM users WHERE user_id = ?")
 
-	public static boolean userExists(long user_id) throws SQLException {
-		try (
-				Connection dbcon = ConnectionController.getConnection();
-				PreparedStatement statement = dbcon.prepareStatement(
-						"SELECT user_id, username, create_date, last_login, email_address" +
-								" FROM users" +
-								" WHERE user_id = ?"
-				)
-		) {
-			statement.setLong(1, user_id);
-			statement.execute();
+        ) {
+            statement.setLong(1, user_id);
 
-			try (ResultSet resultSet = statement.getResultSet()) {
-				return resultSet.next();
-			}
-		}
-	}
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new User(
+                            resultSet.getInt("user_id"),
+                            resultSet.getString("username"),
+                            resultSet.getLong("create_date"),
+                            resultSet.getLong("last_login"),
+                            resultSet.getString("email_address")
+                    );
+                }
+            }
+        }
+        return null;
+    }
 
-	public static User getUserByID(long user_id) throws SQLException {
-		try (
-				Connection dbcon = ConnectionController.getConnection();
-				PreparedStatement statement = dbcon.prepareStatement(
-						"SELECT user_id, username, create_date, last_login, email_address" +
-								" FROM users" +
-								" WHERE user_id = ?"
-				)
-		) {
-			statement.setLong(1, user_id);
-			statement.execute();
-			try (ResultSet resultSet = statement.getResultSet()) {
-				if (!resultSet.next()) {
-					return null;
-				}
-				return new User(
-						resultSet.getLong("user_id"),
-						resultSet.getString("username"),
-						resultSet.getLong("create_date"),
-						resultSet.getLong("last_login"),
-						resultSet.getString("email_address")
-				);
-			}
-		}
-	}
+    public static void deleteUser(long user_id) throws SQLException {
+        try (
+                Connection dbcon = ConnectionController.getConnection();
+                PreparedStatement statement = dbcon.prepareStatement(
+                        "DELETE FROM users WHERE user_id = ?"
+                )
+        ) {
+            statement.setLong(1, user_id);
+            statement.execute();
+        }
+    }
 
-	public static void deleteUser(long user_id) throws SQLException {
-		try (
-				Connection dbcon = ConnectionController.getConnection();
-				PreparedStatement statement = dbcon.prepareStatement(
-						"DELETE FROM users WHERE user_id = ?"
-				)
-		) {
-			statement.setLong(1, user_id);
-			statement.execute();
-		}
-	}
-
-	public static String getUserJson(long user_id) throws SQLException {
-		Gson gson = new Gson();
-		return gson.toJson(getUserFromID(user_id));
-	}
+    public static String getUserJson(long user_id) throws SQLException {
+        Gson gson = new Gson();
+        return gson.toJson(getUserByID(user_id));
+    }
 }
