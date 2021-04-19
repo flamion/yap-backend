@@ -1,6 +1,6 @@
 # Backend Documentation
 
-This is the documentation for the yap backend. If you find anything missing or something false, please open an issue
+This is the documentation for the yap backend. If you find anything missing or something incorrect, please open an issue
 
 # [Entry]
 
