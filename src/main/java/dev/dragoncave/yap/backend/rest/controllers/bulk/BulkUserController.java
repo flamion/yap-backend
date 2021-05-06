@@ -15,36 +15,36 @@ import java.util.List;
 @RestController
 @RequestMapping("/bulk/user")
 public class BulkUserController {
-    Tokenstore tokenstore = new DatabaseTokenStore();
+	Tokenstore tokenstore = new DatabaseTokenStore();
 
-    @GetMapping("/entries")
-    public ResponseEntity<?> getBulkEntries(@RequestHeader(value = "Token") String token, @RequestBody List<Long> entryIDs) {
-        try {
-            if (!tokenstore.tokenIsValid(token)) {
-                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
+	@GetMapping("/entries")
+	public ResponseEntity<?> getBulkEntries(@RequestHeader(value = "Token") String token, @RequestBody List<Long> entryIDs) {
+		try {
+			if (!tokenstore.tokenIsValid(token)) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
 
-            long ownerId = tokenstore.getUserIdByToken(token);
-            for (int i = 0; i < entryIDs.size(); i++) {
-                long entryId = entryIDs.get(i);
-                if (!EntryController.entryExists(entryId)) {
-                    entryIDs.remove(i);
-                }
-                if (!EntryController.entryBelongsToUser(ownerId, entryId)) {
-                    entryIDs.remove(i);
-                }
-            }
+			long ownerId = tokenstore.getUserIdByToken(token);
+			for (int i = 0; i < entryIDs.size(); i++) {
+				long entryId = entryIDs.get(i);
+				if (!EntryController.entryExists(entryId)) {
+					entryIDs.remove(i);
+				}
+				if (!EntryController.entryBelongsToUser(ownerId, entryId)) {
+					entryIDs.remove(i);
+				}
+			}
 
-            List<Entry> entries = new ArrayList<>();
+			List<Entry> entries = new ArrayList<>();
 
-            for (var entryID : entryIDs) {
-                entries.add(EntryController.getEntryByID(entryID));
-            }
+			for (var entryID : entryIDs) {
+				entries.add(EntryController.getEntryByID(entryID));
+			}
 
-            return new ResponseEntity<>(entries, HttpStatus.OK);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+			return new ResponseEntity<>(entries, HttpStatus.OK);
+		} catch (SQLException exception) {
+			exception.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }

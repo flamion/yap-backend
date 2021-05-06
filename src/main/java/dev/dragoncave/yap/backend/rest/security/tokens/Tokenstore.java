@@ -3,17 +3,17 @@ package dev.dragoncave.yap.backend.rest.security.tokens;
 import java.util.List;
 
 public interface Tokenstore {
-    List<String> getTokensByUserId(long userId);
+	List<String> getTokensByUserId(long userId);
 
-    List<String> getTokensByEmail(String emailAddress);
+	List<String> getTokensByEmail(String emailAddress);
 
-    String createToken(long userId);
+	String createToken(long userId);
 
-    void invalidateToken(String token);
+	void invalidateToken(String token);
 
-    void invalidateAllUserTokens(long userId);
+	void invalidateAllUserTokens(long userId);
 
-    boolean tokenIsValid(String token);
+	boolean tokenIsValid(String token);
 
-    long getUserIdByToken(String token);
+	long getUserIdByToken(String token);
 }
