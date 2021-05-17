@@ -74,6 +74,10 @@ public class UserController {
         }
     }
 
+    public static User getUserFromEmailAddress(String email_address) throws SQLException {
+        return getUserByID(getUserIdFromEmailAddress(email_address));
+    }
+
     public static long getUserIdFromEmailAddress(String email_address) throws SQLException {
         try (
                 Connection dbcon = ConnectionController.getConnection();
