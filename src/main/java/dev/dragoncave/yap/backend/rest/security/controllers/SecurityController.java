@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 import java.util.HashMap;
 
 @RestController()
@@ -19,7 +17,7 @@ public class SecurityController {
 
 
 	@PutMapping("/changePassword")
-	public ResponseEntity<?> changePassword(@RequestBody HashMap<String, String> requestParams) throws SQLException, NoSuchAlgorithmException {
+	public ResponseEntity<?> changePassword(@RequestBody HashMap<String, String> requestParams) {
 		try {
 			if (!(requestParams.containsKey("emailAddress") && requestParams.containsKey("newPassword") && requestParams.containsKey("oldPassword"))) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
