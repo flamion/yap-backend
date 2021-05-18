@@ -20,20 +20,25 @@ public class SecurityController {
 
 	@PutMapping("/changePassword")
 	public ResponseEntity<?> changePassword(@RequestBody HashMap<String, String> requestParams) throws SQLException, NoSuchAlgorithmException {
-		if (!(requestParams.containsKey("emailAddress") && requestParams.containsKey("newPassword") && requestParams.containsKey("oldPassword"))) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
+		try {
+			if (!(requestParams.containsKey("emailAddress") && requestParams.containsKey("newPassword") && requestParams.containsKey("oldPassword"))) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
 
-		User user = UserController.getUserFromEmailAddress(requestParams.get("emailAddress"));
-		if (user == null) {
-			return new ResponseEntity<>("Incorrect email address provided", HttpStatus.BAD_REQUEST);
-		}
+			User user = UserController.getUserFromEmailAddress(requestParams.get("emailAddress"));
+			if (user == null) {
+				return new ResponseEntity<>("Incorrect email address provided", HttpStatus.BAD_REQUEST);
+			}
 
-		if (!UserController.passwordMatches(user.getUserid(), requestParams.get("oldPassword"))) {
-			return new ResponseEntity<>("Incorrect email address or password provided", HttpStatus.FORBIDDEN);
-		}
+			if (!UserController.passwordMatches(user.getUserid(), requestParams.get("oldPassword"))) {
+				return new ResponseEntity<>("Incorrect email address or password provided", HttpStatus.FORBIDDEN);
+			}
 
-		UserController.updatePassword(user.getUserid(), requestParams.get("newPassword")); //TODO add password constraint check
+			UserController.updatePassword(user.getUserid(), requestParams.get("newPassword")); //TODO add password constraint check
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
