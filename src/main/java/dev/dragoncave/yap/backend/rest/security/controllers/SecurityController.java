@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-@RestController
+@RestController("/security")
 public class SecurityController {
 
 
