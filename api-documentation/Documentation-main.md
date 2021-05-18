@@ -25,3 +25,5 @@ This is the documentation for the yap backend. If you find anything missing or s
 # [Security]
 
 [Get user token](security/get-new-token.md)
+
+[Check if token is valid](security/check-valid-token.md)

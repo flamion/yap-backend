@@ -79,7 +79,7 @@ public class RestEntryController {
             }
 
             long ownerId = tokenStore.getUserIdByToken(token);
-            newEntry.setCreator(UserController.getUserFromID(ownerId));
+            newEntry.setCreator(UserController.getUserByID(ownerId));
 
             if (newEntry.isInvalid()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

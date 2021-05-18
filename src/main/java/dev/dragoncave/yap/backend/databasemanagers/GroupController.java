@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@SuppressWarnings("SqlResolve")
 public class GroupController {
     private GroupController() {
 
@@ -68,7 +69,7 @@ public class GroupController {
                 return new Group(
                         resultSet.getLong("group_id"),
                         resultSet.getString("group_name"),
-                        UserController.getUserFromID(resultSet.getLong("creator")),
+                        UserController.getUserByID(resultSet.getLong("creator")),
                         resultSet.getLong("create_date"),
                         resultSet.getLong("last_access_date")
                 );

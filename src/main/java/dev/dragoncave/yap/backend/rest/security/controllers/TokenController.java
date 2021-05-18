@@ -15,36 +15,36 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/security/token")
 public class TokenController {
-    private static final Tokenstore tokenStore = new DatabaseTokenStore();
+	private static final Tokenstore tokenStore = new DatabaseTokenStore();
 
-    @PostMapping(produces = {MediaType.TEXT_PLAIN_VALUE})
-    public ResponseEntity<?> createToken(@RequestBody HashMap<String, String> loginDetails) {
-        if (!loginDetails.containsKey("emailAddress") && !loginDetails.containsKey("password")) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+	@PostMapping(produces = {MediaType.TEXT_PLAIN_VALUE})
+	public ResponseEntity<?> createToken(@RequestBody HashMap<String, String> loginDetails) {
+		if (!loginDetails.containsKey("emailAddress") && !loginDetails.containsKey("password")) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 
-        String emailAddress = loginDetails.get("emailAddress");
-        String password = loginDetails.get("password");
+		String emailAddress = loginDetails.get("emailAddress");
+		String password = loginDetails.get("password");
 
-        try {
-            long userId = UserController.getUserIdFromEmailAddress(emailAddress);
-            if (UserController.passwordMatches(userId, password)) {
-                String newToken = tokenStore.createToken(userId);
-                return new ResponseEntity<>(newToken, HttpStatus.OK);
-            }
-            return new ResponseEntity<>("Incorrect email address or password", HttpStatus.FORBIDDEN);
-        } catch (SQLException | NoSuchAlgorithmException exception) {
-            exception.printStackTrace();
-        }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+		try {
+			long userId = UserController.getUserIdFromEmailAddress(emailAddress);
+			if (UserController.passwordMatches(userId, password)) {
+				String newToken = tokenStore.createToken(userId);
+				return new ResponseEntity<>(newToken, HttpStatus.OK);
+			}
+			return new ResponseEntity<>("Incorrect email address or password", HttpStatus.FORBIDDEN);
+		} catch (SQLException | NoSuchAlgorithmException exception) {
+			exception.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
-    @GetMapping(produces = {MediaType.TEXT_PLAIN_VALUE})
-    @RequestMapping("/checkValid")
-    public ResponseEntity<?> tokenIsValid(@RequestHeader(value = "Token") String token) {
-        if (tokenStore.tokenIsValid(token)) {
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(false, HttpStatus.OK);
-    }
+	@GetMapping(produces = {MediaType.TEXT_PLAIN_VALUE})
+	@RequestMapping("/checkValid")
+	public ResponseEntity<?> tokenIsValid(@RequestHeader(value = "Token") String token) {
+		if (tokenStore.tokenIsValid(token)) {
+			return new ResponseEntity<>(true, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(false, HttpStatus.OK);
+	}
 }

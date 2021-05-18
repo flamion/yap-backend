@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("SqlResolve")
 public class EntryController {
 
     private EntryController() {
@@ -25,7 +26,7 @@ public class EntryController {
                 resultSet.next();
                 return new Entry(
                         resultSet.getLong("entry_id"),
-                        UserController.getUserFromID(resultSet.getLong("creator")),
+                        UserController.getUserByID(resultSet.getLong("creator")),
                         resultSet.getLong("create_date"),
                         resultSet.getLong("due_date"),
                         resultSet.getString("title"),
