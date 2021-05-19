@@ -11,21 +11,23 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/user")
 public class RestUserController {
-	Tokenstore tokenStore = new DatabaseTokenStore();
+	Tokenstore tokenstore = new DatabaseTokenStore();
 
 	@GetMapping()
 	public ResponseEntity<?> getUser(@RequestHeader(value = "Token") String token) {
 		try {
-			if (!tokenStore.tokenIsValid(token)) {
+			if (!tokenstore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			long userId = tokenStore.getUserIdByToken(token);
+			long userId = tokenstore.getUserIdByToken(token);
 			return new ResponseEntity<>(UserController.getUserJson(userId), HttpStatus.OK);
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -36,11 +38,11 @@ public class RestUserController {
 	@GetMapping("/entries")
 	public ResponseEntity<?> getEntries(@RequestHeader(value = "Token") String token) {
 		try {
-			if (!tokenStore.tokenIsValid(token)) {
+			if (!tokenstore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			long userId = tokenStore.getUserIdByToken(token);
+			long userId = tokenstore.getUserIdByToken(token);
 			return new ResponseEntity<>(EntryController.getUserEntries(userId), HttpStatus.OK);
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -51,11 +53,11 @@ public class RestUserController {
 	@PutMapping()
 	public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @RequestBody User user) {
 		try {
-			if (!tokenStore.tokenIsValid(token)) {
+			if (!tokenstore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			long id = tokenStore.getUserIdByToken(token);
+			long id = tokenstore.getUserIdByToken(token);
 			user.setUserid(id);
 
 			if (user.isInvalid()) {
@@ -96,19 +98,27 @@ public class RestUserController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	//Todo: maybe require password to delete a user not just the token
-	//Todo: remove tokens on delete
 	@DeleteMapping()
-	public ResponseEntity<?> deleteUser(@RequestHeader(value = "Token") String token) {
+	public ResponseEntity<?> deleteUser(@RequestHeader(value = "Token") String token, @RequestBody HashMap<String, String> requestBody) {
 		try {
-			if (!tokenStore.tokenIsValid(token)) {
+			if (!tokenstore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			long userId = tokenStore.getUserIdByToken(token);
+			if (!requestBody.containsKey("password")) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			long userId = tokenstore.getUserIdByToken(token);
+
+			if (!UserController.passwordMatches(userId, requestBody.get("password"))) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			tokenstore.invalidateAllUserTokens(userId);
 			UserController.deleteUser(userId);
 			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (SQLException exception) {
+		} catch (SQLException | NoSuchAlgorithmException exception) {
 			exception.printStackTrace();
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
