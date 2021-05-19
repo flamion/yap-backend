@@ -98,7 +98,6 @@ public class RestUserController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	//Todo: remove tokens on delete
 	@DeleteMapping()
 	public ResponseEntity<?> deleteUser(@RequestHeader(value = "Token") String token, @RequestBody HashMap<String, String> requestBody) {
 		try {
@@ -116,6 +115,7 @@ public class RestUserController {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
+			tokenStore.invalidateAllUserTokens(userId);
 			UserController.deleteUser(userId);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (SQLException | NoSuchAlgorithmException exception) {
