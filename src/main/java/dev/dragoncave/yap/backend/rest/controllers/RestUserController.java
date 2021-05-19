@@ -97,6 +97,7 @@ public class RestUserController {
 	}
 
 	//Todo: maybe require password to delete a user not just the token
+	//Todo: remove tokens on delete
 	@DeleteMapping()
 	public ResponseEntity<?> deleteUser(@RequestHeader(value = "Token") String token) {
 		try {
