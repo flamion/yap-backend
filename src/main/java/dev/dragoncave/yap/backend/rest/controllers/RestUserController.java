@@ -11,7 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/user")
@@ -96,19 +98,27 @@ public class RestUserController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	//Todo: maybe require password to delete a user not just the token
 	//Todo: remove tokens on delete
 	@DeleteMapping()
-	public ResponseEntity<?> deleteUser(@RequestHeader(value = "Token") String token) {
+	public ResponseEntity<?> deleteUser(@RequestHeader(value = "Token") String token, @RequestBody HashMap<String, String> requestBody) {
 		try {
 			if (!tokenStore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
+			if (!requestBody.containsKey("password")) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
 			long userId = tokenStore.getUserIdByToken(token);
+
+			if (!UserController.passwordMatches(userId, requestBody.get("password"))) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
 			UserController.deleteUser(userId);
 			return new ResponseEntity<>(HttpStatus.OK);
-		} catch (SQLException exception) {
+		} catch (SQLException | NoSuchAlgorithmException exception) {
 			exception.printStackTrace();
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
