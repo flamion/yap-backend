@@ -7,7 +7,7 @@ import java.util.Base64;
 public class Main {
     public static void main(String[] args) throws Exception {
         String input = "a";
-        byte[] salt = Base64.getDecoder().decode("+JBzVVwj7ygWdnF1CKLKCg==");
+        byte[] salt = Base64.getDecoder().decode("Ko0qAD/ZTFF/h9QWo8mw7w==");
 
 
         MessageDigest digest = MessageDigest.getInstance("SHA3-512");

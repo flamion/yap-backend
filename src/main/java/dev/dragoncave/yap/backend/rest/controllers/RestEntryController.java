@@ -74,7 +74,7 @@ public class RestEntryController {
     )
     public ResponseEntity<?> createEntry(@RequestHeader(value = "Token") String token, @RequestBody Entry newEntry) {
         try {
-            if (tokenStore.tokenIsValid(token)) {
+            if (!tokenStore.tokenIsValid(token)) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
@@ -100,7 +100,7 @@ public class RestEntryController {
     @DeleteMapping("/{entryId}")
     public ResponseEntity<?> deleteEntry(@RequestHeader(value = "Token") String token, @PathVariable Long entryId) {
         try {
-            if (tokenStore.tokenIsValid(token)) {
+            if (!tokenStore.tokenIsValid(token)) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
 
