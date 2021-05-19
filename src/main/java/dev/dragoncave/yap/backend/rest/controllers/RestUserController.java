@@ -18,16 +18,16 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/user")
 public class RestUserController {
-	Tokenstore tokenStore = new DatabaseTokenStore();
+	Tokenstore tokenstore = new DatabaseTokenStore();
 
 	@GetMapping()
 	public ResponseEntity<?> getUser(@RequestHeader(value = "Token") String token) {
 		try {
-			if (!tokenStore.tokenIsValid(token)) {
+			if (!tokenstore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			long userId = tokenStore.getUserIdByToken(token);
+			long userId = tokenstore.getUserIdByToken(token);
 			return new ResponseEntity<>(UserController.getUserJson(userId), HttpStatus.OK);
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -38,11 +38,11 @@ public class RestUserController {
 	@GetMapping("/entries")
 	public ResponseEntity<?> getEntries(@RequestHeader(value = "Token") String token) {
 		try {
-			if (!tokenStore.tokenIsValid(token)) {
+			if (!tokenstore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			long userId = tokenStore.getUserIdByToken(token);
+			long userId = tokenstore.getUserIdByToken(token);
 			return new ResponseEntity<>(EntryController.getUserEntries(userId), HttpStatus.OK);
 		} catch (SQLException exception) {
 			exception.printStackTrace();
@@ -53,11 +53,11 @@ public class RestUserController {
 	@PutMapping()
 	public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @RequestBody User user) {
 		try {
-			if (!tokenStore.tokenIsValid(token)) {
+			if (!tokenstore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			long id = tokenStore.getUserIdByToken(token);
+			long id = tokenstore.getUserIdByToken(token);
 			user.setUserid(id);
 
 			if (user.isInvalid()) {
@@ -101,7 +101,7 @@ public class RestUserController {
 	@DeleteMapping()
 	public ResponseEntity<?> deleteUser(@RequestHeader(value = "Token") String token, @RequestBody HashMap<String, String> requestBody) {
 		try {
-			if (!tokenStore.tokenIsValid(token)) {
+			if (!tokenstore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
@@ -109,13 +109,13 @@ public class RestUserController {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 
-			long userId = tokenStore.getUserIdByToken(token);
+			long userId = tokenstore.getUserIdByToken(token);
 
 			if (!UserController.passwordMatches(userId, requestBody.get("password"))) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
-			tokenStore.invalidateAllUserTokens(userId);
+			tokenstore.invalidateAllUserTokens(userId);
 			UserController.deleteUser(userId);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (SQLException | NoSuchAlgorithmException exception) {
