@@ -30,6 +30,7 @@ public class TokenController {
 			long userId = UserController.getUserIdFromEmailAddress(emailAddress);
 			if (UserController.passwordMatches(userId, password)) {
 				String newToken = tokenStore.createToken(userId);
+				UserController.updateLastLoginTime(userId);
 				return new ResponseEntity<>(newToken, HttpStatus.OK);
 			}
 			return new ResponseEntity<>("Incorrect email address or password", HttpStatus.FORBIDDEN);
