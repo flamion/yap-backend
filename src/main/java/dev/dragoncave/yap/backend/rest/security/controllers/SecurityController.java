@@ -2,6 +2,8 @@ package dev.dragoncave.yap.backend.rest.security.controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.User;
+import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
+import dev.dragoncave.yap.backend.rest.security.tokens.Tokenstore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,7 +16,7 @@ import java.util.HashMap;
 @RestController()
 @RequestMapping("/security")
 public class SecurityController {
-
+	private final Tokenstore tokenstore = new DatabaseTokenStore();
 
 	@PutMapping("/changePassword")
 	public ResponseEntity<?> changePassword(@RequestBody HashMap<String, String> requestParams) {
@@ -32,6 +34,7 @@ public class SecurityController {
 				return new ResponseEntity<>("Incorrect email address or password provided", HttpStatus.FORBIDDEN);
 			}
 
+			tokenstore.invalidateAllUserTokens(user.getUserid());
 			UserController.updatePassword(user.getUserid(), requestParams.get("newPassword")); //TODO add password constraint check
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception ex) {

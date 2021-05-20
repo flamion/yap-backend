@@ -29,6 +29,7 @@ public class TokenController {
 		try {
 			long userId = UserController.getUserIdFromEmailAddress(emailAddress);
 			if (UserController.passwordMatches(userId, password)) {
+				UserController.updateLastLoginTime(userId);
 				String newToken = tokenStore.createToken(userId);
 				return new ResponseEntity<>(newToken, HttpStatus.OK);
 			}

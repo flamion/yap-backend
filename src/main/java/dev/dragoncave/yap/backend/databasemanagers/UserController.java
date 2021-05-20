@@ -14,6 +14,22 @@ public class UserController {
 
 	}
 
+	public static void updateLastLoginTime(long user_id, long newTime) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement updateTime = dbcon.prepareStatement(
+						"UPDATE users SET last_login = ? WHERE user = ?"
+				)
+		) {
+			updateTime.setLong(1, newTime);
+			updateTime.setLong(2, user_id);
+		}
+	}
+
+	public static void updateLastLoginTime(long user_id) throws SQLException {
+		updateLastLoginTime(user_id, System.currentTimeMillis());
+	}
+
 	public static boolean passwordMatches(String email_address, String password) throws SQLException, NoSuchAlgorithmException {
 		long user_id = getUserIdFromEmailAddress(email_address);
 		return passwordMatches(user_id, password);
