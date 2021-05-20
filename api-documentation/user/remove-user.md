@@ -1,14 +1,16 @@
-#DELETE user
+# DELETE user
 
-###Mapping /user
+### Mapping /user
 
 * Header: "Token $token"
 
-* Requestbody: none
+* Requestbody:
+    * Json:
+        * password
 
-* Response: 
-  * HttpStatus (401, 200)
-  
+* Response:
+    * HttpStatus (401, 200)
 
-####Description:
-Deletes the User who owns the token. **!!Subject to change!!**
+#### Description:
+
+Takes in a token to identify the user to delete it. Requires the password aswell
