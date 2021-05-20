@@ -23,6 +23,7 @@ public class UserController {
 		) {
 			updateTime.setLong(1, newTime);
 			updateTime.setLong(2, user_id);
+			updateTime.execute();
 		}
 	}
 
