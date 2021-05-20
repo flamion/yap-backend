@@ -18,7 +18,7 @@ public class UserController {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement updateTime = dbcon.prepareStatement(
-						"UPDATE users SET last_login = ? WHERE user = ?"
+						"UPDATE users SET last_login = ? WHERE user_id = ?"
 				)
 		) {
 			updateTime.setLong(1, newTime);
