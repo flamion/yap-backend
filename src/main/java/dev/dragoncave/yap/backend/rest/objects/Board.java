@@ -1,5 +1,9 @@
 package dev.dragoncave.yap.backend.rest.objects;
 
+import dev.dragoncave.yap.backend.databasemanagers.UserController;
+
+import java.sql.SQLException;
+
 public class Board {
 	private long boardId;
 	private String name;
@@ -47,5 +51,9 @@ public class Board {
 
 	public void setCreator(User creator) {
 		this.creator = creator;
+	}
+
+	public boolean boardIsInvalid() throws SQLException {
+		return boardId == -1 && name == null && creator == null && !UserController.userExists(creator.getUserid());
 	}
 }
