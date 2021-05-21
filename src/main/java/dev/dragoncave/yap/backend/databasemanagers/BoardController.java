@@ -94,6 +94,18 @@ public class BoardController {
 		}
 	}
 
+	public static boolean boardExists(long board_id) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement statement = dbcon.prepareStatement("SELECT * FROM boards WHERE board_id = ?")
+		) {
+			statement.setLong(1, board_id);
+			try (ResultSet resultSet = statement.executeQuery()) {
+				return resultSet.next();
+			}
+		}
+	}
+
 	public static Board getBoardByID(long board_id) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
