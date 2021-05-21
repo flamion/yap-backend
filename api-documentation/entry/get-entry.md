@@ -1,8 +1,10 @@
 # GET entry
 
-### Mapping /entry/$id
+### Mapping /entry/{entryID}
 
 * Header: "Token $token"
+
+* Pathvariable: entryID
 
 * Requestbody: none
 
