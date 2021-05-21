@@ -36,12 +36,12 @@ public class EntryController {
 		}
 	}
 
-	public static long createEntry(long creator_id, long due_date, String title, String description) throws SQLException {
+	public static long createEntry(long creator_id, long due_date, String title, String description, long board_id) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement statement = dbcon.prepareStatement(
-						"INSERT INTO entry (creator, create_date, due_date, title, description)" +
-								"VALUES (?, ?, ?, ?, ?)",
+						"INSERT INTO entry (creator, create_date, due_date, title, description, board_id)" +
+								"VALUES (?, ?, ?, ?, ?, ?)",
 						Statement.RETURN_GENERATED_KEYS
 				)
 		) {
@@ -50,6 +50,7 @@ public class EntryController {
 			statement.setLong(3, due_date);
 			statement.setString(4, title);
 			statement.setString(5, description);
+			statement.setLong(6, board_id);
 
 			statement.execute();
 
@@ -108,8 +109,8 @@ public class EntryController {
 		}
 	}
 
-	public static long createEntry(Entry newEntry) throws SQLException {
-		return createEntry(newEntry.getCreator().getUserid(), newEntry.getDueDate(), newEntry.getTitle(), newEntry.getDescription());
+	public static long createEntry(Entry newEntry, long boardID) throws SQLException {
+		return createEntry(newEntry.getCreator().getUserid(), newEntry.getDueDate(), newEntry.getTitle(), newEntry.getDescription(), boardID);
 	}
 
 	public static void updateEntry(Entry entry) throws SQLException {
