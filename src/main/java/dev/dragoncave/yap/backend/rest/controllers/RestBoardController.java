@@ -43,7 +43,7 @@ public class RestBoardController {
 
 			long userID = tokenstore.getUserIdByToken(token);
 
-			if (!BoardController.userHasAccessToBoard(userID, boardID)) {
+			if (!BoardController.userIsBoardMember(userID, boardID)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
@@ -68,7 +68,7 @@ public class RestBoardController {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 
-			if (!BoardController.userHasAccessToBoard(userID, boardID)) {
+			if (!BoardController.userIsBoardMember(userID, boardID)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
@@ -96,7 +96,7 @@ public class RestBoardController {
 			}
 
 			long userID = tokenstore.getUserIdByToken(token);
-			if (!BoardController.userHasAccessToBoard(userID, boardID)) {
+			if (!BoardController.userIsBoardMember(userID, boardID)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
@@ -172,7 +172,7 @@ public class RestBoardController {
 			}
 
 			long newMemberID = UserController.getUserIdFromEmailAddress(requestBody.get("emailAddress"));
-			if (!BoardController.userHasAccessToBoard(newMemberID, boardID)) {
+			if (!BoardController.userIsBoardMember(newMemberID, boardID)) {
 				BoardController.addMemberToBoard(userID, boardID);
 			}
 

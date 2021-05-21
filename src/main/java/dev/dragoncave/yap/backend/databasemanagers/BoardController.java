@@ -80,7 +80,7 @@ public class BoardController {
 		return createNewBoard(user_id, newBoard.getName(), System.currentTimeMillis());
 	}
 
-	public static boolean userHasAccessToBoard(long user_id, long board_id) throws SQLException {
+	public static boolean userIsBoardMember(long user_id, long board_id) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement canAccess = dbcon.prepareStatement(
