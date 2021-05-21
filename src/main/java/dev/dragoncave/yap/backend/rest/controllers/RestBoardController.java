@@ -90,9 +90,11 @@ public class RestBoardController {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			long userID = tokenstore.getUserIdByToken(token);
+			if (!BoardController.boardExists(boardID)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
 
-			//TODO: Check if board exists to return appropriate Error response, not Forbidden
+			long userID = tokenstore.getUserIdByToken(token);
 			if (!BoardController.userHasAccessToBoard(userID, boardID)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
