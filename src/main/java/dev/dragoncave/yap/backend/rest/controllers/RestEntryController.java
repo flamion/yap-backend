@@ -1,5 +1,6 @@
 package dev.dragoncave.yap.backend.rest.controllers;
 
+import dev.dragoncave.yap.backend.databasemanagers.BoardController;
 import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.Entry;
@@ -69,34 +70,34 @@ public class RestEntryController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@PostMapping(
-			consumes = {MediaType.APPLICATION_JSON_VALUE},
-			produces = {MediaType.APPLICATION_JSON_VALUE}
-	)
-	public ResponseEntity<?> createEntry(@RequestHeader(value = "Token") String token, @RequestBody Entry newEntry) {
-		try {
-			if (!tokenStore.tokenIsValid(token)) {
-				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-			}
-
-			long ownerId = tokenStore.getUserIdByToken(token);
-			newEntry.setCreator(UserController.getUserByID(ownerId));
-
-			if (newEntry.isInvalid()) {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-			}
-
-			long newEntryId = EntryController.createEntry(newEntry);
-			if (newEntryId == -1) {
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-
-			return new ResponseEntity<>(newEntryId, HttpStatus.CREATED);
-		} catch (SQLException exception) {
-			exception.printStackTrace();
-		}
-		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+//	@PostMapping(
+//			consumes = {MediaType.APPLICATION_JSON_VALUE},
+//			produces = {MediaType.APPLICATION_JSON_VALUE}
+//	)
+//	public ResponseEntity<?> createEntry(@RequestHeader(value = "Token") String token, @RequestBody Entry newEntry) {
+//		try {
+//			if (!tokenStore.tokenIsValid(token)) {
+//				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//			}
+//
+//			long ownerId = tokenStore.getUserIdByToken(token);
+//			newEntry.setCreator(UserController.getUserByID(ownerId));
+//
+//			if (newEntry.isInvalid()) {
+//				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//			}
+//
+//			long newEntryId = EntryController.createEntry(newEntry);
+//			if (newEntryId == -1) {
+//				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//			}
+//
+//			return new ResponseEntity<>(newEntryId, HttpStatus.CREATED);
+//		} catch (SQLException exception) {
+//			exception.printStackTrace();
+//		}
+//		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//	}
 
 	@DeleteMapping("/{entryId}")
 	public ResponseEntity<?> deleteEntry(@RequestHeader(value = "Token") String token, @PathVariable Long entryId) {
