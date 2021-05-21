@@ -18,11 +18,12 @@ public class UserController {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement updateTime = dbcon.prepareStatement(
-						"UPDATE users SET last_login = ? WHERE user = ?"
+						"UPDATE users SET last_login = ? WHERE user_id = ?"
 				)
 		) {
 			updateTime.setLong(1, newTime);
 			updateTime.setLong(2, user_id);
+			updateTime.execute();
 		}
 	}
 
@@ -114,7 +115,7 @@ public class UserController {
 	}
 
 	public static void updateUser(User user) throws SQLException {
-		User oldUser = getUserByID(user.getUserid());
+		User oldUser = getUserByID(user.getUserID());
 		String username = user.getUsername();
 		String emailAddress = user.getEmailAddress();
 
@@ -135,7 +136,7 @@ public class UserController {
 		) {
 			statement.setString(1, username);
 			statement.setString(2, emailAddress);
-			statement.setLong(3, user.getUserid());
+			statement.setLong(3, user.getUserID());
 
 			statement.execute();
 		}

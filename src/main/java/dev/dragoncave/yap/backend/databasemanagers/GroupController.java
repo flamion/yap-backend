@@ -26,7 +26,7 @@ public class GroupController {
                                 "VALUES (?, ?, ?, ?)")
         ) {
             statement.setString(1, group_name);
-            statement.setLong(2, creator.getUserid());
+            statement.setLong(2, creator.getUserID());
             statement.setLong(3, System.currentTimeMillis());
             statement.setLong(4, System.currentTimeMillis());
             statement.execute();

@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class ConnectionController {
-	//private static final String DATABASE_URL = "jdbc:sqlite:database.db";
 	private static final String DATABASE_URL = "jdbc:postgresql:testseite";
 	private static final HikariDataSource dataSource;
 

@@ -58,7 +58,7 @@ public class RestUserController {
 			}
 
 			long id = tokenstore.getUserIdByToken(token);
-			user.setUserid(id);
+			user.setUserID(id);
 
 			if (user.isInvalid()) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

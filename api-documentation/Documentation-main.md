@@ -4,9 +4,11 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 # [Entry]
 
-[GET entry](entry/get-entry.md)
+[Get entry](entry/get-entry.md)
 
-[POST entry](entry/post-entry.md)
+<!--- Commented out for now, still deciding where it should go --->
+<!--- [POST entry](entry/post-entry.md) --->
+[Create new Entry](boards/new-entry.md)
 
 [PUT entry](entry/put-entry.md)
 
@@ -16,7 +18,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [GET user](user/get-user.md)
 
-[Get all user entries](user/get-all-user-entries.md)
+<!--- [Get all user entries](user/get-all-user-entries.md) --->
 
 [POST user](user/post-user.md)
 
@@ -29,3 +31,25 @@ This is the documentation for the yap backend. If you find anything missing or s
 [Get user token](security/get-new-token.md)
 
 [Check if token is valid](security/check-valid-token.md)
+
+# [Boards]
+
+[Get board](boards/get-board.md)
+
+[Create new board](boards/new-board-creation.md)
+
+[Get all entries on a board](boards/get-all-board-entries.md)
+
+[Get all boards of a user](boards/get-all-user-boards.md)
+
+[Add member to a board](boards/add-member-to-board.md)
+
+[Add admin to a board](boards/add-admin-to-board.md)
+
+# Object definitions
+
+[Entry Object](objects/entry.md)
+
+[User Object](objects/user.md)
+
+[Board Object](objects/board.md)
