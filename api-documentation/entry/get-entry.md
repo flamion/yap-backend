@@ -1,6 +1,7 @@
-# GET entry
-
+# Get entry
 ### Mapping /entry/{entryID}
+
+* Method: GET
 
 * Header: "Token $token"
 
