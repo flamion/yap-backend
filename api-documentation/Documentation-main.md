@@ -6,7 +6,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Get entry](entry/get-entry.md)
 
-<!--- Commented out for now, still deciding where it should go--->
+<!--- Commented out for now, still deciding where it should go --->
 <!--- [POST entry](entry/post-entry.md) --->
 [Create new Entry](boards/new-entry.md)
 
@@ -41,3 +41,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 [Get all entries on a board](boards/get-all-board-entries.md)
 
 [Get all boards of a user](boards/get-all-user-boards.md)
+
+# Object definitions
+
+[Entry Object](objects/entry.md)
