@@ -6,7 +6,9 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [GET entry](entry/get-entry.md)
 
-[POST entry](entry/post-entry.md)
+<!--- Commented out for now, still deciding where it should go--->
+<!--- [POST entry](entry/post-entry.md) --->
+[Create new Entry](boards/new-entry.md)
 
 [PUT entry](entry/put-entry.md)
 
