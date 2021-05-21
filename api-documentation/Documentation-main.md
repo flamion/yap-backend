@@ -47,3 +47,5 @@ This is the documentation for the yap backend. If you find anything missing or s
 [Entry Object](objects/entry.md)
 
 [User Object](objects/user.md)
+
+[Board Object](objects/board.md)
