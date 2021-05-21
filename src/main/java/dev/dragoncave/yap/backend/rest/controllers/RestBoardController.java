@@ -154,4 +154,30 @@ public class RestBoardController {
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+
+	@PostMapping("/{boardID}/admin")
+	public ResponseEntity<?> addAdmin(@PathVariable Long boardID, @RequestHeader(value = "Token") String token, @RequestBody HashMap<String, String> requestBody) {
+		try {
+			if (!tokenstore.tokenIsValid(token)) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			if (!requestBody.containsKey("emailAddress")) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			long userID = tokenstore.getUserIdByToken(token);
+			if (!BoardController.userIsBoardAdmin(userID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			long newMemberID = UserController.getUserIdFromEmailAddress(requestBody.get("emailAddress"));
+			BoardController.addMemberToBoard(newMemberID, boardID);
+
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }
