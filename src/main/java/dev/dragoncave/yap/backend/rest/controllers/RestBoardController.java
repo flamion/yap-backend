@@ -1,6 +1,7 @@
 package dev.dragoncave.yap.backend.rest.controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.BoardController;
+import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.Board;
 import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
@@ -25,6 +26,26 @@ public class RestBoardController {
 
 			long userID = tokenstore.getUserIdByToken(token);
 			return new ResponseEntity<>(BoardController.getUserBoards(userID), HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@GetMapping("/{boardID}/entries")
+	public ResponseEntity<?> getBoardEntries(@PathVariable Long boardID, @RequestHeader(value = "Token") String token) {
+		try {
+			if (!tokenstore.tokenIsValid(token)) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			long userID = tokenstore.getUserIdByToken(token);
+
+			if (!BoardController.userHasAccessToBoard(userID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			return new ResponseEntity<>(EntryController.getBoardEntries(boardID), HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
