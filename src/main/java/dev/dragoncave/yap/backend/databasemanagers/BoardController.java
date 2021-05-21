@@ -127,6 +127,20 @@ public class BoardController {
 		}
 	}
 
+	public static void addMemberToBoard(long user_id, long board_id) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement addMemberToBoard = dbcon.prepareStatement(
+						"INSERT INTO member_in_board (user_id, board_id) VALUES (?, ?)"
+				)
+		) {
+			addMemberToBoard.setLong(1, user_id);
+			addMemberToBoard.setLong(2, board_id);
+
+			addMemberToBoard.execute();
+		}
+	}
+
 	public static boolean userIsBoardAdmin(long user_id, long board_id) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
