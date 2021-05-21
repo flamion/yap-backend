@@ -42,6 +42,8 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Get all boards of a user](boards/get-all-user-boards.md)
 
+[Add member to a board](boards/add-member-to-board.md)
+
 # Object definitions
 
 [Entry Object](objects/entry.md)
