@@ -94,6 +94,23 @@ public class BoardController {
 		}
 	}
 
+	public static boolean userIsBoardAdmin(long user_id, long board_id) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement getIsAdmin = dbcon.prepareStatement(
+						"SELECT * FROM admin_in_board WHERE user_id = ? AND board_id =?"
+				)
+		) {
+			getIsAdmin.setLong(1, user_id);
+			getIsAdmin.setLong(2, board_id);
+
+			try (ResultSet isAdminResult = getIsAdmin.executeQuery()) {
+				return isAdminResult.next();
+			}
+
+		}
+	}
+
 	public static boolean boardExists(long board_id) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
@@ -154,22 +171,4 @@ public class BoardController {
 			addAdminToBoard.execute();
 		}
 	}
-
-	public static boolean userIsBoardAdmin(long user_id, long board_id) throws SQLException {
-		try (
-				Connection dbcon = ConnectionController.getConnection();
-				PreparedStatement getIsAdmin = dbcon.prepareStatement(
-						"SELECT * FROM admin_in_board WHERE user_id = ? AND board_id =?"
-				)
-		) {
-			getIsAdmin.setLong(1, user_id);
-			getIsAdmin.setLong(2, board_id);
-
-			try (ResultSet isAdminResult = getIsAdmin.executeQuery()) {
-				return isAdminResult.next();
-			}
-
-		}
-	}
-
 }
