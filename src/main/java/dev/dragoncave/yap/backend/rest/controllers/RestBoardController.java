@@ -172,7 +172,7 @@ public class RestBoardController {
 			}
 
 			long newMemberID = UserController.getUserIdFromEmailAddress(requestBody.get("emailAddress"));
-			BoardController.addMemberToBoard(newMemberID, boardID);
+			BoardController.addAdminToBoard(newMemberID, boardID);
 
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
