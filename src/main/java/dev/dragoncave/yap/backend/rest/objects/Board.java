@@ -5,7 +5,7 @@ import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import java.sql.SQLException;
 
 public class Board {
-	private long boardId;
+	private long boardID;
 	private String name;
 	private long createDate;
 	private User creator;
@@ -15,18 +15,18 @@ public class Board {
 	}
 
 	public Board(long boardId, String name, long createDate, User creator) {
-		this.boardId = boardId;
+		this.boardID = boardId;
 		this.name = name;
 		this.createDate = createDate;
 		this.creator = creator;
 	}
 
-	public long getBoardId() {
-		return boardId;
+	public long getBoardID() {
+		return boardID;
 	}
 
-	public void setBoardId(long boardId) {
-		this.boardId = boardId;
+	public void setBoardID(long boardID) {
+		this.boardID = boardID;
 	}
 
 	public String getName() {
@@ -54,6 +54,6 @@ public class Board {
 	}
 
 	public boolean boardIsInvalid() throws SQLException {
-		return boardId == -1 && name == null && creator == null && !UserController.userExists(creator.getUserID());
+		return boardID == -1 && name == null && creator == null && !UserController.userExists(creator.getUserID());
 	}
 }
