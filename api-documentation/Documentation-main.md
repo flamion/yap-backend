@@ -37,3 +37,5 @@ This is the documentation for the yap backend. If you find anything missing or s
 [Get board](boards/get-board.md)
 
 [Create new board](boards/new-board-creation.md)
+
+[Get all entries on a board](boards/get-all-board-entries.md)
