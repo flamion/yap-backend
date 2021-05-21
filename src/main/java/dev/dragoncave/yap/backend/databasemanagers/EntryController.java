@@ -175,22 +175,6 @@ public class EntryController {
 		}
 	}
 
-//	public static boolean userHasAccessToEntry(long user_id, long entry_id) throws SQLException {
-//		try (
-//				Connection dbcon = ConnectionController.getConnection();
-//				PreparedStatement statement = dbcon.prepareStatement(
-//						"SELECT * FROM entry WHERE creator = ? AND entry_id = ?"
-//				)
-//		) {
-//			statement.setLong(1, user_id);
-//			statement.setLong(2, entry_id);
-//
-//			try (ResultSet resultSet = statement.executeQuery()) {
-//				return resultSet.next();
-//			}
-//		}
-//	}
-
 	public static String getEntryJson(long entry_id) throws SQLException {
 		Gson gson = new Gson();
 		return gson.toJson(getEntryByID(entry_id));
