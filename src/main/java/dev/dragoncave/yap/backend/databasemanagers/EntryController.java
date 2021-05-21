@@ -74,7 +74,6 @@ public class EntryController {
 		}
 	}
 
-	//Get all entries from a user
 	public static List<Long> getUserEntries(long user_id) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
@@ -83,6 +82,23 @@ public class EntryController {
 			statement.setLong(1, user_id);
 
 			try (ResultSet resultSet = statement.executeQuery()) {
+				List<Long> entryIds = new ArrayList<>();
+				while (resultSet.next()) {
+					entryIds.add(resultSet.getLong("entry_id"));
+				}
+				return entryIds;
+			}
+		}
+	}
+
+	public static List<Long> getBoardEntries(long board_id) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement boardEntries = dbcon.prepareStatement("SELECT * FROM entry WHERE board_id = ?")
+		) {
+			boardEntries.setLong(1, board_id);
+
+			try (ResultSet resultSet = boardEntries.executeQuery()) {
 				List<Long> entryIds = new ArrayList<>();
 				while (resultSet.next()) {
 					entryIds.add(resultSet.getLong("entry_id"));
@@ -158,6 +174,22 @@ public class EntryController {
 			}
 		}
 	}
+
+//	public static boolean userHasAccessToEntry(long user_id, long entry_id) throws SQLException {
+//		try (
+//				Connection dbcon = ConnectionController.getConnection();
+//				PreparedStatement statement = dbcon.prepareStatement(
+//						"SELECT * FROM entry WHERE creator = ? AND entry_id = ?"
+//				)
+//		) {
+//			statement.setLong(1, user_id);
+//			statement.setLong(2, entry_id);
+//
+//			try (ResultSet resultSet = statement.executeQuery()) {
+//				return resultSet.next();
+//			}
+//		}
+//	}
 
 	public static String getEntryJson(long entry_id) throws SQLException {
 		Gson gson = new Gson();
