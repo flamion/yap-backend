@@ -2,6 +2,8 @@
 
 ### Mapping /board/{boardID}
 
+* Method: GET
+
 * Header: "Token $token"
 
 * Pathvariable: boardID
