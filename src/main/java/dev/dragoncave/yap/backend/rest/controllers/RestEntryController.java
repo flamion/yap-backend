@@ -24,15 +24,15 @@ public class RestEntryController {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			//TODO maybe check Order of checks
+			if (!EntryController.entryExists(entryId)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
 			long ownerId = tokenStore.getUserIdByToken(token);
 			if (!EntryController.entryBelongsToUser(ownerId, entryId)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
-			if (!EntryController.entryExists(entryId)) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
 			return new ResponseEntity<>(EntryController.getEntryJson(entryId), HttpStatus.OK);
 		} catch (SQLException ex) {
 			ex.printStackTrace();
