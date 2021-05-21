@@ -54,6 +54,6 @@ public class Board {
 	}
 
 	public boolean boardIsInvalid() throws SQLException {
-		return boardId == -1 && name == null && creator == null && !UserController.userExists(creator.getUserid());
+		return boardId == -1 && name == null && creator == null && !UserController.userExists(creator.getUserID());
 	}
 }

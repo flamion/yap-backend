@@ -30,12 +30,12 @@ public class SecurityController {
 				return new ResponseEntity<>("Incorrect email address provided", HttpStatus.BAD_REQUEST);
 			}
 
-			if (!UserController.passwordMatches(user.getUserid(), requestParams.get("oldPassword"))) {
+			if (!UserController.passwordMatches(user.getUserID(), requestParams.get("oldPassword"))) {
 				return new ResponseEntity<>("Incorrect email address or password provided", HttpStatus.FORBIDDEN);
 			}
 
-			tokenstore.invalidateAllUserTokens(user.getUserid());
-			UserController.updatePassword(user.getUserid(), requestParams.get("newPassword")); //TODO add password constraint check
+			tokenstore.invalidateAllUserTokens(user.getUserID());
+			UserController.updatePassword(user.getUserID(), requestParams.get("newPassword")); //TODO add password constraint check
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception ex) {
 			ex.printStackTrace();

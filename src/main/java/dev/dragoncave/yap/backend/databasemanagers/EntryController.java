@@ -110,7 +110,7 @@ public class EntryController {
 	}
 
 	public static long createEntry(Entry newEntry, long boardID) throws SQLException {
-		return createEntry(newEntry.getCreator().getUserid(), newEntry.getDueDate(), newEntry.getTitle(), newEntry.getDescription(), boardID);
+		return createEntry(newEntry.getCreator().getUserID(), newEntry.getDueDate(), newEntry.getTitle(), newEntry.getDescription(), boardID);
 	}
 
 	public static void updateEntry(Entry entry) throws SQLException {
