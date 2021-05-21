@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/boards")
@@ -122,6 +123,32 @@ public class RestBoardController {
 
 			long newBoardID = BoardController.createNewBoard(userID, newBoard);
 			return new ResponseEntity<>(newBoardID, HttpStatus.CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@PostMapping("/{boardID}/member")
+	public ResponseEntity<?> addMember(@PathVariable Long boardID, @RequestHeader(value = "Token") String token, @RequestBody HashMap<String, String> requestBody) {
+		try {
+			if (!tokenstore.tokenIsValid(token)) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			if (!requestBody.containsKey("emailAddress")) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			long userID = tokenstore.getUserIdByToken(token);
+			if (!BoardController.userIsBoardAdmin(userID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			long newMemberID = UserController.getUserIdFromEmailAddress(requestBody.get("emailAddress"));
+			BoardController.addMemberToBoard(newMemberID, boardID);
+
+			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
