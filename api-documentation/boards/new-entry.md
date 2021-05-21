@@ -2,6 +2,8 @@
 
 ### Mapping /boards/{entryID}/entry
 
+* Method: POST
+
 * Header: "Token $token"
 
 * Requestbody:
