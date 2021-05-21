@@ -15,7 +15,8 @@
 
 * Response:
     * HttpStatus (401, 403, 201)
+    * Newly created Entry ID
 
 #### Description:
 
-Takes in a Json formatted entry and creates it on the board.
+Takes in a Json formatted entry and creates it on the board. Returns the ID of the newly created entry.
