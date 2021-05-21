@@ -35,3 +35,5 @@ This is the documentation for the yap backend. If you find anything missing or s
 # [Boards]
 
 [Get board](boards/get-board.md)
+
+[Create new board](boards/new-board-creation.md)
