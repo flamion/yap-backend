@@ -138,7 +138,7 @@ public class BoardController {
 						board_id,
 						boardSet.getString("name"),
 						boardSet.getLong("create_date"),
-						UserController.getUserByID(boardSet.getLong("creator"))
+						boardSet.getLong("creator")
 				);
 			}
 		}

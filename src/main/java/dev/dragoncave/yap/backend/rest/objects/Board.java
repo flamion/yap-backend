@@ -8,17 +8,17 @@ public class Board {
 	private long boardID;
 	private String name;
 	private long createDate;
-	private User creator;
+	private long creatorID;
 
 	public Board() {
 
 	}
 
-	public Board(long boardId, String name, long createDate, User creator) {
+	public Board(long boardId, String name, long createDate, long creatorID) {
 		this.boardID = boardId;
 		this.name = name;
 		this.createDate = createDate;
-		this.creator = creator;
+		this.creatorID = creatorID;
 	}
 
 	public long getBoardID() {
@@ -45,15 +45,15 @@ public class Board {
 		this.createDate = createDate;
 	}
 
-	public User getCreator() {
-		return creator;
+	public long getCreatorID() {
+		return creatorID;
 	}
 
-	public void setCreator(User creator) {
-		this.creator = creator;
+	public void setCreatorID(long creatorID) {
+		this.creatorID = creatorID;
 	}
 
 	public boolean boardIsInvalid() throws SQLException {
-		return boardID == -1 && name == null && creator == null && !UserController.userExists(creator.getUserID());
+		return boardID == -1 && name == null && !UserController.userExists(creatorID);
 	}
 }
