@@ -115,7 +115,7 @@ public class RestBoardController {
 			}
 
 			long userID = tokenstore.getUserIdByToken(token);
-			newBoard.setCreator(UserController.getUserByID(userID));
+			newBoard.setCreatorID(userID);
 
 			if (newBoard.boardIsInvalid()) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
