@@ -18,7 +18,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Create new user](user/post-user.md)
 
-[PUT user](user/put-user.md)
+[Modify existing user](user/modify-existing-user.md)
 
 [DELETE user](user/remove-user.md)
 
