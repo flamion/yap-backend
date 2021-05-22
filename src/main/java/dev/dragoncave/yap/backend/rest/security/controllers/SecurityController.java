@@ -2,6 +2,7 @@ package dev.dragoncave.yap.backend.rest.security.controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.User;
+import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
 import dev.dragoncave.yap.backend.rest.security.tokens.Tokenstore;
 import org.springframework.http.HttpStatus;
@@ -34,8 +35,12 @@ public class SecurityController {
 				return new ResponseEntity<>("Incorrect email address or password provided", HttpStatus.FORBIDDEN);
 			}
 
+			if (PasswordUtils.isValidPassword(requestParams.get("newPassword"))) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
 			tokenstore.invalidateAllUserTokens(user.getUserID());
-			UserController.updatePassword(user.getUserID(), requestParams.get("newPassword")); //TODO add password constraint check
+			UserController.updatePassword(user.getUserID(), requestParams.get("newPassword"));
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception ex) {
 			ex.printStackTrace();
