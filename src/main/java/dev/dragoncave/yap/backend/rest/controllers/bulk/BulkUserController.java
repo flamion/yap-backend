@@ -30,7 +30,7 @@ public class BulkUserController {
 				if (!EntryController.entryExists(entryId)) {
 					entryIDs.remove(i);
 				}
-				if (!EntryController.entryBelongsToUser(ownerId, entryId)) {
+				if (!EntryController.userHasAccessToEntry(ownerId, entryId)) {
 					entryIDs.remove(i);
 				}
 			}

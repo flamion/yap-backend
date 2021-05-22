@@ -26,8 +26,8 @@ public class RestEntryController {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
-			long ownerId = tokenStore.getUserIdByToken(token);
-			if (!EntryController.entryBelongsToUser(ownerId, entryId)) {
+			long userID = tokenStore.getUserIdByToken(token);
+			if (!EntryController.userHasAccessToEntry(userID, entryId)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
@@ -39,7 +39,7 @@ public class RestEntryController {
 	}
 
 	@PutMapping("/{entryID}")
-	public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @PathVariable Long entryID ,@RequestBody Entry entry) {
+	public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @PathVariable Long entryID, @RequestBody Entry entry) {
 		try {
 			if (!tokenStore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -54,8 +54,8 @@ public class RestEntryController {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
-			long ownerId = tokenStore.getUserIdByToken(token);
-			if (!EntryController.entryBelongsToUser(ownerId, entryID)) {
+			long userID = tokenStore.getUserIdByToken(token);
+			if (!EntryController.userHasAccessToEntry(userID, entryID)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
@@ -78,8 +78,8 @@ public class RestEntryController {
 				return new ResponseEntity<>("Entry does not exist", HttpStatus.NO_CONTENT);
 			}
 
-			long ownerId = tokenStore.getUserIdByToken(token);
-			if (!EntryController.entryBelongsToUser(ownerId, entryId)) {
+			long userID = tokenStore.getUserIdByToken(token);
+			if (!EntryController.userHasAccessToEntry(userID, entryId)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
