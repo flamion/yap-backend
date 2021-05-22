@@ -16,7 +16,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Get user](user/get-user.md)
 
-[POST user](user/post-user.md)
+[Create new user](user/post-user.md)
 
 [PUT user](user/put-user.md)
 
