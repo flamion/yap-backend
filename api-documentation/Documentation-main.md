@@ -46,6 +46,8 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Remove member from board](boards/remove-member-from-board.md)
 
+[Rename Board](boards/rename-board.md)
+
 [Delete a board](boards/remove-board.md)
 
 # Object definitions
