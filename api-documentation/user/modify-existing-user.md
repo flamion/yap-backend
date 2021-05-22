@@ -1,15 +1,17 @@
-# PUT user
+# Modify existing user
 
-### Mapping /user
+### Mapping /user/{userID}
 
 * Header: "Token $token"
 
+* Pathvariable: userID
+
 * Requestbody:
     * Json:
-        * User Object
+        * [User Object](../objects/user.md)
 
 * Response:
-    * HttpStatus (400, 401, 200)
+    * HttpStatus (400, 401, 403, 200)
 
 #### Description:
 

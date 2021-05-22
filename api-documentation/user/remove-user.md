@@ -1,4 +1,4 @@
-# DELETE user
+# Delete user
 
 ### Mapping /user
 
@@ -13,4 +13,4 @@
 
 #### Description:
 
-Takes in a token to identify the user to delete it. Requires the password aswell
+Takes in a token to identify the user to delete it. Requires the password of the user.

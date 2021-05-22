@@ -1,4 +1,5 @@
-# Get entry
+# Get entry object
+
 ### Mapping /entry/{entryID}
 
 * Method: GET
@@ -10,10 +11,10 @@
 * Requestbody: none
 
 * Response:
-    * HttpStatus (401, 403, 204, 200)
+    * HttpStatus (401, 403, 200, 204)
     * Json:
-        * Content: Entry Object
+        * [Entry Object](../objects/entry.md)
 
 #### Description:
 
-Takes an entry id in the path and returns a Json formatted entry object
+Takes an entry id in the path and returns a Json formatted entry object, if the user has access to the entry.

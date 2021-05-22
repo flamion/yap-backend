@@ -8,7 +8,7 @@
 
 * Requestbody:
     * Json:
-        * Entry object with properties:
+        * [Entry object](../objects/entry.md) with properties:
             * dueDate (64 bit Integer unix timestamp) [optional]
             * title
             * description

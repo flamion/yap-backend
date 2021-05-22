@@ -4,29 +4,25 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 # [Entry]
 
-[Get entry](entry/get-entry.md)
+[Get entry object](entry/get-entry.md)
 
-<!--- Commented out for now, still deciding where it should go --->
-<!--- [POST entry](entry/post-entry.md) --->
 [Create new Entry](boards/new-entry.md)
 
-[PUT entry](entry/put-entry.md)
+[Modify existing entry](entry/modify-existing-entry.md)
 
-[DELETE entry](entry/remove-entry.md)
+[Delete entry](entry/remove-entry.md)
 
 # [User]
 
-[GET user](user/get-user.md)
+[Get user](user/get-user.md)
 
-<!--- [Get all user entries](user/get-all-user-entries.md) --->
+[Create new user](user/post-user.md)
 
-[POST user](user/post-user.md)
+[Modify existing user](user/modify-existing-user.md)
 
-[PUT user](user/put-user.md)
+[Delete user](user/remove-user.md)
 
-[DELETE user](user/remove-user.md)
-
-# [Security]
+# [Access tokens]
 
 [Get user token](security/get-new-token.md)
 

@@ -1,4 +1,4 @@
-# GET user
+# Get user
 
 ### Mapping /user
 
@@ -9,7 +9,7 @@
 * Response:
     * HttpStatus (401, 200)
     * Json:
-        * User object
+        * [User object](../objects/user.md)
 
 #### Description:
 

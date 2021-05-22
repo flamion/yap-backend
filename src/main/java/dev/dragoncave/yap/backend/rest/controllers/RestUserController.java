@@ -50,15 +50,18 @@ public class RestUserController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@PutMapping()
-	public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @RequestBody User user) {
+	@PutMapping("/{userID}")
+	public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @PathVariable Long userID ,@RequestBody User user) {
 		try {
 			if (!tokenstore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			long id = tokenstore.getUserIdByToken(token);
-			user.setUserID(id);
+			if (tokenstore.getUserIdByToken(token) != userID) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			user.setUserID(userID);
 
 			if (user.isInvalid()) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
