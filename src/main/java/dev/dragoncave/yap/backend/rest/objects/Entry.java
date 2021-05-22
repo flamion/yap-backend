@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class Entry {
 	private long entryID = -1;
-	private long creator = -1;
+	private long creatorID = -1;
 	private long createDate = -1;
 	private long dueDate = -1;
 	private String title;
@@ -16,7 +16,7 @@ public class Entry {
 
 	public Entry(long entryID, long creator, long createDate, long dueDate, String title, String description, long boardID) {
 		this.entryID = entryID;
-		this.creator = creator;
+		this.creatorID = creator;
 		this.createDate = createDate;
 		this.dueDate = dueDate;
 		this.title = title;
@@ -80,12 +80,12 @@ public class Entry {
 		return new Gson().toJson(this);
 	}
 
-	public long getCreator() {
-		return creator;
+	public long getCreatorID() {
+		return creatorID;
 	}
 
-	public void setCreator(long creator) {
-		this.creator = creator;
+	public void setCreatorID(long creator) {
+		this.creatorID = creator;
 	}
 
 	public boolean isInvalid() throws SQLException {
