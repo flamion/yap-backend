@@ -17,7 +17,7 @@ public class BoardController {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement getUserBoards = dbcon.prepareStatement(
-						"SELECT board_id FROM member_in_board WHERE user_id = ?"
+						"SELECT board_id FROM member_in_board WHERE creator = ?"
 				)
 		) {
 			getUserBoards.setLong(1, user_id);
