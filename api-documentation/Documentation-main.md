@@ -44,6 +44,8 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Add admin to a board](boards/add-admin-to-board.md)
 
+[Check permission level of a user](boards/get-member-permission-level.md)
+
 [Remove member from board](boards/remove-member-from-board.md)
 
 [Rename Board](boards/rename-board.md)
