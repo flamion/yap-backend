@@ -1,4 +1,5 @@
 # Get entry object
+
 ### Mapping /entry/{entryID}
 
 * Method: GET
@@ -12,7 +13,7 @@
 * Response:
     * HttpStatus (401, 403, 200, 204)
     * Json:
-      * [Entry Object](../objects/entry.md)
+        * [Entry Object](../objects/entry.md)
 
 #### Description:
 
