@@ -66,7 +66,7 @@ public class DatabaseTokenStore implements Tokenstore {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement insertNewTokenStatement = dbcon.prepareStatement(
-						"INSERT INTO tokens VALUES (?, ?, ?)"
+						"INSERT INTO tokens (user_id, token, valid_until) VALUES (?, ?, ?)"
 				)
 		) {
 			String newToken = TokenUtils.generateToken();
