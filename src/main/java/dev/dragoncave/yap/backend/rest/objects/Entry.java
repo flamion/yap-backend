@@ -7,27 +7,21 @@ import java.sql.SQLException;
 
 public class Entry {
 	private long entryID = -1;
-	private User creator;
+	private long creator = -1;
 	private long createDate = -1;
 	private long dueDate = -1;
 	private String title;
 	private String description;
 	private long boardID = -1;
 
-	public Entry(long entryID, User creator, long createDate, long dueDate, String title, String description) {
+	public Entry(long entryID, long creator, long createDate, long dueDate, String title, String description, long boardID) {
 		this.entryID = entryID;
 		this.creator = creator;
 		this.createDate = createDate;
 		this.dueDate = dueDate;
 		this.title = title;
 		this.description = description;
-	}
-
-	public Entry(long creatorId, long dueDate, String title, String description) throws SQLException {
-		this.creator = UserController.getUserByID(creatorId);
-		this.createDate = System.currentTimeMillis();
-		this.title = title;
-		this.description = description;
+		this.boardID = boardID;
 	}
 
 	public Entry() {
@@ -48,14 +42,6 @@ public class Entry {
 
 	public void setEntryID(long entryID) {
 		this.entryID = entryID;
-	}
-
-	public User getCreator() {
-		return creator;
-	}
-
-	public void setCreator(User creator) {
-		this.creator = creator;
 	}
 
 	public String getTitle() {
@@ -92,6 +78,14 @@ public class Entry {
 
 	public String toJson() {
 		return new Gson().toJson(this);
+	}
+
+	public long getCreator() {
+		return creator;
+	}
+
+	public void setCreator(long creator) {
+		this.creator = creator;
 	}
 
 	public boolean isInvalid() throws SQLException {
