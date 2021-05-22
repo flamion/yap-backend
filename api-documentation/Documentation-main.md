@@ -20,7 +20,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Modify existing user](user/modify-existing-user.md)
 
-[DELETE user](user/remove-user.md)
+[Delete user](user/remove-user.md)
 
 # [Access tokens]
 
