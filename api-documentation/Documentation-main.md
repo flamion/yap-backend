@@ -8,7 +8,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Create new Entry](boards/new-entry.md)
 
-[PUT entry](entry/put-entry.md)
+[Modify existing entry](entry/modify-existing-entry.md)
 
 [DELETE entry](entry/remove-entry.md)
 
