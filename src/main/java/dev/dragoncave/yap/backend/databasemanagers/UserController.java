@@ -99,7 +99,7 @@ public class UserController {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement getIdStatement = dbcon.prepareStatement(
-						"SELECT user_id FROM users WHERE email_address = ?"
+						"SELECT user_id FROM users WHERE email_address = LOWER(?)"
 				)
 		) {
 
@@ -130,7 +130,7 @@ public class UserController {
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement statement = dbcon.prepareStatement(
 						"UPDATE users " +
-								"SET username = ?, email_address = ?" +
+								"SET username = ?, email_address = LOWER(?)" +
 								"WHERE user_id = ?"
 				)
 		) {
@@ -148,7 +148,7 @@ public class UserController {
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement userInsertionStatement = dbcon.prepareStatement(
 						"INSERT INTO users (username, password, create_date, last_login, email_address)" +
-								"VALUES (?, ?, ?, ?, ?)",
+								"VALUES (?, ?, ?, ?, LOWER(?))",
 						Statement.RETURN_GENERATED_KEYS //Add to prepared statement as second argument next to the sql because we otherwise don't get the generated ID unlike with MySQL or SQLITE
 				);
 				PreparedStatement passwordSaltInsertionStatement = dbcon.prepareStatement(

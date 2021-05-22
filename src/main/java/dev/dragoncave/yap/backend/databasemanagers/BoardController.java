@@ -128,17 +128,32 @@ public class BoardController {
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement getBoard = dbcon.prepareStatement(
 						"SELECT * FROM boards WHERE board_id = ?"
+				);
+				PreparedStatement getMembers = dbcon.prepareStatement(
+						"SELECT user_id FROM member_in_board WHERE board_id = ?"
 				)
 		) {
 			getBoard.setLong(1, board_id);
+			getMembers.setLong(1, board_id);
 
-			try (var boardSet = getBoard.executeQuery()) {
+			try (
+					var boardSet = getBoard.executeQuery();
+					var members = getMembers.executeQuery()
+			) {
 				boardSet.next();
+				members.next();
+
+				List<Long> memberIDs = new ArrayList<>();
+				while (members.next()) {
+					memberIDs.add(members.getLong("user_id"));
+				}
+
 				return new Board(
 						board_id,
 						boardSet.getString("name"),
 						boardSet.getLong("create_date"),
-						boardSet.getLong("creator")
+						boardSet.getLong("creator"),
+						memberIDs
 				);
 			}
 		}
