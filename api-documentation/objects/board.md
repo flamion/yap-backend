@@ -19,3 +19,7 @@
 
 * creatorID
     * user ID of the creator
+
+
+* members
+    * List of user IDs of users who are members of the board
