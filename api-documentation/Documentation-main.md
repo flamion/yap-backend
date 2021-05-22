@@ -4,7 +4,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 # [Entry]
 
-[Get entry](entry/get-entry.md)
+[Get entry object](entry/get-entry.md)
 
 <!--- Commented out for now, still deciding where it should go --->
 <!--- [POST entry](entry/post-entry.md) --->
