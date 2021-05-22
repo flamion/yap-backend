@@ -201,6 +201,22 @@ public class BoardController {
 		}
 	}
 
+	public static int getUserPermissionLevel(long user_id, long board_id) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement getPermissionlevel = dbcon.prepareStatement(
+						"SELECT permission_level FROM member_in_board WHERE user_id = ? AND board_id = ?"
+				)
+		) {
+			getPermissionlevel.setLong(1, user_id);
+			getPermissionlevel.setLong(2, board_id);
+
+			try (ResultSet permissionLevel = getPermissionlevel.executeQuery()) {
+				return permissionLevel.getInt("permission_level");
+			}
+		}
+	}
+
 	public static void removeMemberFromBoard(long user_id, long board_id) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
