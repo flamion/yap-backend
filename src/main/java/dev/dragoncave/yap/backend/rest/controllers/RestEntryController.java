@@ -38,8 +38,8 @@ public class RestEntryController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@PutMapping()
-	public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @RequestBody Entry entry) {
+	@PutMapping("/{entryID}")
+	public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @PathVariable Long entryID ,@RequestBody Entry entry) {
 		try {
 			if (!tokenStore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -49,13 +49,13 @@ public class RestEntryController {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 
-			long entryId = entry.getEntryID();
-			if (!EntryController.entryExists(entryId)) {
+			entry.setEntryID(entryID);
+			if (!EntryController.entryExists(entryID)) {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
 			long ownerId = tokenStore.getUserIdByToken(token);
-			if (!EntryController.entryBelongsToUser(ownerId, entryId)) {
+			if (!EntryController.entryBelongsToUser(ownerId, entryID)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
