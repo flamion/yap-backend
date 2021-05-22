@@ -48,4 +48,10 @@ public class TokenController {
 		}
 		return new ResponseEntity<>(false, HttpStatus.OK);
 	}
+
+	@DeleteMapping
+	public ResponseEntity<?> invalidateToken(@RequestHeader(value = "Token") String token) {
+		tokenStore.invalidateToken(token);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 }
