@@ -28,7 +28,7 @@ public class BoardController {
 			var resultSet = getUserBoards.executeQuery(); //TODO: decide whether to put in try with resources
 
 			while (resultSet.next()) {
-				boardIDs.add(resultSet.getLong("user_id"));
+				boardIDs.add(resultSet.getLong("board_id"));
 			}
 
 			return boardIDs;
