@@ -17,7 +17,7 @@ public class BoardController {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement getUserBoards = dbcon.prepareStatement(
-						"SELECT board_id FROM member_in_board WHERE creator = ?"
+						"SELECT board_id FROM member_in_board WHERE user_id = ?"
 				)
 		) {
 			getUserBoards.setLong(1, user_id);
@@ -28,7 +28,7 @@ public class BoardController {
 			var resultSet = getUserBoards.executeQuery(); //TODO: decide whether to put in try with resources
 
 			while (resultSet.next()) {
-				boardIDs.add(resultSet.getLong("user_id"));
+				boardIDs.add(resultSet.getLong("board_id"));
 			}
 
 			return boardIDs;
