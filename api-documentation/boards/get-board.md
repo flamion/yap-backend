@@ -1,6 +1,6 @@
 # Get board
 
-### Mapping /board/{boardID}
+### Mapping /boards/{boardID}
 
 * Method: GET
 
