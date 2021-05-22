@@ -24,11 +24,10 @@ public class BoardController {
 
 
 			List<Long> boardIDs = new ArrayList<>();
-
-			var resultSet = getUserBoards.executeQuery(); //TODO: decide whether to put in try with resources
-
-			while (resultSet.next()) {
-				boardIDs.add(resultSet.getLong("board_id"));
+			try (ResultSet userBoards = getUserBoards.executeQuery()) {
+				while (userBoards.next()) {
+					boardIDs.add(userBoards.getLong("board_id"));
+				}
 			}
 
 			return boardIDs;
