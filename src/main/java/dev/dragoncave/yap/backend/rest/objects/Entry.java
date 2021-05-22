@@ -12,6 +12,7 @@ public class Entry {
 	private long dueDate = -1;
 	private String title;
 	private String description;
+	private long boardID = -1;
 
 	public Entry(long entryID, User creator, long createDate, long dueDate, String title, String description) {
 		this.entryID = entryID;
@@ -31,6 +32,14 @@ public class Entry {
 
 	public Entry() {
 
+	}
+
+	public long getBoardID() {
+		return boardID;
+	}
+
+	public void setBoardID(long boardID) {
+		this.boardID = boardID;
 	}
 
 	public long getEntryID() {
