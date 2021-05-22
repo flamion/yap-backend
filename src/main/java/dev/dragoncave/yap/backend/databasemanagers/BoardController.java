@@ -128,17 +128,32 @@ public class BoardController {
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement getBoard = dbcon.prepareStatement(
 						"SELECT * FROM boards WHERE board_id = ?"
+				);
+				PreparedStatement getMembers = dbcon.prepareStatement(
+						"SELECT user_id FROM member_in_board WHERE board_id = ?"
 				)
 		) {
 			getBoard.setLong(1, board_id);
+			getMembers.setLong(1, board_id);
 
-			try (var boardSet = getBoard.executeQuery()) {
+			try (
+					var boardSet = getBoard.executeQuery();
+					var members = getMembers.executeQuery()
+			) {
 				boardSet.next();
+				members.next();
+
+				List<Long> memberIDs = new ArrayList<>();
+				while (members.next()) {
+					memberIDs.add(members.getLong("user_id"));
+				}
+
 				return new Board(
 						board_id,
 						boardSet.getString("name"),
 						boardSet.getLong("create_date"),
-						UserController.getUserByID(boardSet.getLong("creator"))
+						boardSet.getLong("creator"),
+						memberIDs
 				);
 			}
 		}
@@ -169,6 +184,23 @@ public class BoardController {
 			addAdminToBoard.setLong(2, board_id);
 
 			addAdminToBoard.execute();
+		}
+	}
+
+	public static void removeMemberFromBoard(long user_id, long board_id) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement removeMember = dbcon.prepareStatement(
+						"DELETE FROM member_in_board WHERE user_id = ? AND board_id = ?;" +
+								"DELETE FROM admin_in_board WHERE user_id = ? AND board_id = ?"
+				)
+		) {
+			removeMember.setLong(1, user_id);
+			removeMember.setLong(2, board_id);
+			removeMember.setLong(3, user_id);
+			removeMember.setLong(4, board_id);
+
+			removeMember.execute();
 		}
 	}
 

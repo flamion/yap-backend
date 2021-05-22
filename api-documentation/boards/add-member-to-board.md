@@ -12,7 +12,7 @@
     * emailAddress
 
 * Response:
-    * HttpStatus (401, 403, 400, 200)
+    * HttpStatus (409, 403, 401, 400, 200)
 
 #### Description:
 

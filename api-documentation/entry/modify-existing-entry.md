@@ -1,10 +1,12 @@
 # Modify existing entry
 
-### Mapping /entry
+### Mapping /entry/{entryID}
 
 * Method: PUT
 
 * Header: "Token $token"
+
+* Pathvariable: entryID
 
 * Requestbody:
     * Json:

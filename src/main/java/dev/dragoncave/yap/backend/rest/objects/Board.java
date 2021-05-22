@@ -3,22 +3,25 @@ package dev.dragoncave.yap.backend.rest.objects;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class Board {
 	private long boardID;
 	private String name;
 	private long createDate;
-	private User creator;
+	private long creatorID;
+	private List<Long> members;
 
 	public Board() {
 
 	}
 
-	public Board(long boardId, String name, long createDate, User creator) {
-		this.boardID = boardId;
+	public Board(long boardID, String name, long createDate, long creatorID, List<Long> members) {
+		this.boardID = boardID;
 		this.name = name;
 		this.createDate = createDate;
-		this.creator = creator;
+		this.creatorID = creatorID;
+		this.members = members;
 	}
 
 	public long getBoardID() {
@@ -45,15 +48,23 @@ public class Board {
 		this.createDate = createDate;
 	}
 
-	public User getCreator() {
-		return creator;
+	public long getCreatorID() {
+		return creatorID;
 	}
 
-	public void setCreator(User creator) {
-		this.creator = creator;
+	public void setCreatorID(long creatorID) {
+		this.creatorID = creatorID;
+	}
+
+	public List<Long> getMembers() {
+		return members;
+	}
+
+	public void setMembers(List<Long> members) {
+		this.members = members;
 	}
 
 	public boolean boardIsInvalid() throws SQLException {
-		return boardID == -1 && name == null && creator == null && !UserController.userExists(creator.getUserID());
+		return boardID == -1 && name == null && !UserController.userExists(creatorID);
 	}
 }

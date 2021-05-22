@@ -115,7 +115,7 @@ public class RestBoardController {
 			}
 
 			long userID = tokenstore.getUserIdByToken(token);
-			newBoard.setCreator(UserController.getUserByID(userID));
+			newBoard.setCreatorID(userID);
 
 			if (newBoard.boardIsInvalid()) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -146,8 +146,32 @@ public class RestBoardController {
 			}
 
 			long newMemberID = UserController.getUserIdFromEmailAddress(requestBody.get("emailAddress"));
+			if (BoardController.userIsBoardMember(newMemberID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.CONFLICT);
+			}
+
 			BoardController.addMemberToBoard(newMemberID, boardID);
 
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+
+	@DeleteMapping("/{boardID}/member/{userID}")
+	public ResponseEntity<?> removeMember(@PathVariable Long boardID, @PathVariable Long userID, @RequestHeader(value = "Token") String token) {
+		try {
+			if (!tokenstore.tokenIsValid(token)) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			if (!BoardController.userIsBoardAdmin(userID, boardID) && userID != tokenstore.getUserIdByToken(token)) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			BoardController.removeMemberFromBoard(userID, boardID);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -172,6 +196,10 @@ public class RestBoardController {
 			}
 
 			long newMemberID = UserController.getUserIdFromEmailAddress(requestBody.get("emailAddress"));
+			if (BoardController.userIsBoardAdmin(newMemberID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.CONFLICT);
+			}
+
 			if (!BoardController.userIsBoardMember(newMemberID, boardID)) {
 				BoardController.addMemberToBoard(userID, boardID);
 			}
