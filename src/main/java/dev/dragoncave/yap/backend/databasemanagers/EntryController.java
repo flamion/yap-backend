@@ -170,8 +170,11 @@ public class EntryController {
 			getBoardID.setLong(1, entry_id);
 
 			try (ResultSet getBoardIDResult = getBoardID.executeQuery()) {
-				long boardID = getBoardIDResult.getLong("board_id");
-				return BoardController.userIsBoardMember(user_id, boardID);
+				if (getBoardIDResult.next()) {
+					long boardID = getBoardIDResult.getLong("board_id");
+					return BoardController.userIsBoardMember(user_id, boardID);
+				}
+				return false;
 			}
 		}
 	}
