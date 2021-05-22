@@ -10,7 +10,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Modify existing entry](entry/modify-existing-entry.md)
 
-[DELETE entry](entry/remove-entry.md)
+[Delete entry](entry/remove-entry.md)
 
 # [User]
 

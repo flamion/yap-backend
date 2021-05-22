@@ -1,8 +1,12 @@
 # Delete Entry
 
-### Mapping /entry/$id
+### Mapping /entry/{entryID}
+
+* Method: DELETE
 
 * Header: "Token $token"
+
+* Pathvariable: entryID
 
 * Requestbody: none
 
