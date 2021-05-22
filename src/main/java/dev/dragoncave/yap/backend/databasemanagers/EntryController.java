@@ -160,6 +160,23 @@ public class EntryController {
 		}
 	}
 
+	public static boolean userHasAccessToEntry(long user_id, long entry_id) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement getBoardID = dbcon.prepareStatement(
+						"SELECT board_id FROM entry WHERE entry_id = ?"
+				)
+		) {
+			getBoardID.setLong(1, entry_id);
+
+			try (ResultSet getBoardIDResult = getBoardID.executeQuery()) {
+				long boardID = getBoardIDResult.getLong("board_id");
+				return BoardController.userIsBoardMember(user_id, boardID);
+			}
+		}
+	}
+
+	@Deprecated
 	public static boolean entryBelongsToUser(long user_id, long entry_id) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
