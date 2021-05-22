@@ -14,7 +14,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 # [User]
 
-[GET user](user/get-user.md)
+[Get user](user/get-user.md)
 
 [POST user](user/post-user.md)
 
