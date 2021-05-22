@@ -8,7 +8,7 @@
 
 * Requestbody:
     * Json:
-        * Board object with properties:
+        * [Board object](../objects/board.md) with properties:
             * name
 
 * Response:

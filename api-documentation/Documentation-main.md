@@ -44,6 +44,8 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Add admin to a board](boards/add-admin-to-board.md)
 
+[Delete a board](boards/remove-board.md)
+
 # Object definitions
 
 [Entry Object](objects/entry.md)

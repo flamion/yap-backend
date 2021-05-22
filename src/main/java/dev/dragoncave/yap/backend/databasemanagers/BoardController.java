@@ -171,4 +171,16 @@ public class BoardController {
 			addAdminToBoard.execute();
 		}
 	}
+
+	public static void deleteBoard(long boardID) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement deleteBoard = dbcon.prepareStatement(
+						"DELETE FROM boards WHERE board_id = ?"
+				)
+		) {
+			deleteBoard.setLong(1, boardID);
+			deleteBoard.execute();
+		}
+	}
 }
