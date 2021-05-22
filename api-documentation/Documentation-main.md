@@ -22,7 +22,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [DELETE user](user/remove-user.md)
 
-# [Security]
+# [Access tokens]
 
 [Get user token](security/get-new-token.md)
 
