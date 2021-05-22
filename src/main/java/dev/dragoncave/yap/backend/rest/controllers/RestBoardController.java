@@ -146,6 +146,10 @@ public class RestBoardController {
 			}
 
 			long newMemberID = UserController.getUserIdFromEmailAddress(requestBody.get("emailAddress"));
+			if (BoardController.userIsBoardMember(newMemberID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.CONFLICT);
+			}
+
 			BoardController.addMemberToBoard(newMemberID, boardID);
 
 			return new ResponseEntity<>(HttpStatus.OK);
