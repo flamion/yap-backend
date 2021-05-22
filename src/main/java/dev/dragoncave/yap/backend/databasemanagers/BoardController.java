@@ -212,6 +212,7 @@ public class BoardController {
 			getPermissionlevel.setLong(2, board_id);
 
 			try (ResultSet permissionLevel = getPermissionlevel.executeQuery()) {
+				permissionLevel.next();
 				return permissionLevel.getInt("permission_level");
 			}
 		}

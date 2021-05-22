@@ -91,7 +91,11 @@ public class RestBoardController {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			if (!BoardController.userIsBoardMember(userID, boardID			)) {
+			if (!BoardController.userIsBoardMember(userID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			if (!BoardController.userIsBoardMember(userID, boardID)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
