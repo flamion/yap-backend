@@ -6,8 +6,6 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Get entry object](entry/get-entry.md)
 
-<!--- Commented out for now, still deciding where it should go --->
-<!--- [POST entry](entry/post-entry.md) --->
 [Create new Entry](boards/new-entry.md)
 
 [PUT entry](entry/put-entry.md)
@@ -17,8 +15,6 @@ This is the documentation for the yap backend. If you find anything missing or s
 # [User]
 
 [GET user](user/get-user.md)
-
-<!--- [Get all user entries](user/get-all-user-entries.md) --->
 
 [POST user](user/post-user.md)
 
