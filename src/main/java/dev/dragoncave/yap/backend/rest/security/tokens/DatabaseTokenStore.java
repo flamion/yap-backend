@@ -92,6 +92,7 @@ public class DatabaseTokenStore implements Tokenstore {
 				)
 		) {
 			deleteToken.setString(1, token);
+			deleteToken.execute();
 		} catch (SQLException exception) {
 			exception.printStackTrace();
 		}

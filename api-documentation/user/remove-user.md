@@ -2,6 +2,8 @@
 
 ### Mapping /user
 
+* Method: DELETE 
+
 * Header: "Token $token"
 
 * Requestbody:

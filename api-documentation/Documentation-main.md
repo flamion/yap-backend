@@ -28,6 +28,8 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Check if token is valid](security/check-valid-token.md)
 
+[Invalidate token](security/invalidate-token.md)
+
 # [Boards]
 
 [Get board](boards/get-board.md)
