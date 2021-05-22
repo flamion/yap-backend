@@ -43,8 +43,7 @@ public class BoardController {
 						Statement.RETURN_GENERATED_KEYS
 				);
 				PreparedStatement grantBoardAccess = dbcon.prepareStatement(
-						"INSERT INTO member_in_board (user_id, board_id) VALUES (?, ?);" +
-								"INSERT INTO admin_in_board (user_id, board_id) VALUES (?, ?)"
+						"INSERT INTO member_in_board (user_id, board_id) VALUES (?, ?);"
 				)
 		) {
 			createNewBoard.setString(1, name);
@@ -67,10 +66,10 @@ public class BoardController {
 
 			grantBoardAccess.setLong(1, user_id);
 			grantBoardAccess.setLong(2, newBoardID);
-			grantBoardAccess.setLong(3, user_id);
-			grantBoardAccess.setLong(4, newBoardID);
 
 			grantBoardAccess.execute();
+
+			addAdminToBoard(user_id, newBoardID);
 
 			return newBoardID;
 		}
