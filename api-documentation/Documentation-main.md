@@ -59,3 +59,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 [User Object](objects/user.md)
 
 [Board Object](objects/board.md)
+
+# Other
+
+[Password requirements](user/password-requirements.md)

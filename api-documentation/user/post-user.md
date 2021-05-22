@@ -14,3 +14,5 @@
 
 Accepts a Json formatted user object and creates the user in the database, if the provided object is valid
 (For example, if the user does not exist yet and the password is valid)
+
+[Password requirements](../user/password-requirements.md)
