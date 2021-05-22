@@ -129,6 +129,30 @@ public class RestBoardController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	@PutMapping("/{boardID}")
+	public ResponseEntity<?> modifyBoard(@PathVariable Long boardID, @RequestHeader(value = "Token") String token, @RequestBody HashMap<String, String> requestBody) {
+		try {
+			if (!tokenstore.tokenIsValid(token)) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			if (!requestBody.containsKey("newName")) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			long userID = tokenstore.getUserIdByToken(token);
+			if (!BoardController.userIsBoardAdmin(userID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			BoardController.modifyBoardName(boardID, requestBody.get("newName"));
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 	@PostMapping("/{boardID}/member")
 	public ResponseEntity<?> addMember(@PathVariable Long boardID, @RequestHeader(value = "Token") String token, @RequestBody HashMap<String, String> requestBody) {
 		try {
@@ -158,7 +182,6 @@ public class RestBoardController {
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
 
 	@DeleteMapping("/{boardID}/member/{userID}")
 	public ResponseEntity<?> removeMember(@PathVariable Long boardID, @PathVariable Long userID, @RequestHeader(value = "Token") String token) {

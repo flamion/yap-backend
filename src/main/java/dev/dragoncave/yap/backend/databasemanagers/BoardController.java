@@ -80,6 +80,20 @@ public class BoardController {
 		return createNewBoard(user_id, newBoard.getName(), System.currentTimeMillis());
 	}
 
+	public static void modifyBoardName(long board_id, String newName) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement updateBoard = dbcon.prepareStatement(
+						"UPDATE boards SET name = ? WHERE board_id = ?"
+				)
+		) {
+			updateBoard.setString(1, newName);
+			updateBoard.setLong(2, board_id);
+
+			updateBoard.execute();
+		}
+	}
+
 	public static boolean userIsBoardMember(long user_id, long board_id) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
