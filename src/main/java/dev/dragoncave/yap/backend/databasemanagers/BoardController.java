@@ -187,6 +187,23 @@ public class BoardController {
 		}
 	}
 
+	public static void removeMemberFromBoard(long user_id, long board_id) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement removeMember = dbcon.prepareStatement(
+						"DELETE FROM member_in_board WHERE user_id = ? AND board_id = ?;" +
+								"DELETE FROM admin_in_board WHERE user_id = ? AND board_id = ?"
+				)
+		) {
+			removeMember.setLong(1, user_id);
+			removeMember.setLong(2, board_id);
+			removeMember.setLong(3, user_id);
+			removeMember.setLong(4, board_id);
+
+			removeMember.execute();
+		}
+	}
+
 	public static void deleteBoard(long boardID) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
