@@ -159,6 +159,26 @@ public class RestBoardController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+
+	@DeleteMapping("/{boardID}/member/{userID}")
+	public ResponseEntity<?> removeMember(@PathVariable Long boardID, @PathVariable Long userID, @RequestHeader(value = "Token") String token) {
+		try {
+			if (!tokenstore.tokenIsValid(token)) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			if (!BoardController.userIsBoardAdmin(userID, boardID) && userID != tokenstore.getUserIdByToken(token)) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			BoardController.removeMemberFromBoard(userID, boardID);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 	@PostMapping("/{boardID}/admin")
 	public ResponseEntity<?> addAdmin(@PathVariable Long boardID, @RequestHeader(value = "Token") String token, @RequestBody HashMap<String, String> requestBody) {
 		try {
