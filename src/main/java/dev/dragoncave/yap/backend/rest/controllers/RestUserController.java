@@ -8,12 +8,14 @@ import dev.dragoncave.yap.backend.rest.objects.User;
 import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
 import dev.dragoncave.yap.backend.rest.security.tokens.Tokenstore;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -127,7 +129,11 @@ public class RestUserController {
 			}
 
 			String profilePictureLocation = FileStore.getProfilePictureLocation(userID);
-			return new ResponseEntity<>(profilePictureLocation, HttpStatus.TEMPORARY_REDIRECT);
+
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.setLocation(URI.create(profilePictureLocation));
+
+			return new ResponseEntity<>(responseHeaders, HttpStatus.TEMPORARY_REDIRECT);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
