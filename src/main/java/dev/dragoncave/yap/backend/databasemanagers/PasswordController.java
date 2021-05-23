@@ -23,7 +23,7 @@ public class PasswordController {
 				)
 		) {
 			insertResetCode.setLong(1, user_id);
-			insertResetCode.setLong(2, System.currentTimeMillis() + 1000 * 60 * 5);
+			insertResetCode.setLong(2, System.currentTimeMillis() + 1000 * 60 * 15);
 			insertResetCode.setString(3, reset_code);
 
 			insertResetCode.execute();
