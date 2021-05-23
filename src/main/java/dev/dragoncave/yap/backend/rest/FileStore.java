@@ -50,7 +50,7 @@ public class FileStore {
 	}
 
 	public static String getProfilePictureLocation(long user_id) throws SQLException {
-		return CDN_DOMAIN + PROFILE_PICTURE_ROOT + FileDatabaseController.getProfilePictureName(user_id);
+		return CDN_DOMAIN + "/profile_pictures/" + FileDatabaseController.getProfilePictureName(user_id);
 	}
 
 	private static String getFileEnding(String filename) {
