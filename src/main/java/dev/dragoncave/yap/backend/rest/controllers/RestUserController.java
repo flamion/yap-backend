@@ -103,9 +103,10 @@ public class RestUserController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@PostMapping("/{userID}/profilePicture")
-	public ResponseEntity<?> uploadProfilePicture(@RequestParam("file") MultipartFile multipartFile, @PathVariable Long userID) {
+	@PostMapping("/profilePicture")
+	public ResponseEntity<?> uploadProfilePicture(@RequestParam("file") MultipartFile multipartFile, @RequestHeader(value = "Token") String token) {
 		try {
+			long userID = tokenstore.getUserIdByToken(token);
 			FileStore.storeProfilePicture(multipartFile, userID);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (IllegalArgumentException illegalArgumentException) {
@@ -113,7 +114,7 @@ public class RestUserController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR		);
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@DeleteMapping()
