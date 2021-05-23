@@ -18,7 +18,9 @@ public class FileStore {
 	public static void storeProfilePicture(MultipartFile multipartFile, long userID) throws IOException, NoSuchAlgorithmException, SQLException {
 		String fileHash = UserUtils.hashFile(multipartFile.getBytes());
 
-		File destinationFile = new File("/var/www/cdn/profile_pictures/" + fileHash);
+		File destinationFile = new File("/var/www/cdn/profile_pictures/" + fileHash + multipartFile
+				.getOriginalFilename()
+				.substring(multipartFile.getOriginalFilename().length() - 3));
 		OutputStream outputStream = new FileOutputStream(destinationFile);
 		outputStream.write(multipartFile.getBytes());
 
