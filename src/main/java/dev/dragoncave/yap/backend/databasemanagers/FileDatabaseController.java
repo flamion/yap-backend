@@ -18,7 +18,7 @@ public class FileDatabaseController {
 		) {
 			getProfilePicture.setLong(1, user_id);
 
-			try (ResultSet profilePictureResultSet = getProfilePicture.getResultSet()) {
+			try (ResultSet profilePictureResultSet = getProfilePicture.executeQuery()) {
 				return profilePictureResultSet.next();
 			}
 		}
