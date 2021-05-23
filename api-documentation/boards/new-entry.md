@@ -1,8 +1,10 @@
 # Create new Entry
 
-### Mapping /boards/{entryID}/entry
+### Mapping /boards/{boardID}/entry
 
 * Method: POST
+
+* Pathvariable: boardID
 
 * Header: "Token $token"
 
@@ -14,7 +16,7 @@
             * description
 
 * Response:
-    * HttpStatus (401, 403, 201)
+    * HttpStatus (403, 401, 201)
     * Newly created Entry ID
 
 #### Description:
