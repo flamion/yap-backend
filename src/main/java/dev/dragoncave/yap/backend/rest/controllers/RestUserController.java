@@ -1,6 +1,7 @@
 package dev.dragoncave.yap.backend.rest.controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.EntryController;
+import dev.dragoncave.yap.backend.databasemanagers.FileDatabaseController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.FileStore;
 import dev.dragoncave.yap.backend.rest.objects.User;
@@ -112,6 +113,21 @@ public class RestUserController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (IllegalArgumentException illegalArgumentException) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@GetMapping("/{userID}/profilePicture")
+	public ResponseEntity<?> getProfilePicture(@PathVariable Long userID) {
+		try {
+			if (!FileDatabaseController.userHasProfilePicture(userID)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			String profilePictureLocation = FileStore.getProfilePictureLocation(userID);
+			return new ResponseEntity<>(profilePictureLocation, HttpStatus.SEE_OTHER);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
