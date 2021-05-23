@@ -110,6 +110,10 @@ public class RestUserController {
 	@PostMapping("/profilePicture")
 	public ResponseEntity<?> uploadProfilePicture(@RequestParam("file") MultipartFile multipartFile, @RequestHeader(value = "Token") String token) {
 		try {
+			if (multipartFile.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
 			long userID = tokenstore.getUserIdByToken(token);
 			ProfilePictureStore.storeProfilePicture(multipartFile, userID);
 			return new ResponseEntity<>(HttpStatus.OK);
