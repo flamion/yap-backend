@@ -116,11 +116,12 @@ public class BoardController {
 			getIsAdmin.setLong(2, board_id);
 
 			try (ResultSet isAdminResult = getIsAdmin.executeQuery()) {
-				isAdminResult.next();
-				return isAdminResult.getInt("permission_level") >= 100;
+				if (isAdminResult.next()) {
+					return isAdminResult.getInt("permission_level") >= 100;
+				}
 			}
-
 		}
+		return false;
 	}
 
 	public static boolean boardExists(long board_id) throws SQLException {
