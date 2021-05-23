@@ -41,7 +41,7 @@ public class SecurityController {
 				return new ResponseEntity<>("Incorrect email address or password provided", HttpStatus.FORBIDDEN);
 			}
 
-			if (PasswordUtils.isValidPassword(requestParams.get("newPassword"))) {
+			if (!PasswordUtils.isValidPassword(requestParams.get("newPassword"))) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 
@@ -62,8 +62,14 @@ public class SecurityController {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 
+			long userID = UserController.getUserIdFromEmailAddress(requestBody.get("emailAddress"));
+
+			if (userID == -1) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
 			String resetCode = TokenUtils.generateToken(48);
-			PasswordController.insertPasswordResetCode(requestBody.get("emailAddress"), resetCode);
+			PasswordController.insertPasswordResetCode(userID, resetCode);
 
 			MailSend.sendMail(
 					"yapreset@gmail.com",
