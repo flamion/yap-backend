@@ -25,7 +25,7 @@ public class FileDatabaseController {
 	}
 
 
-	public static void writeProfilePictureInformation(long user_id, String profile_picture_hash) throws SQLException {
+	public static void writeProfilePictureInformation(long user_id, String profile_picture_file_name) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement insertProfilePictureInformationIntoDatabase = dbcon.prepareStatement(
@@ -33,7 +33,7 @@ public class FileDatabaseController {
 				)
 		) {
 			insertProfilePictureInformationIntoDatabase.setLong(1, user_id);
-			insertProfilePictureInformationIntoDatabase.setString(2, profile_picture_hash);
+			insertProfilePictureInformationIntoDatabase.setString(2, profile_picture_file_name);
 			insertProfilePictureInformationIntoDatabase.execute();
 		}
 	}
