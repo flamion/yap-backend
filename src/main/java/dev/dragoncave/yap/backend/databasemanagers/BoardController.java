@@ -193,7 +193,7 @@ public class BoardController {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement addAdminToBoard = dbcon.prepareStatement(
-						"UPDATE member_in_board SET permissionlevel = ? WHERE user_id = ? AND board_id = ?"
+						"UPDATE member_in_board SET permission_level = ? WHERE user_id = ? AND board_id = ?"
 				)
 		) {
 			addAdminToBoard.setInt(1, permission_level);
