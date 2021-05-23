@@ -20,7 +20,7 @@ public class FileStore {
 
 		File destinationFile = new File("/var/www/cdn/profile_pictures/" + fileHash + multipartFile
 				.getOriginalFilename()
-				.substring(multipartFile.getOriginalFilename().length() - 3));
+				.substring(multipartFile.getOriginalFilename().length() - 4));
 		OutputStream outputStream = new FileOutputStream(destinationFile);
 		outputStream.write(multipartFile.getBytes());
 
