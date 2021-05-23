@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("SqlResolve")
-public class FileStore {
+public class ProfilePictureStore {
 
 	private static final Pattern threeCharPictureExtension = Pattern.compile("(.*?)\\.(png|jpg)");
 	private static final Pattern fourCharPictureExtension = Pattern.compile("(.*?)\\.(jpeg)");

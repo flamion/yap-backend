@@ -3,7 +3,7 @@ package dev.dragoncave.yap.backend.rest.controllers;
 import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.FileDatabaseController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
-import dev.dragoncave.yap.backend.rest.FileStore;
+import dev.dragoncave.yap.backend.rest.ProfilePictureStore;
 import dev.dragoncave.yap.backend.rest.objects.User;
 import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
@@ -111,7 +111,7 @@ public class RestUserController {
 	public ResponseEntity<?> uploadProfilePicture(@RequestParam("file") MultipartFile multipartFile, @RequestHeader(value = "Token") String token) {
 		try {
 			long userID = tokenstore.getUserIdByToken(token);
-			FileStore.storeProfilePicture(multipartFile, userID);
+			ProfilePictureStore.storeProfilePicture(multipartFile, userID);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (IllegalArgumentException illegalArgumentException) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -128,7 +128,7 @@ public class RestUserController {
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
-			String profilePictureLocation = FileStore.getProfilePictureLocation(userID);
+			String profilePictureLocation = ProfilePictureStore.getProfilePictureLocation(userID);
 
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.setLocation(URI.create(profilePictureLocation));
