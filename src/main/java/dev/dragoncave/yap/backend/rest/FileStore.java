@@ -18,7 +18,7 @@ public class FileStore {
 	private static final Pattern fourCharPictureExtension = Pattern.compile("(.*?)\\.(jpeg)");
 
 	private static final String BACKEND_DOMAIN = "https://backend.yap.dragoncave.dev";
-	private static final String CDN_DOMAIN = "https://dragoncave.dev/cdn";
+	private static final String CDN_DOMAIN = "https://dragoncave.dev:42069/cdn";
 	private static final String PROFILE_PICTURE_ROOT = "/var/www/cdn/profile_pictures/";
 
 	public static void storeProfilePicture(MultipartFile multipartFile, long userID) throws IOException, NoSuchAlgorithmException, SQLException {
