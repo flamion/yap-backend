@@ -6,6 +6,9 @@
 
 * Pathvariable: boardID
 
+* Requestbody:
+    * name
+
 * Header: "Token $token"
 
 * Response:

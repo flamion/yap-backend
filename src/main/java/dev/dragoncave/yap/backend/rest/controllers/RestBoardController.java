@@ -158,7 +158,7 @@ public class RestBoardController {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			if (!requestBody.containsKey("newName")) {
+			if (!requestBody.containsKey("name")) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 
@@ -167,7 +167,7 @@ public class RestBoardController {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
-			BoardController.modifyBoardName(boardID, requestBody.get("newName"));
+			BoardController.modifyBoardName(boardID, requestBody.get("name"));
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
