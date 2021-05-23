@@ -127,7 +127,7 @@ public class RestUserController {
 			}
 
 			String profilePictureLocation = FileStore.getProfilePictureLocation(userID);
-			return new ResponseEntity<>(profilePictureLocation, HttpStatus.SEE_OTHER);
+			return new ResponseEntity<>(profilePictureLocation, HttpStatus.TEMPORARY_REDIRECT);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
