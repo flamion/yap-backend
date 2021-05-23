@@ -2,6 +2,7 @@ package dev.dragoncave.yap.backend.rest.controllers;
 
 import dev.dragoncave.yap.backend.databasemanagers.EntryController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
+import dev.dragoncave.yap.backend.rest.FileStore;
 import dev.dragoncave.yap.backend.rest.objects.User;
 import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
@@ -51,7 +53,7 @@ public class RestUserController {
 	}
 
 	@PutMapping("/{userID}")
-	public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @PathVariable Long userID ,@RequestBody User user) {
+	public ResponseEntity<?> putEntry(@RequestHeader(value = "Token") String token, @PathVariable Long userID, @RequestBody User user) {
 		try {
 			if (!tokenstore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -99,6 +101,17 @@ public class RestUserController {
 			exception.printStackTrace();
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@PostMapping("/{userID}/profilePicture")
+	public ResponseEntity<?> uploadProfilePicture(@RequestParam("file") MultipartFile multipartFile, @PathVariable Long userID) {
+		try {
+			FileStore.storeProfilePicture(multipartFile, userID);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR		);
 	}
 
 	@DeleteMapping()

@@ -48,7 +48,7 @@ public class PasswordUtils {
 		return bytesToHex(encodedHash);
 	}
 
-	private static String bytesToHex(byte[] hash) {
+	public static String bytesToHex(byte[] hash) {
 		StringBuilder hexString = new StringBuilder(2 * hash.length);
 		for (byte b : hash) {
 			String hex = Integer.toHexString(0xff & b);
