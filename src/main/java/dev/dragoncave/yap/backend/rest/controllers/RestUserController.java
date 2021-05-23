@@ -108,6 +108,8 @@ public class RestUserController {
 		try {
 			FileStore.storeProfilePicture(multipartFile, userID);
 			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (IllegalArgumentException illegalArgumentException) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
