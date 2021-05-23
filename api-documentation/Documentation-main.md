@@ -63,3 +63,5 @@ This is the documentation for the yap backend. If you find anything missing or s
 # Other
 
 [Password requirements](user/password-requirements.md)
+
+[Reset password via reset email](user/reset-password-via-reset-email.md)

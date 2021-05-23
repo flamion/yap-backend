@@ -36,7 +36,7 @@ public class UserController {
 		return passwordMatches(user_id, password);
 	}
 
-	//TODO Optimize Query into a single one using JOIN
+	//TODO Optimize into single query
 	public static boolean passwordMatches(long user_id, String password) throws SQLException, NoSuchAlgorithmException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();

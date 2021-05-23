@@ -8,7 +8,11 @@ public class TokenUtils {
 	private static final int TOKEN_SIZE = 32; //how many bytes the token should consist of
 
 	public static String generateToken() {
-		byte[] randomBytes = new byte[TOKEN_SIZE];
+		return generateToken(TOKEN_SIZE);
+	}
+
+	public static String generateToken(int tokenSize) {
+		byte[] randomBytes = new byte[tokenSize];
 		new SecureRandom().nextBytes(randomBytes);
 		return Base64.getUrlEncoder().encodeToString(randomBytes);
 	}

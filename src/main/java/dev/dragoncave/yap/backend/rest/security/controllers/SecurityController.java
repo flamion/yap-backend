@@ -1,9 +1,11 @@
 package dev.dragoncave.yap.backend.rest.security.controllers;
 
+import dev.dragoncave.yap.backend.databasemanagers.PasswordController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.User;
 import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
+import dev.dragoncave.yap.backend.rest.security.tokens.TokenUtils;
 import dev.dragoncave.yap.backend.rest.security.tokens.Tokenstore;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,43 +54,81 @@ public class SecurityController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-//	@PostMapping("/resetPassword")
-//	public ResponseEntity<?> resetPassword(@RequestBody HashMap<String, String> requestBody) {
-//		try {
-//			Properties prop = new Properties();
-//			prop.put("mail.smtp.auth", true);
-//			prop.put("mail.smtp.starttls.enable", "true");
-//			prop.put("mail.smtp.host", "smtp.mailtrap.io");
-//			prop.put("mail.smtp.port", "25");
-//			prop.put("mail.smtp.ssl.trust", "smtp.mailtrap.io");
-//
-//			Session session = Session.getInstance(prop, new Authenticator() {
-//				@Override
-//				protected PasswordAuthentication getPasswordAuthentication() {
-//					return new PasswordAuthentication(username, password);
-//				}
-//			});
-//
-//			Message message = new MimeMessage(session);
-//			message.setFrom(new InternetAddress("from@gmail.com"));
-//			message.setRecipients(
-//					Message.RecipientType.TO, InternetAddress.parse("to@gmail.com"));
-//			message.setSubject("Mail Subject");
-//
-//			String msg = "This is my first email using JavaMailer";
-//
-//			MimeBodyPart mimeBodyPart = new MimeBodyPart();
-//			mimeBodyPart.setContent(msg, "text/html");
-//
-//			Multipart multipart = new MimeMultipart();
-//			multipart.addBodyPart(mimeBodyPart);
-//
-//			message.setContent(multipart);
-//
-//			Transport.send(message);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//	}
+	@PostMapping("/resetPasswordRequest")
+	public ResponseEntity<?> makeResetPasswordRequest(@RequestBody HashMap<String, String> requestBody) {
+		try {
+			if (!requestBody.containsKey("emailAddress")) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			String resetCode = TokenUtils.generateToken(48);
+			PasswordController.insertPasswordResetCode(requestBody.get("emailAddress"), resetCode);
+
+			Properties prop = new Properties();
+			prop.put("mail.smtp.auth", true);
+			prop.put("mail.smtp.starttls.enable", "true");
+			prop.put("mail.smtp.host", "smtp.gmail.com");
+			prop.put("mail.smtp.port", "587");
+			prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+
+			String username = "yapreset@gmail.com";
+			String password = System.getenv("MAIL_PASS");
+
+			Session session = Session.getInstance(prop, new Authenticator() {
+				@Override
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(username, password);
+				}
+			});
+
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress("yapreset@gmail.com"));
+			message.setRecipients(
+					Message.RecipientType.TO, InternetAddress.parse(requestBody.get("emailAddress")));
+			message.setSubject("YAP Password Reset");
+
+			String messageContent = "Your Reset code is: \n" + resetCode;
+
+			MimeBodyPart mimeBodyPart = new MimeBodyPart();
+			mimeBodyPart.setContent(messageContent, "text/html");
+
+			Multipart multipart = new MimeMultipart();
+			multipart.addBodyPart(mimeBodyPart);
+
+			message.setContent(multipart);
+
+			Transport.send(message);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@PostMapping("/resetPassword")
+	public ResponseEntity<?> resetPassword(@RequestBody HashMap<String, String> requestBody) {
+		try {
+			if (!requestBody.containsKey("resetCode") && !requestBody.containsKey("emailAddress") && !requestBody.containsKey("newPassword")) {
+				return new ResponseEntity<>("Missing field", HttpStatus.BAD_REQUEST);
+			}
+
+			long userID = UserController.getUserIdFromEmailAddress(requestBody.get("emailAddress"));
+
+			if (!PasswordController.resetCodeIsValid(userID, requestBody.get("resetCode"))) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			if (!PasswordUtils.isValidPassword(requestBody.get("newPassword"))) {
+				return new ResponseEntity<>("Password does not conform to guidelines", HttpStatus.BAD_REQUEST);
+			}
+
+			tokenstore.invalidateAllUserTokens(userID);
+			PasswordController.removeResetCode(requestBody.get("resetCode"));
+			PasswordController.resetUserPassword(userID, requestBody.get("newPassword"));
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 }
