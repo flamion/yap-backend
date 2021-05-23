@@ -109,13 +109,17 @@ public class SecurityController {
 	public ResponseEntity<?> resetPassword(@RequestBody HashMap<String, String> requestBody) {
 		try {
 			if (!requestBody.containsKey("resetCode") && !requestBody.containsKey("emailAddress") && !requestBody.containsKey("newPassword")) {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>("Missing field", HttpStatus.BAD_REQUEST);
 			}
 
 			long userID = UserController.getUserIdFromEmailAddress(requestBody.get("emailAddress"));
 
 			if (!PasswordController.resetCodeIsValid(userID, requestBody.get("resetCode"))) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			if (!PasswordUtils.isValidPassword(requestBody.get("newPassword"))) {
+				return new ResponseEntity<>("Password does not conform to guidelines", HttpStatus.BAD_REQUEST);
 			}
 
 			tokenstore.invalidateAllUserTokens(userID);
