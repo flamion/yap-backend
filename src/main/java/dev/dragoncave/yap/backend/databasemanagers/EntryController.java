@@ -26,11 +26,12 @@ public class EntryController {
 				resultSet.next();
 				return new Entry(
 						resultSet.getLong("entry_id"),
-						UserController.getUserByID(resultSet.getLong("creator")),
+						resultSet.getLong("creator"),
 						resultSet.getLong("create_date"),
 						resultSet.getLong("due_date"),
 						resultSet.getString("title"),
-						resultSet.getString("description")
+						resultSet.getString("description"),
+						resultSet.getLong("board_id")
 				);
 			}
 		}
@@ -110,7 +111,7 @@ public class EntryController {
 	}
 
 	public static long createEntry(Entry newEntry, long boardID) throws SQLException {
-		return createEntry(newEntry.getCreator().getUserID(), newEntry.getDueDate(), newEntry.getTitle(), newEntry.getDescription(), boardID);
+		return createEntry(newEntry.getCreatorID(), newEntry.getDueDate(), newEntry.getTitle(), newEntry.getDescription(), boardID);
 	}
 
 	public static void updateEntry(Entry entry) throws SQLException {

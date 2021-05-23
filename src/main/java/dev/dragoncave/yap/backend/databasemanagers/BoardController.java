@@ -24,11 +24,10 @@ public class BoardController {
 
 
 			List<Long> boardIDs = new ArrayList<>();
-
-			var resultSet = getUserBoards.executeQuery(); //TODO: decide whether to put in try with resources
-
-			while (resultSet.next()) {
-				boardIDs.add(resultSet.getLong("board_id"));
+			try (ResultSet userBoards = getUserBoards.executeQuery()) {
+				while (userBoards.next()) {
+					boardIDs.add(userBoards.getLong("board_id"));
+				}
 			}
 
 			return boardIDs;
@@ -43,8 +42,7 @@ public class BoardController {
 						Statement.RETURN_GENERATED_KEYS
 				);
 				PreparedStatement grantBoardAccess = dbcon.prepareStatement(
-						"INSERT INTO member_in_board (user_id, board_id) VALUES (?, ?);" +
-								"INSERT INTO admin_in_board (user_id, board_id) VALUES (?, ?)"
+						"INSERT INTO member_in_board (user_id, board_id) VALUES (?, ?);"
 				)
 		) {
 			createNewBoard.setString(1, name);
@@ -67,10 +65,10 @@ public class BoardController {
 
 			grantBoardAccess.setLong(1, user_id);
 			grantBoardAccess.setLong(2, newBoardID);
-			grantBoardAccess.setLong(3, user_id);
-			grantBoardAccess.setLong(4, newBoardID);
 
 			grantBoardAccess.execute();
+
+			addAdminToBoard(user_id, newBoardID);
 
 			return newBoardID;
 		}
@@ -78,6 +76,20 @@ public class BoardController {
 
 	public static long createNewBoard(long user_id, Board newBoard) throws SQLException {
 		return createNewBoard(user_id, newBoard.getName(), System.currentTimeMillis());
+	}
+
+	public static void modifyBoardName(long board_id, String newName) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement updateBoard = dbcon.prepareStatement(
+						"UPDATE boards SET name = ? WHERE board_id = ?"
+				)
+		) {
+			updateBoard.setString(1, newName);
+			updateBoard.setLong(2, board_id);
+
+			updateBoard.execute();
+		}
 	}
 
 	public static boolean userIsBoardMember(long user_id, long board_id) throws SQLException {
@@ -98,14 +110,15 @@ public class BoardController {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement getIsAdmin = dbcon.prepareStatement(
-						"SELECT * FROM admin_in_board WHERE user_id = ? AND board_id =?"
+						"SELECT permission_level FROM member_in_board WHERE user_id = ? AND board_id =?"
 				)
 		) {
 			getIsAdmin.setLong(1, user_id);
 			getIsAdmin.setLong(2, board_id);
 
 			try (ResultSet isAdminResult = getIsAdmin.executeQuery()) {
-				return isAdminResult.next();
+				isAdminResult.next();
+				return isAdminResult.getInt("permission_level") >= 100;
 			}
 
 		}
@@ -174,16 +187,38 @@ public class BoardController {
 	}
 
 	public static void addAdminToBoard(long user_id, long board_id) throws SQLException {
+		setMemberPermissionLevel(user_id, board_id, 100);
+	}
+
+	public static void setMemberPermissionLevel(long user_id, long board_id, int permission_level) throws SQLException {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement addAdminToBoard = dbcon.prepareStatement(
-						"INSERT INTO admin_in_board (user_id, board_id) VALUES (?, ?)"
+						"UPDATE member_in_board SET permissionlevel = ? WHERE user_id = ? AND board_id = ?"
 				)
 		) {
-			addAdminToBoard.setLong(1, user_id);
-			addAdminToBoard.setLong(2, board_id);
+			addAdminToBoard.setInt(1, permission_level);
+			addAdminToBoard.setLong(2, user_id);
+			addAdminToBoard.setLong(3, board_id);
 
 			addAdminToBoard.execute();
+		}
+	}
+
+	public static int getUserPermissionLevel(long user_id, long board_id) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement getPermissionlevel = dbcon.prepareStatement(
+						"SELECT permission_level FROM member_in_board WHERE user_id = ? AND board_id = ?"
+				)
+		) {
+			getPermissionlevel.setLong(1, user_id);
+			getPermissionlevel.setLong(2, board_id);
+
+			try (ResultSet permissionLevel = getPermissionlevel.executeQuery()) {
+				permissionLevel.next();
+				return permissionLevel.getInt("permission_level");
+			}
 		}
 	}
 
@@ -191,14 +226,11 @@ public class BoardController {
 		try (
 				Connection dbcon = ConnectionController.getConnection();
 				PreparedStatement removeMember = dbcon.prepareStatement(
-						"DELETE FROM member_in_board WHERE user_id = ? AND board_id = ?;" +
-								"DELETE FROM admin_in_board WHERE user_id = ? AND board_id = ?"
+						"DELETE FROM member_in_board WHERE user_id = ? AND board_id = ?;"
 				)
 		) {
 			removeMember.setLong(1, user_id);
 			removeMember.setLong(2, board_id);
-			removeMember.setLong(3, user_id);
-			removeMember.setLong(4, board_id);
 
 			removeMember.execute();
 		}

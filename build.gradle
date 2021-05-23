@@ -22,16 +22,14 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.session:spring-session-core'
-//    implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
 
     implementation 'com.zaxxer:HikariCP:4.0.3'
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.19'
 
+    implementation group: 'javax.mail', name: 'mail', version: '1.5.0-b01'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 test {

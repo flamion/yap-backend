@@ -62,7 +62,7 @@ public class RestBoardController {
 			}
 
 			long userID = tokenstore.getUserIdByToken(token);
-			newEntry.setCreator(UserController.getUserByID(userID));
+			newEntry.setCreatorID(userID);
 
 			if (newEntry.isInvalid()) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -78,6 +78,28 @@ public class RestBoardController {
 			}
 
 			return new ResponseEntity<>(newEntryId, HttpStatus.CREATED);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@GetMapping("/{boardID}/member/{userID}/permissionLevel")
+	public ResponseEntity<?> getUserPermissionLevel(@PathVariable Long boardID, @PathVariable Long userID, @RequestHeader(value = "Token") String token) {
+		try {
+			if (!tokenstore.tokenIsValid(token)) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			if (!BoardController.userIsBoardMember(userID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			if (!BoardController.userIsBoardMember(userID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			return new ResponseEntity<>(BoardController.getUserPermissionLevel(userID, boardID), HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -129,6 +151,30 @@ public class RestBoardController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
+	@PutMapping("/{boardID}")
+	public ResponseEntity<?> modifyBoard(@PathVariable Long boardID, @RequestHeader(value = "Token") String token, @RequestBody HashMap<String, String> requestBody) {
+		try {
+			if (!tokenstore.tokenIsValid(token)) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			if (!requestBody.containsKey("newName")) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			long userID = tokenstore.getUserIdByToken(token);
+			if (!BoardController.userIsBoardAdmin(userID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			BoardController.modifyBoardName(boardID, requestBody.get("newName"));
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
 	@PostMapping("/{boardID}/member")
 	public ResponseEntity<?> addMember(@PathVariable Long boardID, @RequestHeader(value = "Token") String token, @RequestBody HashMap<String, String> requestBody) {
 		try {
@@ -158,7 +204,6 @@ public class RestBoardController {
 		}
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-
 
 	@DeleteMapping("/{boardID}/member/{userID}")
 	public ResponseEntity<?> removeMember(@PathVariable Long boardID, @PathVariable Long userID, @RequestHeader(value = "Token") String token) {

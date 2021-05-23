@@ -44,7 +44,11 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Add admin to a board](boards/add-admin-to-board.md)
 
+[Check permission level of a user](boards/get-member-permission-level.md)
+
 [Remove member from board](boards/remove-member-from-board.md)
+
+[Rename Board](boards/rename-board.md)
 
 [Delete a board](boards/remove-board.md)
 
@@ -55,3 +59,7 @@ This is the documentation for the yap backend. If you find anything missing or s
 [User Object](objects/user.md)
 
 [Board Object](objects/board.md)
+
+# Other
+
+[Password requirements](user/password-requirements.md)
