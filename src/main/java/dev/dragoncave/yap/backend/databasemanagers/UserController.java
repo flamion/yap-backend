@@ -246,4 +246,23 @@ public class UserController {
 		Gson gson = new Gson();
 		return gson.toJson(getUserByID(user_id));
 	}
+
+	public static void insertPasswordResetCode(String email_address, String reset_code) throws SQLException {
+		insertPasswordResetCode(getUserIdFromEmailAddress(email_address), reset_code);
+	}
+
+	public static void insertPasswordResetCode(long user_id, String reset_code) throws SQLException {
+		try (
+				Connection dbcon = ConnectionController.getConnection();
+				PreparedStatement insertResetCode = dbcon.prepareStatement(
+						"INSERT INTO password_resets (user_id, valid_until, reset_code) VALUES (?, ?, ?)"
+				)
+		) {
+			insertResetCode.setLong(1, user_id);
+			insertResetCode.setLong(2, System.currentTimeMillis() + 1000 * 60 * 5);
+			insertResetCode.setString(3, reset_code);
+
+			insertResetCode.execute();
+		}
+	}
 }
