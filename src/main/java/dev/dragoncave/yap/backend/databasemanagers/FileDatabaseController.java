@@ -59,6 +59,7 @@ public class FileDatabaseController {
 		) {
 			getProfilePictureLocation.setLong(1, user_id);
 			try (ResultSet profilePictureLocation = getProfilePictureLocation.executeQuery()) {
+				profilePictureLocation.next();
 				return profilePictureLocation.getString("name");
 			}
 		}
