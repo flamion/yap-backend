@@ -12,4 +12,10 @@ public class TokenUtils {
 		new SecureRandom().nextBytes(randomBytes);
 		return Base64.getUrlEncoder().encodeToString(randomBytes);
 	}
+
+	public static String generateToken(int tokenSize) {
+		byte[] randomBytes = new byte[tokenSize];
+		new SecureRandom().nextBytes(randomBytes);
+		return Base64.getUrlEncoder().encodeToString(randomBytes);
+	}
 }
