@@ -1,10 +1,10 @@
 # Modify existing user
 
-### Mapping /user/{userID}
+### Mapping /user
+
+* Method: PUT
 
 * Header: "Token $token"
-
-* Pathvariable: userID
 
 * Requestbody:
     * Json:

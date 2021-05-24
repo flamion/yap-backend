@@ -20,6 +20,10 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Modify existing user](user/modify-existing-user.md)
 
+[Add/Change profile picture](user/upload-profile-picture.md)
+
+[Get a users profile picture](user/get-profile-picture.md)
+
 [Delete user](user/remove-user.md)
 
 # [Access tokens]

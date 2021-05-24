@@ -3,6 +3,7 @@ package dev.dragoncave.yap.backend.rest.security.controllers;
 import dev.dragoncave.yap.backend.databasemanagers.PasswordController;
 import dev.dragoncave.yap.backend.databasemanagers.UserController;
 import dev.dragoncave.yap.backend.rest.objects.User;
+import dev.dragoncave.yap.backend.rest.security.MailSend;
 import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
 import dev.dragoncave.yap.backend.rest.security.tokens.DatabaseTokenStore;
 import dev.dragoncave.yap.backend.rest.security.tokens.TokenUtils;
@@ -40,7 +41,7 @@ public class SecurityController {
 				return new ResponseEntity<>("Incorrect email address or password provided", HttpStatus.FORBIDDEN);
 			}
 
-			if (PasswordUtils.isValidPassword(requestParams.get("newPassword"))) {
+			if (!PasswordUtils.isValidPassword(requestParams.get("newPassword"))) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 
@@ -61,43 +62,22 @@ public class SecurityController {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 
+			long userID = UserController.getUserIdFromEmailAddress(requestBody.get("emailAddress"));
+
+			if (userID == -1) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
 			String resetCode = TokenUtils.generateToken(48);
-			PasswordController.insertPasswordResetCode(requestBody.get("emailAddress"), resetCode);
+			PasswordController.insertPasswordResetCode(userID, resetCode);
 
-			Properties prop = new Properties();
-			prop.put("mail.smtp.auth", true);
-			prop.put("mail.smtp.starttls.enable", "true");
-			prop.put("mail.smtp.host", "smtp.gmail.com");
-			prop.put("mail.smtp.port", "587");
-			prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-
-			String username = "yapreset@gmail.com";
-			String password = System.getenv("MAIL_PASS");
-
-			Session session = Session.getInstance(prop, new Authenticator() {
-				@Override
-				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication(username, password);
-				}
-			});
-
-			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("yapreset@gmail.com"));
-			message.setRecipients(
-					Message.RecipientType.TO, InternetAddress.parse(requestBody.get("emailAddress")));
-			message.setSubject("YAP Password Reset");
-
-			String messageContent = "Your Reset code is: \n" + resetCode;
-
-			MimeBodyPart mimeBodyPart = new MimeBodyPart();
-			mimeBodyPart.setContent(messageContent, "text/html");
-
-			Multipart multipart = new MimeMultipart();
-			multipart.addBodyPart(mimeBodyPart);
-
-			message.setContent(multipart);
-
-			Transport.send(message);
+			MailSend.sendMail(
+					"yapreset@gmail.com",
+					requestBody.get("emailAddress"),
+					"YAP Password reset code",
+					"Your Reset code is: " + resetCode +
+							"<br><br> You can reset your account password here: https://testseite.dragoncave.dev/reset"
+			);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -41,6 +41,10 @@ public class RestBoardController {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
+			if (!BoardController.boardExists(boardID)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
 			long userID = tokenstore.getUserIdByToken(token);
 
 			if (!BoardController.userIsBoardMember(userID, boardID)) {
@@ -66,6 +70,10 @@ public class RestBoardController {
 
 			if (newEntry.isInvalid()) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			if (!BoardController.boardExists(boardID)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
 			if (!BoardController.userIsBoardMember(userID, boardID)) {
@@ -158,8 +166,12 @@ public class RestBoardController {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
-			if (!requestBody.containsKey("newName")) {
+			if (!requestBody.containsKey("name")) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+
+			if (!BoardController.boardExists(boardID)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
 			long userID = tokenstore.getUserIdByToken(token);
@@ -167,7 +179,7 @@ public class RestBoardController {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
-			BoardController.modifyBoardName(boardID, requestBody.get("newName"));
+			BoardController.modifyBoardName(boardID, requestBody.get("name"));
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();

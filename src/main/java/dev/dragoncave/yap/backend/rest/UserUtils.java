@@ -1,5 +1,9 @@
 package dev.dragoncave.yap.backend.rest;
 
+import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
 public class UserUtils {
@@ -8,5 +12,11 @@ public class UserUtils {
 
 	public static boolean emailIsValid(String emailAddress) {
 		return emailAddress != null && emailPattern.matcher(emailAddress).matches();
+	}
+
+	public static String hashFile(byte[] bytes) throws NoSuchAlgorithmException {
+		MessageDigest digest = MessageDigest.getInstance("SHA3-512");
+		byte[] encodedHash = digest.digest(bytes);
+		return PasswordUtils.bytesToHex(encodedHash);
 	}
 }
