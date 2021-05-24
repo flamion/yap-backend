@@ -19,7 +19,7 @@ public class ConnectionController {
 		config.setMaximumPoolSize(50);
 		config.setMinimumIdle(5);
 		config.setMaxLifetime(1000 * 60 * 60);
-		config.setIdleTimeout(1000 * 120);
+		config.setIdleTimeout(1000 * 60 * 2);
 		config.setLeakDetectionThreshold(10 * 1000);
 		dataSource = new HikariDataSource(config);
 	}
