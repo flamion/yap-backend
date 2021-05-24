@@ -16,7 +16,7 @@ public class ConnectionController {
 		config.setUsername(System.getenv("DB_USERNAME"));
 		config.setPassword(System.getenv("DB_PASS"));
 		config.setPoolName("Postgres DB Pool for yap-backend");
-		config.setMaximumPoolSize(50);
+		config.setMaximumPoolSize(15);
 		config.setMinimumIdle(5);
 		config.setMaxLifetime(1000 * 60 * 15);
 		config.setIdleTimeout(1000 * 120);
