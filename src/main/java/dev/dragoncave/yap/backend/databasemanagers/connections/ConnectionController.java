@@ -18,7 +18,7 @@ public class ConnectionController {
 		config.setPoolName("YAP-Backend DB Connection pool");
 		config.setMaximumPoolSize(15);
 		config.setMinimumIdle(5);
-		config.setMaxLifetime(1000 * 60 * 15);
+		config.setMaxLifetime(1000 * 60 * 60);
 		config.setIdleTimeout(1000 * 120);
 		config.setLeakDetectionThreshold(10 * 1000);
 		dataSource = new HikariDataSource(config);
