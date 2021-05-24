@@ -16,7 +16,7 @@ public class ConnectionController {
 		config.setUsername(System.getenv("DB_USERNAME"));
 		config.setPassword(System.getenv("DB_PASS"));
 		config.setPoolName("Postgres DB Pool for yap-backend");
-		config.setMaximumPoolSize(20);
+		config.setMaximumPoolSize(50);
 		config.setLeakDetectionThreshold(60 * 1000);
 		dataSource = new HikariDataSource(config);
 	}
