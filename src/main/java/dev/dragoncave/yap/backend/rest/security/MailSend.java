@@ -12,11 +12,11 @@ public class MailSend {
 		Properties prop = new Properties();
 		prop.put("mail.smtp.auth", true);
 		prop.put("mail.smtp.starttls.enable", "true");
-		prop.put("mail.smtp.host", "smtp.gmail.com");
+		prop.put("mail.smtp.host", "smtp.ionos.de");
 		prop.put("mail.smtp.port", "587");
-		prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+		prop.put("mail.smtp.ssl.trust", "smtp.ionos.de");
 
-		String username = "yapreset@gmail.com";
+		String username = "noreply@dragoncave.dev";
 		String password = System.getenv("MAIL_PASS");
 
 		Session session = Session.getInstance(prop, new Authenticator() {

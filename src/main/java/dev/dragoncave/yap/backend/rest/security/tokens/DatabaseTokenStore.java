@@ -1,5 +1,6 @@
 package dev.dragoncave.yap.backend.rest.security.tokens;
 
+import com.google.gson.annotations.Since;
 import dev.dragoncave.yap.backend.databasemanagers.connections.ConnectionController;
 
 import java.sql.Connection;
@@ -9,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("SqlResolve")
 public class DatabaseTokenStore implements Tokenstore {
 	//Days, hours, minutes, seconds, milliseconds
 	private static final long VALID_DURATION = 14 * 24 * 60 * 60 * 1000; //how long the token is valid in milliseconds

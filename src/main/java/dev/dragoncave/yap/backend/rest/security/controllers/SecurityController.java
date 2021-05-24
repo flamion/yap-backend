@@ -72,7 +72,7 @@ public class SecurityController {
 			PasswordController.insertPasswordResetCode(userID, resetCode);
 
 			MailSend.sendMail(
-					"yapreset@gmail.com",
+					"noreply@dragoncave.dev",
 					requestBody.get("emailAddress"),
 					"YAP Password reset code",
 					"Your Reset code is: " + resetCode +
