@@ -20,7 +20,7 @@ public class ConnectionController {
 		config.setMinimumIdle(5);
 		config.setMaxLifetime(1000 * 60 * 15);
 		config.setIdleTimeout(1000 * 120);
-		config.setLeakDetectionThreshold(5 * 1000);
+		config.setLeakDetectionThreshold(10 * 1000);
 		dataSource = new HikariDataSource(config);
 	}
 
