@@ -18,7 +18,7 @@ public class ConnectionController {
 		config.setPoolName("Postgres DB Pool for yap-backend");
 		config.setMaximumPoolSize(50);
 		config.setMinimumIdle(5);
-		config.setMaxLifetime(1000 * 60);
+		config.setMaxLifetime(1000 * 60 * 15);
 		config.setIdleTimeout(1000 * 120);
 		config.setLeakDetectionThreshold(60 * 1000);
 		dataSource = new HikariDataSource(config);
