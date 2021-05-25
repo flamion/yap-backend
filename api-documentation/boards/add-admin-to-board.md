@@ -1,6 +1,6 @@
 # Add Admin to a board
 
-### Mapping /boards/{boardID}/member
+### Mapping /boards/{boardID}/admin
 
 * Method: POST
 
