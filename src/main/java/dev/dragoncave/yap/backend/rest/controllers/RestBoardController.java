@@ -300,6 +300,10 @@ public class RestBoardController {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 			}
 
+			if (!BoardController.boardExists(boardID)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
 			long userID = tokenstore.getUserIdByToken(token);
 			if (!BoardController.userIsBoardAdmin(userID, boardID)) {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
