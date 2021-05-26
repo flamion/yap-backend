@@ -156,7 +156,6 @@ public class BoardController {
 					var members = getMembers.executeQuery()
 			) {
 				boardSet.next();
-				members.next();
 
 				List<Long> memberIDs = new ArrayList<>();
 				while (members.next()) {
