@@ -10,7 +10,7 @@
 
 * Requestbody: none
 
-* Response: HttpStatus(401, 403, 200)
+* Response: HttpStatus(401, 403, 204, 200)
 
 #### Description:
 
