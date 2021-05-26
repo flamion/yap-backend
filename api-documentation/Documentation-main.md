@@ -54,6 +54,8 @@ This is the documentation for the yap backend. If you find anything missing or s
 
 [Rename Board](boards/rename-board.md)
 
+[Get a board members user Object](boards/get-member-by-id.md)
+
 [Delete a board](boards/remove-board.md)
 
 # Object definitions
