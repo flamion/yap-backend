@@ -111,7 +111,7 @@ public class RestUserController {
 	@PostMapping(
 			path = {"/profilePicture"}
 	)
-	public ResponseEntity<?> uploadProfilePicture(@Nullable @RequestParam(value = "file", required = true) MultipartFile multipartFile, @RequestHeader(value = "Token") String token) {
+	public ResponseEntity<?> uploadProfilePicture(@Nullable @RequestParam(value = "file") MultipartFile multipartFile, @RequestHeader(value = "Token") String token) {
 		try {
 			if (multipartFile == null || multipartFile.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
