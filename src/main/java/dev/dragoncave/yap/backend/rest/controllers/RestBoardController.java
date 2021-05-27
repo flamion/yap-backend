@@ -80,12 +80,12 @@ public class RestBoardController {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
-			long newEntryId = EntryController.createEntry(newEntry, boardID);
-			if (newEntryId == -1) {
+			long newEntryID = EntryController.createEntry(newEntry, boardID);
+			if (newEntryID == -1) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 
-			return new ResponseEntity<>(newEntryId, HttpStatus.CREATED);
+			return new ResponseEntity<>(newEntryID, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -160,7 +160,7 @@ public class RestBoardController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@PostMapping()
+	@PostMapping
 	public ResponseEntity<?> createBoard(@RequestHeader(value = "Token") String token, @RequestBody Board newBoard) {
 		try {
 			if (!tokenstore.tokenIsValid(token)) {

@@ -16,7 +16,7 @@ public class ConnectionController {
 		config.setUsername(System.getenv("DB_USERNAME"));
 		config.setPassword(System.getenv("DB_PASS"));
 		config.setPoolName("YAP-Backend DB Connection pool");
-		config.setMaximumPoolSize(50);
+		config.setMaximumPoolSize(55);
 		config.setMinimumIdle(5);
 		config.setMaxLifetime(1000 * 60 * 60);
 		config.setIdleTimeout(1000 * 60 * 2);
@@ -25,6 +25,7 @@ public class ConnectionController {
 	}
 
 	private ConnectionController() {
+
 	}
 
 	public static Connection getConnection() throws SQLException {
