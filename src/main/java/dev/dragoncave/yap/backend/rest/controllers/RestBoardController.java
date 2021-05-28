@@ -80,12 +80,12 @@ public class RestBoardController {
 				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 
-			long newEntryId = EntryController.createEntry(newEntry, boardID);
-			if (newEntryId == -1) {
+			long newEntryID = EntryController.createEntry(newEntry, boardID);
+			if (newEntryID == -1) {
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 
-			return new ResponseEntity<>(newEntryId, HttpStatus.CREATED);
+			return new ResponseEntity<>(newEntryID, HttpStatus.CREATED);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -137,7 +137,30 @@ public class RestBoardController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@PostMapping()
+	@GetMapping("/{boardID}/member/{userID}")
+	public ResponseEntity<?> getBoardMember(@PathVariable Long boardID, @PathVariable Long userID, @RequestHeader(value = "Token") String token) {
+		try {
+			if (!tokenstore.tokenIsValid(token)) {
+				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			long requesterID = tokenstore.getUserIdByToken(token);
+			if (!BoardController.userIsBoardMember(requesterID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+			}
+
+			if (!BoardController.boardExists(boardID) || !BoardController.userIsBoardMember(userID, boardID)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+
+			return new ResponseEntity<>(UserController.getUserByID(userID), HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	@PostMapping
 	public ResponseEntity<?> createBoard(@RequestHeader(value = "Token") String token, @RequestBody Board newBoard) {
 		try {
 			if (!tokenstore.tokenIsValid(token)) {
@@ -275,6 +298,10 @@ public class RestBoardController {
 		try {
 			if (!tokenstore.tokenIsValid(token)) {
 				return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+			}
+
+			if (!BoardController.boardExists(boardID)) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 			}
 
 			long userID = tokenstore.getUserIdByToken(token);

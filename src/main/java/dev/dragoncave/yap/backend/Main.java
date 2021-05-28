@@ -1,6 +1,7 @@
 package dev.dragoncave.yap.backend;
 
 import dev.dragoncave.yap.backend.rest.security.PasswordUtils;
+import dev.dragoncave.yap.backend.rest.security.tokens.TokenUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -10,7 +11,7 @@ import java.util.Base64;
 @SuppressWarnings("ALL")
 public class Main {
 	public static void main(String[] args) throws Exception {
-		System.out.println(getPasswordHash("a", "1Im3jY3v3qgCqgYHX97iVg=="));
+		System.out.println(TokenUtils.generateToken());
 	}
 
 	private static String getPasswordHash(String input, String saltString) throws NoSuchAlgorithmException {

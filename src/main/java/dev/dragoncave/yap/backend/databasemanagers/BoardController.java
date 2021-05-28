@@ -101,7 +101,9 @@ public class BoardController {
 			canAccess.setLong(1, user_id);
 			canAccess.setLong(2, board_id);
 
-			return canAccess.executeQuery().next();
+			try (ResultSet canAccessResult = canAccess.executeQuery()) {
+				return canAccessResult.next();
+			}
 		}
 	}
 
@@ -154,7 +156,6 @@ public class BoardController {
 					var members = getMembers.executeQuery()
 			) {
 				boardSet.next();
-				members.next();
 
 				List<Long> memberIDs = new ArrayList<>();
 				while (members.next()) {

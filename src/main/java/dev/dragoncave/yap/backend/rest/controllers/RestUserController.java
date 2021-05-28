@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -107,10 +108,12 @@ public class RestUserController {
 		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
-	@PostMapping("/profilePicture")
-	public ResponseEntity<?> uploadProfilePicture(@RequestParam("file") MultipartFile multipartFile, @RequestHeader(value = "Token") String token) {
+	@PostMapping(
+			path = {"/profilePicture"}
+	)
+	public ResponseEntity<?> uploadProfilePicture(@Nullable @RequestParam(value = "file") MultipartFile multipartFile, @RequestHeader(value = "Token") String token) {
 		try {
-			if (multipartFile.isEmpty()) {
+			if (multipartFile == null || multipartFile.isEmpty()) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}
 

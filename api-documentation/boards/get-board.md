@@ -13,7 +13,7 @@
 * Response:
     * HttpStatus (401, 403, 204, 200)
     * Json:
-        * Board object
+        * [Board object](../objects/board.md)
 
 #### Description:
 

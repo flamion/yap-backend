@@ -72,11 +72,12 @@ public class SecurityController {
 			PasswordController.insertPasswordResetCode(userID, resetCode);
 
 			MailSend.sendMail(
-					"yapreset@gmail.com",
+					"noreply@dragoncave.dev",
 					requestBody.get("emailAddress"),
 					"YAP Password reset code",
 					"Your Reset code is: " + resetCode +
-							"<br><br> You can reset your account password here: https://testseite.dragoncave.dev/reset"
+							"<br><br> Or alternatively, use this link: <a href=\"https://testseite.dragoncave.dev/reset?code=" + resetCode +
+			"\"> https://testseite.dragoncave.dev/reset </a>"
 			);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {

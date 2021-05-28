@@ -15,16 +15,17 @@ public class ConnectionController {
 		config.setJdbcUrl(DATABASE_URL);
 		config.setUsername(System.getenv("DB_USERNAME"));
 		config.setPassword(System.getenv("DB_PASS"));
-		config.setPoolName("Postgres DB Pool for yap-backend");
-		config.setMaximumPoolSize(15);
+		config.setPoolName("YAP-Backend DB Connection pool");
+		config.setMaximumPoolSize(55);
 		config.setMinimumIdle(5);
-		config.setMaxLifetime(1000 * 60 * 15);
-		config.setIdleTimeout(1000 * 120);
-		config.setLeakDetectionThreshold(60 * 1000);
+		config.setMaxLifetime(1000 * 60 * 60);
+		config.setIdleTimeout(1000 * 60 * 2);
+		config.setLeakDetectionThreshold(10 * 1000);
 		dataSource = new HikariDataSource(config);
 	}
 
 	private ConnectionController() {
+
 	}
 
 	public static Connection getConnection() throws SQLException {

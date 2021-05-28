@@ -1,6 +1,6 @@
 # Delete board
 
-### Mapping /board/{boardID}
+### Mapping /boards/{boardID}
 
 * Method: DELETE
 
