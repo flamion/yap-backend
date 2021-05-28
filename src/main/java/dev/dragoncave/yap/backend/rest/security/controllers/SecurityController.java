@@ -76,7 +76,7 @@ public class SecurityController {
 					requestBody.get("emailAddress"),
 					"YAP Password reset code",
 					"Your Reset code is: " + resetCode +
-							"<br><br> You can reset your account password here: https://testseite.dragoncave.dev/reset"
+							"<br><br> Or alternatively, use this link: https://testseite.dragoncave.dev/reset?code=" + resetCode
 			);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception e) {
